@@ -6,9 +6,9 @@ import { DataSourceBadge } from '@/components/DataSourceBadge';
 import { toast } from '@/hooks/use-toast';
 
 function generatePDF(provinceId?: string) {
-  import('jspdf').then(({ jsPDF }) => {
-    import('jspdf-autotable').then((autoTableModule) => {
-      const doc = new jsPDF();
+  Promise.all([import('jspdf'), import('jspdf-autotable')]).then(([{ jsPDF }]) => {
+    // jspdf-autotable auto-registers as side effect
+    const doc = new jsPDF();
       const filtered = provinceId ? provinces.filter(p => p.id === provinceId) : provinces;
       
       // Header
@@ -63,7 +63,6 @@ function generatePDF(provinceId?: string) {
 
       doc.save(filename);
       toast({ title: 'Report Downloaded', description: `${filename} saved successfully.` });
-    });
   });
 }
 
