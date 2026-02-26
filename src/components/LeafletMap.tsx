@@ -288,8 +288,8 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect }: Le
   }, [selectedProvince, provinces]);
 
   return (
-    <div className="relative w-full h-full min-h-[420px] rounded-lg overflow-hidden border border-border/50">
-      <div ref={mapRef} className="w-full h-full min-h-[420px]" />
+    <div className="relative w-full h-full min-h-[320px] overflow-hidden">
+      <div ref={mapRef} className="w-full h-full min-h-[320px]" />
       {/* Map overlay legend */}
       <div className="absolute top-3 left-3 z-[1000] bg-card/80 backdrop-blur-md rounded-lg border border-border/50 p-2.5 space-y-1.5">
         <div className="text-[9px] font-mono text-muted-foreground uppercase tracking-wider mb-1">Layers</div>
