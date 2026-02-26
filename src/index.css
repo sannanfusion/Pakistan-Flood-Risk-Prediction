@@ -2,78 +2,73 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap');
 
 @layer base {
   :root {
-    --background: 216 28% 4%;
-    --foreground: 220 13% 91%;
+    --background: 222 47% 6%;
+    --foreground: 210 40% 93%;
 
-    --card: 220 20% 8%;
-    --card-foreground: 220 13% 91%;
+    --card: 222 44% 9%;
+    --card-foreground: 210 40% 93%;
 
-    --popover: 220 20% 8%;
-    --popover-foreground: 220 13% 91%;
+    --popover: 222 44% 9%;
+    --popover-foreground: 210 40% 93%;
 
-    --primary: 217 91% 60%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 187 72% 48%;
+    --primary-foreground: 222 47% 6%;
 
-    --secondary: 220 17% 12%;
-    --secondary-foreground: 220 9% 65%;
+    --secondary: 222 30% 16%;
+    --secondary-foreground: 210 40% 85%;
 
-    --muted: 220 14% 11%;
-    --muted-foreground: 220 9% 46%;
+    --muted: 222 30% 14%;
+    --muted-foreground: 215 20% 55%;
 
-    --accent: 187 78% 53%;
-    --accent-foreground: 216 28% 4%;
+    --accent: 38 92% 55%;
+    --accent-foreground: 222 47% 6%;
 
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 100%;
+    --destructive: 0 72% 55%;
+    --destructive-foreground: 210 40% 98%;
 
-    --border: 220 13% 13%;
-    --input: 220 13% 13%;
-    --ring: 217 91% 60%;
+    --border: 222 30% 18%;
+    --input: 222 30% 18%;
+    --ring: 187 72% 48%;
 
-    --radius: 1rem;
+    --radius: 0.75rem;
 
-    /* Risk tokens */
-    --risk-low: 160 84% 39%;
-    --risk-medium: 38 92% 50%;
-    --risk-high: 0 84% 60%;
-    --risk-critical: 0 72% 51%;
+    /* Custom tokens */
+    --risk-low: 152 69% 42%;
+    --risk-medium: 38 92% 55%;
+    --risk-high: 0 72% 55%;
+    --risk-critical: 0 85% 40%;
 
-    /* Data tokens */
-    --water: 217 91% 60%;
-    --rain: 187 78% 53%;
-    --river: 199 89% 48%;
+    --water: 199 89% 48%;
+    --rain: 210 70% 60%;
+    --river: 187 50% 35%;
 
-    /* Glow tokens */
-    --glow-primary: 217 91% 60%;
-    --glow-accent: 187 78% 53%;
-    --glow-danger: 0 84% 60%;
+    --glow-primary: 187 72% 48%;
+    --glow-accent: 38 92% 55%;
+    --glow-danger: 0 72% 55%;
 
-    /* Surface tokens */
-    --surface-elevated: 220 17% 10%;
-    --surface-overlay: 216 28% 5%;
-    --surface-glass: 0 0% 100% / 0.04;
-    --glass-border: 0 0% 100% / 0.08;
+    --surface-elevated: 222 40% 12%;
+    --surface-overlay: 222 40% 8%;
 
-    /* Shadows */
-    --shadow-glow-primary: 0 0 40px -8px hsl(217 91% 60% / 0.2);
-    --shadow-glow-accent: 0 0 40px -8px hsl(187 78% 53% / 0.2);
-    --shadow-glow-danger: 0 0 40px -8px hsl(0 84% 60% / 0.2);
-    --shadow-card: 0 1px 3px hsl(0 0% 0% / 0.3), 0 4px 16px hsl(0 0% 0% / 0.2);
-    --shadow-card-hover: 0 4px 24px hsl(0 0% 0% / 0.4), 0 0 0 1px hsl(217 91% 60% / 0.1);
+    --gradient-risk: linear-gradient(135deg, hsl(152 69% 42%), hsl(38 92% 55%), hsl(0 72% 55%));
+    --gradient-water: linear-gradient(135deg, hsl(199 89% 48%), hsl(187 72% 48%));
+    --gradient-dark: linear-gradient(180deg, hsl(222 47% 6%), hsl(222 44% 4%));
 
-    /* Sidebar */
-    --sidebar-background: 220 20% 6%;
-    --sidebar-foreground: 220 13% 91%;
-    --sidebar-primary: 217 91% 60%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 220 17% 12%;
-    --sidebar-accent-foreground: 220 9% 65%;
-    --sidebar-border: 220 13% 13%;
-    --sidebar-ring: 217 91% 60%;
+    --shadow-glow-primary: 0 0 30px -5px hsl(187 72% 48% / 0.3);
+    --shadow-glow-danger: 0 0 30px -5px hsl(0 72% 55% / 0.3);
+    --shadow-card: 0 4px 24px -4px hsl(0 0% 0% / 0.4);
+
+    --sidebar-background: 222 44% 9%;
+    --sidebar-foreground: 210 40% 93%;
+    --sidebar-primary: 187 72% 48%;
+    --sidebar-primary-foreground: 222 47% 6%;
+    --sidebar-accent: 222 30% 16%;
+    --sidebar-accent-foreground: 210 40% 85%;
+    --sidebar-border: 222 30% 18%;
+    --sidebar-ring: 187 72% 48%;
   }
 }
 
@@ -83,12 +78,12 @@
   }
 
   body {
-    @apply bg-background text-foreground antialiased;
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Inter', sans-serif;
   }
 
   .font-mono {
-    font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+    font-family: 'JetBrains Mono', monospace;
   }
 }
 
@@ -97,16 +92,19 @@
     box-shadow: var(--shadow-glow-primary);
   }
 
-  .glow-accent {
-    box-shadow: var(--shadow-glow-accent);
-  }
-
   .glow-danger {
     box-shadow: var(--shadow-glow-danger);
   }
 
   .text-gradient-water {
-    background: linear-gradient(135deg, hsl(var(--water)), hsl(var(--accent)));
+    background: var(--gradient-water);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-risk {
+    background: var(--gradient-risk);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -122,7 +120,7 @@
 
   @keyframes float {
     0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-6px); }
+    50% { transform: translateY(-8px); }
   }
 
   .risk-indicator-low {
@@ -147,22 +145,10 @@
   }
 
   .glass-card {
-    background: hsl(var(--surface-glass));
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border: 1px solid hsl(var(--glass-border));
-    box-shadow: var(--shadow-card);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .glass-card:hover {
-    box-shadow: var(--shadow-card-hover);
-    border-color: hsl(var(--primary) / 0.15);
-  }
-
-  .glass-surface {
-    background: hsl(var(--card));
-    border: 1px solid hsl(var(--glass-border));
-    box-shadow: var(--shadow-card);
+    background: hsl(var(--card) / 0.6);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid hsl(var(--border) / 0.5);
+    box-shadow: 0 4px 24px -4px hsl(0 0% 0% / 0.3), inset 0 1px 0 hsl(var(--foreground) / 0.03);
   }
 }

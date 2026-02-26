@@ -6,19 +6,19 @@ const SOURCES: Record<SourceType, { label: string; icon: React.ReactNode; color:
   nasa: {
     label: 'NASA IMERG',
     icon: <Satellite className="w-3 h-3" />,
-    color: '#3B82F6',
+    color: 'hsl(199, 89%, 48%)',
     lastUpdate: '2 min ago',
   },
   ndma: {
     label: 'NDMA',
     icon: <Radio className="w-3 h-3" />,
-    color: '#F59E0B',
+    color: 'hsl(38, 92%, 55%)',
     lastUpdate: '15 min ago',
   },
   wapda: {
     label: 'WAPDA',
     icon: <Database className="w-3 h-3" />,
-    color: '#10B981',
+    color: 'hsl(152, 69%, 42%)',
     lastUpdate: '8 min ago',
   },
 };
@@ -37,14 +37,14 @@ export function DataSourceBadge({ sources }: DataSourceBadgeProps) {
             key={src}
             className="flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-mono border backdrop-blur-sm"
             style={{
-              borderColor: s.color + '30',
+              borderColor: s.color + '40',
               backgroundColor: s.color + '10',
               color: s.color,
             }}
           >
             {s.icon}
             <span className="font-semibold">{s.label}</span>
-            <span style={{ opacity: 0.5 }}>· {s.lastUpdate}</span>
+            <span style={{ opacity: 0.6 }}>· {s.lastUpdate}</span>
           </div>
         );
       })}

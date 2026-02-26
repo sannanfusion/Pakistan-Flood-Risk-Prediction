@@ -4,13 +4,13 @@ export interface ProvinceData {
   id: string;
   name: string;
   riskLevel: RiskLevel;
-  riskScore: number;
-  rainfall7Day: number;
-  rainfall30Day: number;
-  riverDischarge: number;
+  riskScore: number; // 0-100
+  rainfall7Day: number; // mm
+  rainfall30Day: number; // mm
+  riverDischarge: number; // cumecs
   riverDischargeThreshold: number;
   population: number;
-  historicalFloods: number;
+  historicalFloods: number; // count since 2010
   lastFloodDate: string;
   alertActive: boolean;
   districts: DistrictRisk[];
@@ -49,10 +49,10 @@ export interface Alert {
 }
 
 export const RISK_COLORS: Record<RiskLevel, string> = {
-  low: '#10B981',
-  medium: '#F59E0B',
-  high: '#EF4444',
-  critical: '#DC2626',
+  low: 'hsl(152, 69%, 42%)',
+  medium: 'hsl(38, 92%, 55%)',
+  high: 'hsl(0, 72%, 55%)',
+  critical: 'hsl(0, 85%, 40%)',
 };
 
 export const RISK_LABELS: Record<RiskLevel, string> = {

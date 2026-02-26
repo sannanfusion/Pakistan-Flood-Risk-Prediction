@@ -19,20 +19,38 @@ export function AnimatedBackground() {
     resize();
     window.addEventListener('resize', resize);
 
-    for (let i = 0; i < 30; i++) {
+    // Create particles
+    for (let i = 0; i < 40; i++) {
       particles.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.2,
-        vy: (Math.random() - 0.5) * 0.2,
-        r: Math.random() * 1.5 + 0.3,
-        o: Math.random() * 0.08 + 0.02,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: (Math.random() - 0.5) * 0.3,
+        r: Math.random() * 2 + 0.5,
+        o: Math.random() * 0.15 + 0.03,
       });
     }
 
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+      // Draw wave
+      const t = Date.now() * 0.0005;
+      ctx.beginPath();
+      ctx.moveTo(0, canvas.height);
+      for (let x = 0; x <= canvas.width; x += 4) {
+        const y = canvas.height * 0.85 + Math.sin(x * 0.003 + t) * 15 + Math.sin(x * 0.007 + t * 1.3) * 8;
+        ctx.lineTo(x, y);
+      }
+      ctx.lineTo(canvas.width, canvas.height);
+      ctx.closePath();
+      const waveGrad = ctx.createLinearGradient(0, canvas.height * 0.8, 0, canvas.height);
+      waveGrad.addColorStop(0, 'hsla(199, 89%, 48%, 0.03)');
+      waveGrad.addColorStop(1, 'hsla(187, 72%, 48%, 0.01)');
+      ctx.fillStyle = waveGrad;
+      ctx.fill();
+
+      // Draw particles
       particles.forEach((p) => {
         p.x += p.vx;
         p.y += p.vy;
@@ -43,20 +61,21 @@ export function AnimatedBackground() {
 
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = `hsla(217, 91%, 60%, ${p.o})`;
+        ctx.fillStyle = `hsla(187, 72%, 48%, ${p.o})`;
         ctx.fill();
       });
 
+      // Connect nearby particles
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
           const dx = particles[i].x - particles[j].x;
           const dy = particles[i].y - particles[j].y;
           const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 120) {
+          if (dist < 150) {
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = `hsla(217, 91%, 60%, ${0.02 * (1 - dist / 120)})`;
+            ctx.strokeStyle = `hsla(187, 72%, 48%, ${0.03 * (1 - dist / 150)})`;
             ctx.lineWidth = 0.5;
             ctx.stroke();
           }
@@ -77,7 +96,7 @@ export function AnimatedBackground() {
     <canvas
       ref={canvasRef}
       className="fixed inset-0 pointer-events-none z-0"
-      style={{ opacity: 0.6 }}
+      style={{ opacity: 0.8 }}
     />
   );
 }

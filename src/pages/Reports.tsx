@@ -13,6 +13,7 @@ async function generatePDF(provinceId?: string) {
     const doc = new jsPDF();
     const filtered = provinceId ? provinces.filter(p => p.id === provinceId) : provinces;
     
+    // Header
     doc.setFontSize(18);
     doc.setTextColor(30, 58, 95);
     doc.text('Pakistan Flood Risk Report', 14, 22);
@@ -43,6 +44,7 @@ async function generatePDF(provinceId?: string) {
 
       const tableData = province.districts.map(d => [d.name, `${d.riskScore}%`, RISK_LABELS[d.riskLevel]]);
       
+      // Use the default export function directly
       const autoTable = autoTableModule.default || autoTableModule;
       if (typeof autoTable === 'function') {
         autoTable(doc, {
@@ -83,11 +85,11 @@ async function generatePDF(provinceId?: string) {
 
 const Reports = () => {
   return (
-    <div className="p-4 sm:p-6 lg:p-8 space-y-6">
+    <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h1 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-foreground">Risk Reports</h1>
-          <div className="flex flex-wrap items-center gap-2 mt-1.5">
+          <h1 className="text-xl sm:text-2xl font-bold text-foreground">Risk Reports</h1>
+          <div className="flex flex-wrap items-center gap-2 mt-1">
             <p className="text-xs sm:text-sm text-muted-foreground">
               Provincial risk assessment summaries
             </p>
@@ -96,7 +98,7 @@ const Reports = () => {
         </div>
         <button
           onClick={() => generatePDF()}
-          className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-primary/10 text-primary text-xs sm:text-sm font-medium hover:bg-primary/20 transition-all border border-primary/15 w-full sm:w-auto"
+          className="flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-primary/10 text-primary text-xs sm:text-sm font-medium hover:bg-primary/20 transition-colors border border-primary/20 w-full sm:w-auto"
         >
           <Download className="w-4 h-4" /> Export All PDF
         </button>
@@ -109,42 +111,44 @@ const Reports = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.08 }}
-            className="p-4 sm:p-5 rounded-2xl glass-card group"
+            className="p-3 sm:p-5 rounded-xl bg-card/60 backdrop-blur-xl border border-border/50 hover:border-primary/20 transition-all group shadow-lg shadow-black/20"
           >
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-xl bg-primary/10">
+                <div className="p-2 rounded-lg bg-secondary/60">
                   <FileText className="w-4 h-4 text-primary" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-medium text-foreground">{province.name}</h3>
+                  <h3 className="text-sm font-bold text-foreground">{province.name}</h3>
                   <p className="text-[11px] text-muted-foreground font-mono">
                     Last updated: Feb 22, 2026
                   </p>
                 </div>
               </div>
-              <span
-                className="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold border"
-                style={{
-                  color: RISK_COLORS[province.riskLevel],
-                  borderColor: RISK_COLORS[province.riskLevel] + '30',
-                  backgroundColor: RISK_COLORS[province.riskLevel] + '10',
-                }}
-              >
-                {province.riskScore}%
-              </span>
+              <div className="flex items-center gap-2">
+                <span
+                  className="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold border"
+                  style={{
+                    color: RISK_COLORS[province.riskLevel],
+                    borderColor: RISK_COLORS[province.riskLevel] + '40',
+                    backgroundColor: RISK_COLORS[province.riskLevel] + '15',
+                  }}
+                >
+                  {province.riskScore}%
+                </span>
+              </div>
             </div>
 
             <div className="grid grid-cols-3 gap-2 sm:gap-3 mb-3">
-              <div className="text-center p-2 rounded-xl bg-secondary/30">
+              <div className="text-center p-1.5 sm:p-2 rounded bg-secondary/30">
                 <div className="text-[9px] sm:text-[10px] text-muted-foreground mb-0.5">7d Rain</div>
                 <div className="font-mono text-[10px] sm:text-xs font-bold text-foreground">{province.rainfall7Day}mm</div>
               </div>
-              <div className="text-center p-2 rounded-xl bg-secondary/30">
+              <div className="text-center p-1.5 sm:p-2 rounded bg-secondary/30">
                 <div className="text-[9px] sm:text-[10px] text-muted-foreground mb-0.5">Discharge</div>
                 <div className="font-mono text-[10px] sm:text-xs font-bold text-foreground">{(province.riverDischarge / 1000).toFixed(1)}k</div>
               </div>
-              <div className="text-center p-2 rounded-xl bg-secondary/30">
+              <div className="text-center p-1.5 sm:p-2 rounded bg-secondary/30">
                 <div className="text-[9px] sm:text-[10px] text-muted-foreground mb-0.5">Population</div>
                 <div className="font-mono text-[10px] sm:text-xs font-bold text-foreground">{(province.population / 1e6).toFixed(1)}M</div>
               </div>
@@ -162,7 +166,7 @@ const Reports = () => {
 
             <button
               onClick={() => generatePDF(province.id)}
-              className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-secondary/40 text-muted-foreground text-xs font-medium hover:bg-primary/10 hover:text-primary transition-all border border-transparent hover:border-primary/15"
+              className="w-full flex items-center justify-center gap-2 py-2 rounded-lg bg-secondary/50 text-muted-foreground text-xs font-medium hover:bg-primary/10 hover:text-primary transition-colors border border-transparent hover:border-primary/20"
             >
               <Download className="w-3.5 h-3.5" /> Download Report
             </button>

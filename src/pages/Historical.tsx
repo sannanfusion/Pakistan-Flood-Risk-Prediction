@@ -5,10 +5,10 @@ import { motion } from 'framer-motion';
 
 const Historical = () => {
   return (
-    <div className="p-4 sm:p-6 lg:p-8 space-y-6">
+    <div className="space-y-6">
       <div>
-        <h1 className="text-2xl sm:text-3xl font-semibold text-foreground">Historical Flood Events</h1>
-        <p className="text-sm text-muted-foreground mt-1.5">
+        <h1 className="text-2xl font-bold text-foreground">Historical Flood Events</h1>
+        <p className="text-sm text-muted-foreground mt-1">
           Analysis of past flood events across Pakistan since 2010
         </p>
       </div>
@@ -20,12 +20,12 @@ const Historical = () => {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: i * 0.1 }}
-            className="p-4 sm:p-5 rounded-2xl glass-card hover:border-primary/20"
+            className="p-5 rounded-xl bg-card border border-border hover:border-primary/30 transition-colors"
           >
-            <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 mb-3">
+            <div className="flex items-start justify-between mb-3">
               <div>
-                <h3 className="text-sm sm:text-base font-medium text-foreground">{event.description}</h3>
-                <div className="flex flex-wrap items-center gap-3 mt-1.5 text-xs sm:text-sm text-muted-foreground">
+                <h3 className="text-base font-bold text-foreground">{event.description}</h3>
+                <div className="flex items-center gap-3 mt-1.5 text-sm text-muted-foreground">
                   <span className="flex items-center gap-1">
                     <MapPin className="w-3.5 h-3.5" /> {event.region}
                   </span>
@@ -38,11 +38,11 @@ const Historical = () => {
                 </div>
               </div>
               <span
-                className="px-3 py-1 rounded-full text-[10px] font-mono font-bold border shrink-0 self-start"
+                className="px-3 py-1 rounded-full text-xs font-mono font-bold border"
                 style={{
                   color: RISK_COLORS[event.severity],
-                  borderColor: RISK_COLORS[event.severity] + '30',
-                  backgroundColor: RISK_COLORS[event.severity] + '10',
+                  borderColor: RISK_COLORS[event.severity] + '40',
+                  backgroundColor: RISK_COLORS[event.severity] + '15',
                 }}
               >
                 {event.severity.toUpperCase()}

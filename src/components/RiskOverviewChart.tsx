@@ -1,12 +1,6 @@
 import { provinces } from '@/lib/floodData';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
-
-const RISK_BAR_COLORS: Record<string, string> = {
-  low: '#10B981',
-  medium: '#F59E0B',
-  high: '#EF4444',
-  critical: '#DC2626',
-};
+import { RISK_COLORS } from '@/lib/types';
 
 export function RiskOverviewChart() {
   const data = provinces.map((p) => ({
@@ -21,30 +15,29 @@ export function RiskOverviewChart() {
         <BarChart data={data} margin={{ top: 5, right: 5, left: -20, bottom: 0 }}>
           <XAxis
             dataKey="name"
-            tick={{ fill: '#6B7280', fontSize: 10, fontFamily: 'JetBrains Mono' }}
-            axisLine={{ stroke: 'rgba(255,255,255,0.06)' }}
+            tick={{ fill: 'hsl(215, 20%, 55%)', fontSize: 10, fontFamily: 'JetBrains Mono' }}
+            axisLine={{ stroke: 'hsl(222, 30%, 18%)' }}
             tickLine={false}
           />
           <YAxis
-            tick={{ fill: '#6B7280', fontSize: 10, fontFamily: 'JetBrains Mono' }}
+            tick={{ fill: 'hsl(215, 20%, 55%)', fontSize: 10, fontFamily: 'JetBrains Mono' }}
             axisLine={false}
             tickLine={false}
             domain={[0, 100]}
           />
           <Tooltip
             contentStyle={{
-              backgroundColor: '#0B0F14',
-              border: '1px solid rgba(255,255,255,0.1)',
-              borderRadius: '12px',
+              backgroundColor: 'hsl(222, 44%, 9%)',
+              border: '1px solid hsl(222, 30%, 18%)',
+              borderRadius: '8px',
               fontSize: '12px',
               fontFamily: 'JetBrains Mono',
-              color: '#E5E7EB',
-              boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
+              color: 'hsl(210, 40%, 93%)',
             }}
           />
-          <Bar dataKey="riskScore" radius={[6, 6, 0, 0]} name="Risk Score">
+          <Bar dataKey="riskScore" radius={[4, 4, 0, 0]} name="Risk Score">
             {data.map((entry, i) => (
-              <Cell key={i} fill={RISK_BAR_COLORS[entry.riskLevel]} fillOpacity={0.8} />
+              <Cell key={i} fill={RISK_COLORS[entry.riskLevel]} fillOpacity={0.8} />
             ))}
           </Bar>
         </BarChart>
