@@ -5,6 +5,7 @@ interface PakistanMapProps {
   selectedProvince: string | null;
   onProvinceSelect: (id: string) => void;
 }
+console.log("MAP RENDERED");
 
 // Simplified SVG paths for Pakistan provinces
 const PROVINCE_PATHS: Record<string, string> = {

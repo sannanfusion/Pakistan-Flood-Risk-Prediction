@@ -97,9 +97,9 @@ const Index = () => {
           initial={{ opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.2 }}
-          className="lg:col-span-5"
+          className="lg:col-span-12"
         >
-          <GlassCard className="p-4">
+          <GlassCard className="p-4 h-[650px]">
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
                 <MapPin className="w-4 h-4 text-primary" />
