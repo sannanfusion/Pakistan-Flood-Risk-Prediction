@@ -11,7 +11,7 @@ export function LiveIndicator() {
 
   return (
     <div className="flex items-center gap-3">
-      <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-secondary/50 border border-border">
+      <div className="flex items-center gap-2 px-3 py-1.5 rounded-full glass-card">
         <motion.div
           className="w-2 h-2 rounded-full bg-risk-low"
           animate={{ opacity: [1, 0.3, 1] }}
@@ -19,7 +19,7 @@ export function LiveIndicator() {
         />
         <span className="text-[11px] text-foreground font-mono font-medium">LIVE</span>
       </div>
-      <span className="text-xs text-muted-foreground font-mono">
+      <span className="text-xs text-muted-foreground font-mono hidden sm:inline">
         {time.toLocaleTimeString('en-US', { hour12: false })} UTC
       </span>
     </div>

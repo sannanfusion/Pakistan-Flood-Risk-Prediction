@@ -35,7 +35,7 @@ export function AnimatedCounter({ value, suffix = '', prefix = '', decimals = 0,
 
   return (
     <motion.span
-      initial={{ opacity: 0, y: 8 }}
+      initial={{ opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0 }}
       className="font-mono text-2xl font-bold text-foreground tabular-nums"
     >

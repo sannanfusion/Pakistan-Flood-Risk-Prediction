@@ -9,9 +9,9 @@ export function AlertsPanel({ alerts }: AlertsPanelProps) {
   return (
     <div className="space-y-3">
       <div className="flex items-center gap-2 mb-1">
-        <Bell className="w-4 h-4 text-accent" />
-        <h3 className="text-sm font-bold text-foreground">Active Alerts</h3>
-        <span className="ml-auto px-2 py-0.5 rounded-full bg-risk-high/20 text-risk-high text-[10px] font-mono font-bold">
+        <Bell className="w-4 h-4 text-risk-medium" />
+        <h3 className="text-sm font-semibold text-foreground">Active Alerts</h3>
+        <span className="ml-auto px-2 py-0.5 rounded-full bg-risk-high/15 text-risk-high text-[10px] font-mono font-bold">
           {alerts.filter((a) => a.isNew).length} NEW
         </span>
       </div>
@@ -39,18 +39,18 @@ function AlertCard({ alert }: { alert: AlertType }) {
   const hoursAgo = Math.round((Date.now() - time.getTime()) / 3600000);
 
   return (
-    <div className={`p-3 rounded-lg bg-secondary/40 border-l-[3px] ${borderColor} ${alert.isNew ? 'ring-1 ring-primary/20' : ''}`}>
+    <div className={`p-3 rounded-xl bg-secondary/30 border-l-[3px] ${borderColor} ${alert.isNew ? 'ring-1 ring-primary/15' : ''} transition-colors hover:bg-secondary/50`}>
       <div className="flex items-start gap-2">
         <AlertTriangle className={`w-3.5 h-3.5 mt-0.5 shrink-0 ${iconColor}`} />
         <div className="min-w-0">
           <div className="flex items-center gap-2 mb-0.5">
-            <span className="text-xs font-semibold text-foreground truncate">{alert.region}</span>
-            {alert.isNew && <span className="px-1.5 py-0.5 rounded bg-primary/20 text-primary text-[9px] font-mono font-bold">NEW</span>}
+            <span className="text-xs font-medium text-foreground truncate">{alert.region}</span>
+            {alert.isNew && <span className="px-1.5 py-0.5 rounded-md bg-primary/15 text-primary text-[9px] font-mono font-bold">NEW</span>}
           </div>
           <p className="text-[11px] text-muted-foreground leading-relaxed">{alert.message}</p>
           <div className="flex items-center gap-2 mt-1.5">
             <span className={`text-[10px] font-mono font-semibold ${iconColor}`}>{RISK_LABELS[alert.level]}</span>
-            <span className="text-[10px] text-muted-foreground">• {hoursAgo}h ago</span>
+            <span className="text-[10px] text-muted-foreground">· {hoursAgo}h ago</span>
           </div>
         </div>
       </div>

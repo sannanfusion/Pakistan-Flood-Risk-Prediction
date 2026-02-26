@@ -11,7 +11,7 @@ export function DashboardCard({ children, className, noPadding, ...props }: Dash
     <div
       className={cn(
         'rounded-2xl glass-card',
-        !noPadding && 'p-5',
+        !noPadding && 'p-5 sm:p-6',
         className
       )}
       {...props}
