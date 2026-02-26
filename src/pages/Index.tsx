@@ -37,15 +37,15 @@ const Index = () => {
   }, [totalRainfall, avgRisk]);
 
   return (
-    <div className="space-y-6 relative -m-6">
+    <div className="relative">
       <AnimatedBackground />
 
       {/* Hero Map Section */}
       <section className="relative z-10">
-        {/* Header overlay on map */}
-        <div className="absolute top-0 left-0 right-0 z-[500] p-4 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-gradient-to-b from-background/90 via-background/50 to-transparent pointer-events-none">
+        {/* Header overlay */}
+        <div className="absolute top-0 left-0 right-0 z-[500] p-4 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-gradient-to-b from-background via-background/60 to-transparent pointer-events-none">
           <div className="pointer-events-auto">
-            <h1 className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight">
               Flood Risk Dashboard
             </h1>
             <div className="flex items-center gap-3 mt-1.5 flex-wrap">
@@ -60,8 +60,8 @@ const Index = () => {
           </div>
         </div>
 
-        {/* Full-width map */}
-        <div className="w-full h-[50vh] sm:h-[55vh] lg:h-[60vh]">
+        {/* Full-width map — hero */}
+        <div className="w-full h-[55vh] sm:h-[60vh] lg:h-[65vh] rounded-b-3xl overflow-hidden">
           <LeafletMap
             provinces={provinces}
             selectedProvince={selectedProvince}
@@ -69,25 +69,27 @@ const Index = () => {
           />
         </div>
 
-        {/* Province detail overlay - floats on map on desktop */}
+        {/* Floating province detail on desktop */}
         {selected && (
           <motion.div
             key={selected.id}
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="hidden lg:block absolute bottom-4 right-4 z-[500] w-[340px]"
+            className="hidden lg:block absolute bottom-6 right-6 z-[500] w-[340px]"
           >
             <DashboardCard className="max-h-[380px] overflow-y-auto scrollbar-thin">
               <ProvinceDetail province={selected} />
             </DashboardCard>
           </motion.div>
         )}
+
+        {/* Gradient overlay at bottom of map */}
+        <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-background to-transparent z-[400] rounded-b-3xl pointer-events-none" />
       </section>
 
-      {/* Content area with padding */}
-      <div className="px-4 sm:px-6 space-y-6 relative z-10">
-
-        {/* Province detail on mobile/tablet - below map */}
+      {/* Content */}
+      <div className="px-4 sm:px-6 lg:px-8 space-y-6 relative z-10 -mt-8">
+        {/* Mobile province detail */}
         {selected && (
           <motion.div
             key={`mobile-${selected.id}`}
@@ -136,7 +138,7 @@ const Index = () => {
           />
         </div>
 
-        {/* Main Analytics Row: Chart (8 cols) + Alerts (4 cols) */}
+        {/* Main Analytics: Chart (8 cols) + Alerts (4 cols) */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6">
           <motion.div
             initial={{ opacity: 0, y: 16 }}
@@ -146,11 +148,11 @@ const Index = () => {
           >
             <DashboardCard>
               <SectionHeader
-                icon={<Satellite className="w-5 h-5 text-water" />}
+                icon={<Satellite className="w-5 h-5 text-primary" />}
                 title="30-Day Rainfall Trend"
                 badge={<DataSourceBadge sources={['nasa', 'wapda']} />}
               />
-              <p className="text-xs text-muted-foreground mb-3 font-mono">
+              <p className="text-xs text-muted-foreground mb-4 font-mono">
                 Actual vs predicted · Red line = flood threshold (80mm)
               </p>
               <RainfallChart data={rainfallTrend} />
@@ -215,7 +217,7 @@ const Index = () => {
         </div>
 
         {/* Footer */}
-        <footer className="text-center text-[10px] text-muted-foreground font-mono py-6 border-t border-border/50">
+        <footer className="text-center text-[10px] text-muted-foreground font-mono py-8 border-t border-border/30">
           Data: NASA GPM/IMERG · NDMA Pakistan · WAPDA River Discharge · Model: Random Forest (v2.4)
         </footer>
       </div>
