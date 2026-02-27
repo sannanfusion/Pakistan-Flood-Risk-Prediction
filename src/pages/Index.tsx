@@ -51,7 +51,7 @@ const Index = () => {
   ];
 
   return (
-    <div className="space-y-6 relative">
+    <div className="space-y-8 px-6 pb-6 relative">
       <AnimatedBackground />
 
       {/* Header */}
@@ -71,7 +71,7 @@ const Index = () => {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 relative z-10">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-2">
         {stats.map((s, i) => (
           <motion.div
             key={s.label}
@@ -82,7 +82,7 @@ const Index = () => {
             <GlassCard className="p-4 flex items-center gap-3 hover:border-primary/30 transition-all hover:shadow-xl hover:shadow-primary/5">
               <div className="p-2 rounded-lg bg-secondary/60 backdrop-blur-sm">{s.icon}</div>
               <div>
-                <div className="text-[11px] text-muted-foreground">{s.label}</div>
+                <div className="text-xs text-muted-foreground">{s.label}</div>
                 <AnimatedCounter value={s.value} suffix={s.suffix} />
               </div>
             </GlassCard>
