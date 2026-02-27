@@ -3,12 +3,14 @@ import { Brain, Database, Layers, Clock } from 'lucide-react';
 
 export function ModelMetrics() {
   const m = modelMetrics;
-  
+  const circumference = 2 * Math.PI * 40;
+  const dashOffset = circumference - m.rocAuc * circumference;
+
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-2">
         <Brain className="w-4 h-4 text-primary" />
-        <h3 className="text-sm font-bold text-foreground">Model Performance</h3>
+        <h3 className="text-sm font-semibold text-foreground">Model Performance</h3>
       </div>
 
       <div className="grid grid-cols-2 gap-2">
@@ -21,13 +23,15 @@ export function ModelMetrics() {
       <div className="flex items-center justify-center">
         <div className="relative w-24 h-24">
           <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
-            <circle cx="50" cy="50" r="40" fill="none" stroke="hsl(222, 30%, 16%)" strokeWidth="8" />
+            <circle cx="50" cy="50" r="40" fill="none" stroke="hsl(var(--border))" strokeWidth="6" />
             <circle
               cx="50" cy="50" r="40" fill="none"
-              stroke="hsl(187, 72%, 48%)"
-              strokeWidth="8"
+              stroke="hsl(var(--primary))"
+              strokeWidth="6"
               strokeLinecap="round"
-              strokeDasharray={`${m.rocAuc * 251.3} 251.3`}
+              strokeDasharray={circumference}
+              strokeDashoffset={dashOffset}
+              className="transition-all duration-700"
             />
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center">
@@ -54,7 +58,7 @@ export function ModelMetrics() {
 
 function MetricBadge({ label, value }: { label: string; value: string }) {
   return (
-    <div className="p-2 rounded-md bg-secondary/50 text-center">
+    <div className="p-2.5 rounded-xl bg-muted text-center">
       <div className="text-[10px] text-muted-foreground mb-0.5">{label}</div>
       <div className="font-mono text-sm font-bold text-foreground">{value}</div>
     </div>
