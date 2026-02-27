@@ -7,15 +7,14 @@ import { ModelMetrics } from '@/components/ModelMetrics';
 import { RiskOverviewChart } from '@/components/RiskOverviewChart';
 import { LiveIndicator } from '@/components/LiveIndicator';
 import { AnimatedCounter } from '@/components/AnimatedCounter';
-import { AnimatedBackground } from '@/components/AnimatedBackground';
 import { DataSourceBadge } from '@/components/DataSourceBadge';
 import { provinces, rainfallTrend, alerts } from '@/lib/floodData';
 import { Droplets, Waves, AlertTriangle, Shield, MapPin, Satellite } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-const GlassCard = ({ children, className = '', ...props }: React.HTMLAttributes<HTMLDivElement>) => (
+const DashCard = ({ children, className = '', ...props }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
-    className={`rounded-xl bg-card/60 backdrop-blur-xl border border-border/50 shadow-lg shadow-black/20 ${className}`}
+    className={`rounded-2xl bg-card border border-border shadow-sm hover:shadow-md transition-shadow duration-300 ${className}`}
     {...props}
   >
     {children}
@@ -31,7 +30,6 @@ const Index = () => {
   const alertCount = provinces.filter((p) => p.alertActive).length;
   const avgRisk = Math.round(provinces.reduce((s, p) => s + p.riskScore, 0) / provinces.length);
 
-  // Real-time simulation
   const [simRainfall, setSimRainfall] = useState(totalRainfall);
   const [simRisk, setSimRisk] = useState(avgRisk);
 
@@ -44,26 +42,22 @@ const Index = () => {
   }, [totalRainfall, avgRisk]);
 
   const stats = [
-    { icon: <AlertTriangle className="w-4 h-4 text-risk-high" />, label: 'High Risk Regions', value: highRiskCount, suffix: `/${provinces.length}` },
-    { icon: <Droplets className="w-4 h-4 text-water" />, label: 'Avg 7-Day Rain', value: simRainfall, suffix: 'mm' },
-    { icon: <Waves className="w-4 h-4 text-accent" />, label: 'Active Alerts', value: alertCount, suffix: '' },
-    { icon: <Shield className="w-4 h-4 text-primary" />, label: 'Mean Risk Score', value: simRisk, suffix: '/100' },
+    { icon: <AlertTriangle className="w-4 h-4 text-risk-high" />, label: 'High Risk Regions', value: highRiskCount, suffix: `/${provinces.length}`, trend: '+1' },
+    { icon: <Droplets className="w-4 h-4 text-primary" />, label: 'Avg 7-Day Rain', value: simRainfall, suffix: 'mm', trend: '+12%' },
+    { icon: <Waves className="w-4 h-4 text-risk-medium" />, label: 'Active Alerts', value: alertCount, suffix: '', trend: '—' },
+    { icon: <Shield className="w-4 h-4 text-primary" />, label: 'Mean Risk Score', value: simRisk, suffix: '/100', trend: '+3' },
   ];
 
   return (
-    <div className="space-y-8 px-6 pb-6 relative">
-      <AnimatedBackground />
-
+    <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between relative z-10">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-foreground tracking-tight">
+          <h1 className="text-xl sm:text-2xl font-bold text-foreground tracking-tight">
             Flood Risk Dashboard
           </h1>
-          <div className="flex items-center gap-3 mt-1.5">
-            <p className="text-xs text-muted-foreground font-mono">
-              Real-time prediction system
-            </p>
+          <div className="flex flex-wrap items-center gap-3 mt-1.5">
+            <p className="text-xs text-muted-foreground">Real-time prediction system</p>
             <DataSourceBadge sources={['nasa', 'ndma', 'wapda']} />
           </div>
         </div>
@@ -71,58 +65,59 @@ const Index = () => {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-2">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {stats.map((s, i) => (
           <motion.div
             key={s.label}
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.08 }}
+            transition={{ delay: i * 0.06 }}
           >
-            <GlassCard className="p-4 flex items-center gap-3 hover:border-primary/30 transition-all hover:shadow-xl hover:shadow-primary/5">
-              <div className="p-2 rounded-lg bg-secondary/60 backdrop-blur-sm">{s.icon}</div>
-              <div>
+            <DashCard className="p-5 flex items-center gap-4">
+              <div className="p-2.5 rounded-xl bg-muted">{s.icon}</div>
+              <div className="min-w-0">
                 <div className="text-xs text-muted-foreground">{s.label}</div>
-                <AnimatedCounter value={s.value} suffix={s.suffix} />
+                <div className="flex items-baseline gap-2">
+                  <AnimatedCounter value={s.value} suffix={s.suffix} />
+                  <span className="text-[10px] font-mono text-muted-foreground">{s.trend}</span>
+                </div>
               </div>
-            </GlassCard>
+            </DashCard>
           </motion.div>
         ))}
       </div>
 
-      {/* Main Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 relative z-10">
-        {/* Map */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.98 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.2 }}
-          className="lg:col-span-12"
-        >
-          <GlassCard className="p-4 h-[650px]">
-            <div className="flex items-center justify-between mb-3">
-              <div className="flex items-center gap-2">
-                <MapPin className="w-4 h-4 text-primary" />
-                <h2 className="text-sm font-bold text-foreground">Satellite Risk Map</h2>
-              </div>
-              <DataSourceBadge sources={['nasa']} />
+      {/* Map */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.99 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: 0.15 }}
+      >
+        <DashCard className="p-5 h-[500px] lg:h-[600px]">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2">
+              <MapPin className="w-4 h-4 text-primary" />
+              <h2 className="text-sm font-semibold text-foreground">Satellite Risk Map</h2>
             </div>
-            <LeafletMap
-              provinces={provinces}
-              selectedProvince={selectedProvince}
-              onProvinceSelect={setSelectedProvince}
-            />
-          </GlassCard>
-        </motion.div>
+            <DataSourceBadge sources={['nasa']} />
+          </div>
+          <LeafletMap
+            provinces={provinces}
+            selectedProvince={selectedProvince}
+            onProvinceSelect={setSelectedProvince}
+          />
+        </DashCard>
+      </motion.div>
 
-        {/* Province Detail */}
+      {/* Province + Alerts Row */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         <motion.div
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.3 }}
-          className="lg:col-span-3"
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="lg:col-span-5"
         >
-          <GlassCard className="p-5 h-full">
+          <DashCard className="p-5 h-full">
             {selected ? (
               <ProvinceDetail province={selected} />
             ) : (
@@ -130,73 +125,72 @@ const Index = () => {
                 Select a region on the map
               </div>
             )}
-          </GlassCard>
+          </DashCard>
         </motion.div>
 
-        {/* Alerts */}
         <motion.div
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.4 }}
-          className="lg:col-span-4"
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.25 }}
+          className="lg:col-span-7"
         >
-          <GlassCard className="p-5 h-full">
+          <DashCard className="p-5 h-full">
             <AlertsPanel alerts={alerts} />
-          </GlassCard>
+          </DashCard>
         </motion.div>
       </div>
 
       {/* Charts Row */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 relative z-10">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
+          transition={{ delay: 0.3 }}
           className="lg:col-span-5"
         >
-          <GlassCard className="p-5">
+          <DashCard className="p-5">
             <div className="flex items-center justify-between mb-2">
-              <h2 className="text-sm font-bold text-foreground flex items-center gap-2">
-                <Satellite className="w-4 h-4 text-water" /> 30-Day Rainfall Trend
+              <h2 className="text-sm font-semibold text-foreground flex items-center gap-2">
+                <Satellite className="w-4 h-4 text-primary" /> 30-Day Rainfall Trend
               </h2>
               <DataSourceBadge sources={['nasa', 'wapda']} />
             </div>
-            <p className="text-[10px] text-muted-foreground mb-2 font-mono">
+            <p className="text-[10px] text-muted-foreground mb-3 font-mono">
               Actual vs predicted · Red line = flood threshold (80mm)
             </p>
             <RainfallChart data={rainfallTrend} />
-          </GlassCard>
+          </DashCard>
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6 }}
+          transition={{ delay: 0.35 }}
           className="lg:col-span-4"
         >
-          <GlassCard className="p-5">
+          <DashCard className="p-5">
             <div className="flex items-center justify-between mb-3">
-              <h2 className="text-sm font-bold text-foreground">Provincial Risk Comparison</h2>
+              <h2 className="text-sm font-semibold text-foreground">Provincial Risk Comparison</h2>
               <DataSourceBadge sources={['ndma']} />
             </div>
             <RiskOverviewChart />
-          </GlassCard>
+          </DashCard>
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.7 }}
+          transition={{ delay: 0.4 }}
           className="lg:col-span-3"
         >
-          <GlassCard className="p-5">
+          <DashCard className="p-5">
             <ModelMetrics />
-          </GlassCard>
+          </DashCard>
         </motion.div>
       </div>
 
       {/* Footer */}
-      <footer className="text-center text-[10px] text-muted-foreground font-mono py-4 border-t border-border/50 relative z-10">
+      <footer className="text-center text-[10px] text-muted-foreground font-mono py-4 border-t border-border">
         Data: NASA GPM/IMERG · NDMA Pakistan · WAPDA River Discharge · Model: Random Forest (v2.4)
       </footer>
     </div>

@@ -6,69 +6,56 @@
 
 @layer base {
   :root {
-    --background: 222 47% 6%;
-    --foreground: 210 40% 93%;
+    --background: 210 17% 98%;
+    --foreground: 210 29% 24%;
 
-    --card: 222 44% 9%;
-    --card-foreground: 210 40% 93%;
+    --card: 0 0% 100%;
+    --card-foreground: 210 29% 24%;
 
-    --popover: 222 44% 9%;
-    --popover-foreground: 210 40% 93%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 210 29% 24%;
 
-    --primary: 187 72% 48%;
-    --primary-foreground: 222 47% 6%;
+    --primary: 204 63% 28%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 222 30% 16%;
-    --secondary-foreground: 210 40% 85%;
+    --secondary: 210 14% 93%;
+    --secondary-foreground: 210 29% 24%;
 
-    --muted: 222 30% 14%;
-    --muted-foreground: 215 20% 55%;
+    --muted: 210 14% 95%;
+    --muted-foreground: 215 16% 47%;
 
-    --accent: 38 92% 55%;
-    --accent-foreground: 222 47% 6%;
+    --accent: 210 14% 93%;
+    --accent-foreground: 210 29% 24%;
 
-    --destructive: 0 72% 55%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 222 30% 18%;
-    --input: 222 30% 18%;
-    --ring: 187 72% 48%;
+    --border: 214 18% 89%;
+    --input: 214 18% 89%;
+    --ring: 204 63% 28%;
 
-    --radius: 0.75rem;
+    --radius: 1rem;
 
-    /* Custom tokens */
-    --risk-low: 152 69% 42%;
-    --risk-medium: 38 92% 55%;
-    --risk-high: 0 72% 55%;
-    --risk-critical: 0 85% 40%;
+    /* Risk status colors */
+    --risk-low: 142 71% 45%;
+    --risk-medium: 45 93% 47%;
+    --risk-high: 27 96% 54%;
+    --risk-critical: 0 72% 51%;
 
-    --water: 199 89% 48%;
-    --rain: 210 70% 60%;
-    --river: 187 50% 35%;
+    --water: 204 63% 28%;
+    --rain: 210 60% 50%;
+    --river: 199 60% 40%;
 
-    --glow-primary: 187 72% 48%;
-    --glow-accent: 38 92% 55%;
-    --glow-danger: 0 72% 55%;
+    --surface-elevated: 0 0% 100%;
 
-    --surface-elevated: 222 40% 12%;
-    --surface-overlay: 222 40% 8%;
-
-    --gradient-risk: linear-gradient(135deg, hsl(152 69% 42%), hsl(38 92% 55%), hsl(0 72% 55%));
-    --gradient-water: linear-gradient(135deg, hsl(199 89% 48%), hsl(187 72% 48%));
-    --gradient-dark: linear-gradient(180deg, hsl(222 47% 6%), hsl(222 44% 4%));
-
-    --shadow-glow-primary: 0 0 30px -5px hsl(187 72% 48% / 0.3);
-    --shadow-glow-danger: 0 0 30px -5px hsl(0 72% 55% / 0.3);
-    --shadow-card: 0 4px 24px -4px hsl(0 0% 0% / 0.4);
-
-    --sidebar-background: 222 44% 9%;
-    --sidebar-foreground: 210 40% 93%;
-    --sidebar-primary: 187 72% 48%;
-    --sidebar-primary-foreground: 222 47% 6%;
-    --sidebar-accent: 222 30% 16%;
-    --sidebar-accent-foreground: 210 40% 85%;
-    --sidebar-border: 222 30% 18%;
-    --sidebar-ring: 187 72% 48%;
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 210 29% 24%;
+    --sidebar-primary: 204 63% 28%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 210 14% 96%;
+    --sidebar-accent-foreground: 210 29% 24%;
+    --sidebar-border: 214 18% 89%;
+    --sidebar-ring: 204 63% 28%;
   }
 }
 
@@ -88,39 +75,9 @@
 }
 
 @layer utilities {
-  .glow-primary {
-    box-shadow: var(--shadow-glow-primary);
-  }
-
-  .glow-danger {
-    box-shadow: var(--shadow-glow-danger);
-  }
-
-  .text-gradient-water {
-    background: var(--gradient-water);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .text-gradient-risk {
-    background: var(--gradient-risk);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .animate-pulse-slow {
-    animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-  }
-
-  .animate-float {
-    animation: float 6s ease-in-out infinite;
-  }
-
-  @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-8px); }
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--border)) transparent;
   }
 
   .risk-indicator-low {
@@ -137,18 +94,5 @@
 
   .risk-indicator-critical {
     background-color: hsl(var(--risk-critical));
-  }
-
-  .scrollbar-thin {
-    scrollbar-width: thin;
-    scrollbar-color: hsl(var(--border)) transparent;
-  }
-
-  .glass-card {
-    background: hsl(var(--card) / 0.6);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid hsl(var(--border) / 0.5);
-    box-shadow: 0 4px 24px -4px hsl(0 0% 0% / 0.3), inset 0 1px 0 hsl(var(--foreground) / 0.03);
   }
 }

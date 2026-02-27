@@ -9,13 +9,13 @@ export function AlertsPanel({ alerts }: AlertsPanelProps) {
   return (
     <div className="space-y-3">
       <div className="flex items-center gap-2 mb-1">
-        <Bell className="w-4 h-4 text-accent" />
-        <h3 className="text-sm font-bold text-foreground">Active Alerts</h3>
-        <span className="ml-auto px-2 py-0.5 rounded-full bg-risk-high/20 text-risk-high text-[10px] font-mono font-bold">
+        <Bell className="w-4 h-4 text-primary" />
+        <h3 className="text-sm font-semibold text-foreground">Active Alerts</h3>
+        <span className="ml-auto px-2 py-0.5 rounded-full bg-risk-high/10 text-risk-high text-[10px] font-mono font-bold">
           {alerts.filter((a) => a.isNew).length} NEW
         </span>
       </div>
-      <div className="space-y-2 max-h-[320px] overflow-y-auto scrollbar-thin pr-1">
+      <div className="space-y-2.5 max-h-[400px] overflow-y-auto scrollbar-thin pr-1">
         {alerts.map((alert) => (
           <AlertCard key={alert.id} alert={alert} />
         ))}
@@ -25,10 +25,15 @@ export function AlertsPanel({ alerts }: AlertsPanelProps) {
 }
 
 function AlertCard({ alert }: { alert: AlertType }) {
-  const borderColor =
-    alert.level === 'critical' ? 'border-l-risk-critical' :
-    alert.level === 'high' ? 'border-l-risk-high' :
-    alert.level === 'medium' ? 'border-l-risk-medium' : 'border-l-risk-low';
+  const bgClass =
+    alert.level === 'critical' ? 'bg-risk-critical/5 border-risk-critical/20' :
+    alert.level === 'high' ? 'bg-risk-high/5 border-risk-high/20' :
+    alert.level === 'medium' ? 'bg-risk-medium/5 border-risk-medium/15' : 'bg-risk-low/5 border-risk-low/15';
+
+  const barColor =
+    alert.level === 'critical' ? 'bg-risk-critical' :
+    alert.level === 'high' ? 'bg-risk-high' :
+    alert.level === 'medium' ? 'bg-risk-medium' : 'bg-risk-low';
 
   const iconColor =
     alert.level === 'critical' ? 'text-risk-critical' :
@@ -39,18 +44,26 @@ function AlertCard({ alert }: { alert: AlertType }) {
   const hoursAgo = Math.round((Date.now() - time.getTime()) / 3600000);
 
   return (
-    <div className={`p-3 rounded-lg bg-secondary/40 border-l-[3px] ${borderColor} ${alert.isNew ? 'ring-1 ring-primary/20' : ''}`}>
-      <div className="flex items-start gap-2">
-        <AlertTriangle className={`w-3.5 h-3.5 mt-0.5 shrink-0 ${iconColor}`} />
-        <div className="min-w-0">
+    <div className={`relative overflow-hidden p-3.5 rounded-xl border ${bgClass} cursor-pointer hover:shadow-sm transition-all duration-200 ${alert.isNew ? 'ring-1 ring-primary/15' : ''}`}>
+      {/* Left colored bar */}
+      <div className={`absolute left-0 top-0 bottom-0 w-1 ${barColor} rounded-l-xl`} />
+      <div className="flex items-start gap-2.5 pl-2">
+        <AlertTriangle className={`w-4 h-4 mt-0.5 shrink-0 ${iconColor}`} />
+        <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2 mb-0.5">
             <span className="text-xs font-semibold text-foreground truncate">{alert.region}</span>
-            {alert.isNew && <span className="px-1.5 py-0.5 rounded bg-primary/20 text-primary text-[9px] font-mono font-bold">NEW</span>}
+            {alert.isNew && (
+              <span className="px-1.5 py-0.5 rounded-md bg-primary text-primary-foreground text-[9px] font-mono font-bold">NEW</span>
+            )}
           </div>
           <p className="text-[11px] text-muted-foreground leading-relaxed">{alert.message}</p>
-          <div className="flex items-center gap-2 mt-1.5">
-            <span className={`text-[10px] font-mono font-semibold ${iconColor}`}>{RISK_LABELS[alert.level]}</span>
-            <span className="text-[10px] text-muted-foreground">• {hoursAgo}h ago</span>
+          <div className="flex items-center gap-3 mt-2">
+            <span className={`text-[10px] font-mono font-semibold px-2 py-0.5 rounded-md ${
+              alert.level === 'critical' ? 'bg-risk-critical/10 text-risk-critical' :
+              alert.level === 'high' ? 'bg-risk-high/10 text-risk-high' :
+              alert.level === 'medium' ? 'bg-risk-medium/10 text-risk-medium' : 'bg-risk-low/10 text-risk-low'
+            }`}>{RISK_LABELS[alert.level]}</span>
+            <span className="text-[10px] text-muted-foreground font-mono">{hoursAgo}h ago</span>
           </div>
         </div>
       </div>
