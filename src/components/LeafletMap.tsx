@@ -204,22 +204,71 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect }: Le
     <div className="relative w-full h-full min-h-[380px] rounded-xl overflow-hidden border border-border">
       <div ref={mapRef} className="w-full h-full min-h-[380px]" />
       {/* Legend */}
-      <div className="absolute top-3 left-3 z-[1000] bg-card/95 rounded-xl border border-border p-2.5 space-y-1.5 shadow-sm">
-        <div className="text-[9px] font-mono text-muted-foreground uppercase tracking-wider mb-1">Layers</div>
-        <div className="flex items-center gap-1.5">
-          <div className="w-5 h-0.5 rounded bg-primary opacity-40" />
-          <span className="text-[10px] text-muted-foreground">Rivers</span>
-        </div>
-        <div className="flex items-center gap-1.5">
-          <div className="w-2 h-2 rounded-full border border-white shadow-sm" style={{ background: 'hsl(27, 96%, 54%)' }} />
-          <span className="text-[10px] text-muted-foreground">Cities</span>
-        </div>
-        {(['low', 'medium', 'high', 'critical'] as const).map((level) => (
-          <div key={level} className="flex items-center gap-1.5">
-            <div className={`w-2.5 h-2.5 rounded-sm risk-indicator-${level}`} style={{ opacity: 0.7 }} />
-            <span className="text-[10px] text-muted-foreground capitalize">{level}</span>
+      <div className="absolute top-3 left-3 z-[1000] bg-card/95 rounded-xl border border-border p-3 space-y-2 shadow-md backdrop-blur-sm" style={{ minWidth: 160 }}>
+        <div className="text-[9px] font-bold text-foreground uppercase tracking-wider pb-1 border-b border-border">Legend</div>
+        
+        {/* Flood Extent */}
+        <div className="space-y-1">
+          <div className="text-[9px] font-semibold text-muted-foreground uppercase tracking-wider">Flood Extent</div>
+          <div className="flex items-center gap-1.5">
+            <div className="w-4 h-2.5 rounded-sm" style={{ background: 'linear-gradient(90deg, hsl(204, 80%, 70%), hsl(204, 63%, 28%))' }} />
+            <span className="text-[10px] text-muted-foreground">Inundation Area</span>
           </div>
-        ))}
+          <div className="flex items-center gap-1.5">
+            <div className="w-4 h-2.5 rounded-sm" style={{ background: 'linear-gradient(90deg, hsl(199, 60%, 60%), hsl(199, 60%, 30%))' }} />
+            <span className="text-[10px] text-muted-foreground">Water Bodies</span>
+          </div>
+        </div>
+
+        {/* Rivers & Infrastructure */}
+        <div className="space-y-1">
+          <div className="text-[9px] font-semibold text-muted-foreground uppercase tracking-wider">Rivers & Infrastructure</div>
+          <div className="flex items-center gap-1.5">
+            <div className="w-5 h-0.5 rounded" style={{ background: 'hsl(204, 63%, 28%)', opacity: 0.6 }} />
+            <span className="text-[10px] text-muted-foreground">Major Rivers</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <div className="w-3 h-3 rounded-sm border border-border" style={{ background: 'hsl(var(--muted))' }} />
+            <span className="text-[10px] text-muted-foreground">Urban Areas</span>
+          </div>
+        </div>
+
+        {/* Monitoring Stations */}
+        <div className="space-y-1">
+          <div className="text-[9px] font-semibold text-muted-foreground uppercase tracking-wider">Monitoring Stations</div>
+          <div className="flex items-center gap-1.5">
+            <div className="w-2.5 h-2.5 rounded-full border-2" style={{ borderColor: 'hsl(0, 72%, 51%)', background: 'hsl(0, 72%, 51%, 0.3)' }} />
+            <span className="text-[10px] text-muted-foreground">Critical/High</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <div className="w-2.5 h-2.5 rounded-full border-2" style={{ borderColor: 'hsl(142, 71%, 45%)', background: 'hsl(142, 71%, 45%, 0.3)' }} />
+            <span className="text-[10px] text-muted-foreground">Low/Medium</span>
+          </div>
+        </div>
+
+        {/* Risk Levels */}
+        <div className="space-y-1">
+          <div className="text-[9px] font-semibold text-muted-foreground uppercase tracking-wider">Risk Level</div>
+          {(['critical', 'high', 'medium', 'low'] as const).map((level) => (
+            <div key={level} className="flex items-center gap-1.5">
+              <div className={`w-3 h-2 rounded-sm risk-indicator-${level}`} style={{ opacity: 0.8 }} />
+              <span className="text-[10px] text-muted-foreground capitalize">{level}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Scale bar */}
+      <div className="absolute bottom-3 left-3 z-[1000] bg-card/90 rounded-lg border border-border px-2.5 py-1.5 shadow-sm">
+        <div className="flex items-center gap-2">
+          <div className="flex flex-col items-center">
+            <div className="w-16 h-0.5 bg-foreground/50 relative">
+              <div className="absolute -left-0.5 -top-1 w-0.5 h-2.5 bg-foreground/50" />
+              <div className="absolute -right-0.5 -top-1 w-0.5 h-2.5 bg-foreground/50" />
+            </div>
+            <span className="text-[8px] font-mono text-muted-foreground mt-0.5">200 km</span>
+          </div>
+        </div>
       </div>
       <style>{`
         .leaflet-control-zoom a {
