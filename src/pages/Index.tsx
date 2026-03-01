@@ -49,15 +49,15 @@ const Index = () => {
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-xl sm:text-2xl font-bold text-foreground tracking-tight">
-            Flood Risk Dashboard
+            Pakistan Flood Risk Dashboard
           </h1>
-          <div className="flex flex-wrap items-center gap-3 mt-1.5">
-            <p className="text-xs text-muted-foreground">Real-time prediction system</p>
+          <p className="text-xs text-muted-foreground mt-1">Real-time satellite-based prediction system</p>
+          <div className="flex flex-wrap items-center gap-2 mt-3">
             <DataSourceBadge sources={['nasa', 'ndma', 'wapda']} />
           </div>
         </div>
@@ -65,7 +65,7 @@ const Index = () => {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
         {stats.map((s, i) => (
           <motion.div
             key={s.label}
@@ -74,12 +74,12 @@ const Index = () => {
             transition={{ delay: i * 0.06 }}
           >
             <DashCard className="p-5 flex items-center gap-4">
-              <div className="p-2.5 rounded-xl bg-muted">{s.icon}</div>
+              <div className="p-2.5 rounded-xl bg-primary/8">{s.icon}</div>
               <div className="min-w-0">
-                <div className="text-xs text-muted-foreground">{s.label}</div>
+                <div className="text-[11px] text-muted-foreground font-medium">{s.label}</div>
                 <div className="flex items-baseline gap-2">
                   <AnimatedCounter value={s.value} suffix={s.suffix} />
-                  <span className="text-[10px] font-mono text-muted-foreground">{s.trend}</span>
+                  <span className="text-[10px] font-mono text-risk-low font-semibold">{s.trend}</span>
                 </div>
               </div>
             </DashCard>
@@ -93,10 +93,12 @@ const Index = () => {
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.15 }}
       >
-        <DashCard className="p-5 h-[500px] lg:h-[600px]">
-          <div className="flex items-center justify-between mb-3">
+        <DashCard className="p-6 h-[500px] lg:h-[600px]">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-2">
             <div className="flex items-center gap-2">
-              <MapPin className="w-4 h-4 text-primary" />
+              <div className="p-1.5 rounded-lg bg-primary/10">
+                <MapPin className="w-4 h-4 text-primary" />
+              </div>
               <h2 className="text-sm font-semibold text-foreground">Satellite Risk Map</h2>
             </div>
             <DataSourceBadge sources={['nasa']} />
@@ -117,7 +119,7 @@ const Index = () => {
           transition={{ delay: 0.2 }}
           className="lg:col-span-5"
         >
-          <DashCard className="p-5 h-full">
+          <DashCard className="p-6 h-full">
             {selected ? (
               <ProvinceDetail province={selected} />
             ) : (
@@ -134,7 +136,7 @@ const Index = () => {
           transition={{ delay: 0.25 }}
           className="lg:col-span-7"
         >
-          <DashCard className="p-5 h-full">
+          <DashCard className="p-6 h-full">
             <AlertsPanel alerts={alerts} />
           </DashCard>
         </motion.div>
@@ -148,10 +150,13 @@ const Index = () => {
           transition={{ delay: 0.3 }}
           className="lg:col-span-5"
         >
-          <DashCard className="p-5">
-            <div className="flex items-center justify-between mb-2">
+          <DashCard className="p-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-2">
               <h2 className="text-sm font-semibold text-foreground flex items-center gap-2">
-                <Satellite className="w-4 h-4 text-primary" /> 30-Day Rainfall Trend
+                <div className="p-1.5 rounded-lg bg-blue-50">
+                  <Satellite className="w-4 h-4 text-blue-500" />
+                </div>
+                30-Day Rainfall Trend
               </h2>
               <DataSourceBadge sources={['nasa', 'wapda']} />
             </div>
@@ -168,9 +173,14 @@ const Index = () => {
           transition={{ delay: 0.35 }}
           className="lg:col-span-4"
         >
-          <DashCard className="p-5">
-            <div className="flex items-center justify-between mb-3">
-              <h2 className="text-sm font-semibold text-foreground">Provincial Risk Comparison</h2>
+          <DashCard className="p-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-2">
+              <h2 className="text-sm font-semibold text-foreground flex items-center gap-2">
+                <div className="p-1.5 rounded-lg bg-emerald-50">
+                  <AlertTriangle className="w-4 h-4 text-emerald-500" />
+                </div>
+                Provincial Risk
+              </h2>
               <DataSourceBadge sources={['ndma']} />
             </div>
             <RiskOverviewChart />
@@ -183,15 +193,20 @@ const Index = () => {
           transition={{ delay: 0.4 }}
           className="lg:col-span-3"
         >
-          <DashCard className="p-5">
+          <DashCard className="p-6">
             <ModelMetrics />
           </DashCard>
         </motion.div>
       </div>
 
       {/* Footer */}
-      <footer className="text-center text-[10px] text-muted-foreground font-mono py-4 border-t border-border">
-        Data: NASA GPM/IMERG · NDMA Pakistan · WAPDA River Discharge · Model: Random Forest (v2.4)
+      <footer className="text-center text-[10px] text-muted-foreground font-mono py-6 mt-4 border-t border-border">
+        <div className="flex flex-wrap items-center justify-center gap-3">
+          <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-blue-400 inline-block" /> NASA GPM/IMERG</span>
+          <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-emerald-400 inline-block" /> NDMA Pakistan</span>
+          <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-amber-400 inline-block" /> WAPDA River Discharge</span>
+          <span>· Model: Random Forest (v2.4)</span>
+        </div>
       </footer>
     </div>
   );
