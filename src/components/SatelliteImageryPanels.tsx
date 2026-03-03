@@ -1,6 +1,10 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Satellite, Calendar, MapPin, ZoomIn, Layers, X, ExternalLink } from 'lucide-react';
+import satelliteSindh from '@/assets/satellite-sindh-sukkur.jpg';
+import satellitePunjab from '@/assets/satellite-punjab-muzaffargarh.jpg';
+import satelliteKPK from '@/assets/satellite-kpk-swat.jpg';
+import satelliteBalochistan from '@/assets/satellite-balochistan-lasbela.jpg';
 
 const IMAGERY_DATA = [
   {
@@ -11,7 +15,7 @@ const IMAGERY_DATA = [
     sensor: 'Sentinel-2 MSI',
     resolution: '10m',
     band: 'MNDWI',
-    gradient: 'from-[hsl(220,80%,35%)] via-[hsl(204,70%,45%)] to-[hsl(199,80%,60%)]',
+    image: satelliteSindh,
     riskLevel: 'critical' as const,
     description: 'Active inundation detected along Indus River floodplain. Flood waters covering approximately 12,500 hectares of agricultural land.',
     coverage: '12.5K ha',
@@ -25,7 +29,7 @@ const IMAGERY_DATA = [
     sensor: 'MODIS Terra',
     resolution: '250m',
     band: 'NDWI',
-    gradient: 'from-[hsl(180,60%,30%)] via-[hsl(190,70%,40%)] to-[hsl(200,80%,55%)]',
+    image: satellitePunjab,
     riskLevel: 'high' as const,
     description: 'Expanded water coverage near Chenab-Indus confluence. Water level risen 2.3m above normal seasonal average.',
     coverage: '8.2K ha',
@@ -39,7 +43,7 @@ const IMAGERY_DATA = [
     sensor: 'Landsat-9 OLI',
     resolution: '30m',
     band: 'NDVI',
-    gradient: 'from-[hsl(140,50%,25%)] via-[hsl(130,60%,35%)] to-[hsl(120,50%,50%)]',
+    image: satelliteKPK,
     riskLevel: 'medium' as const,
     description: 'Elevated soil moisture in northern valleys. Vegetation stress patterns indicate early-stage waterlogging in low-lying areas.',
     coverage: '3.8K ha',
@@ -53,7 +57,7 @@ const IMAGERY_DATA = [
     sensor: 'Sentinel-2 MSI',
     resolution: '10m',
     band: 'False Color',
-    gradient: 'from-[hsl(30,70%,35%)] via-[hsl(25,80%,45%)] to-[hsl(40,90%,55%)]',
+    image: satelliteBalochistan,
     riskLevel: 'medium' as const,
     description: 'Vegetation stress indicating waterlogging in coastal plains. Abnormal NDVI decrease of 0.15 compared to 5-year average.',
     coverage: '5.1K ha',
@@ -100,8 +104,9 @@ export function SatelliteImageryPanels() {
             className="group rounded-xl border border-border overflow-hidden bg-card hover:shadow-lg transition-all duration-300 cursor-pointer"
             onClick={() => setExpandedIndex(i)}
           >
-            {/* Simulated satellite image */}
-            <div className={`relative h-36 bg-gradient-to-br ${img.gradient} overflow-hidden`}>
+            {/* Satellite image */}
+            <div className="relative h-36 overflow-hidden">
+              <img src={img.image} alt={`${img.title} satellite imagery`} className="w-full h-full object-cover" />
               {/* Coordinate grid overlay */}
               <div className="absolute inset-0" style={{
                 backgroundImage: `
@@ -110,14 +115,6 @@ export function SatelliteImageryPanels() {
                 `,
                 backgroundSize: '24px 24px',
               }} />
-              
-              {/* Simulated terrain features */}
-              <div className="absolute inset-0">
-                <div className="absolute top-4 left-6 w-20 h-10 rounded-full bg-white/10 blur-md" />
-                <div className="absolute bottom-6 right-4 w-16 h-16 rounded-full bg-white/8 blur-lg" />
-                <div className="absolute top-1/2 left-1/4 w-24 h-[2px] bg-white/20 rotate-[15deg]" />
-                <div className="absolute bottom-1/3 left-1/2 w-16 h-[1px] bg-white/15 -rotate-[10deg]" />
-              </div>
               
               {/* Type & sensor badge */}
               <div className="absolute top-2 left-2 flex flex-col gap-1">
@@ -196,7 +193,8 @@ export function SatelliteImageryPanels() {
                 const img = IMAGERY_DATA[expandedIndex];
                 return (
                   <>
-                    <div className={`relative h-56 bg-gradient-to-br ${img.gradient} overflow-hidden`}>
+                    <div className="relative h-56 overflow-hidden">
+                      <img src={img.image} alt={`${img.title} satellite imagery`} className="w-full h-full object-cover" />
                       <div className="absolute inset-0" style={{
                         backgroundImage: `
                           linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
@@ -204,11 +202,6 @@ export function SatelliteImageryPanels() {
                         `,
                         backgroundSize: '30px 30px',
                       }} />
-                      <div className="absolute inset-0">
-                        <div className="absolute top-8 left-10 w-32 h-16 rounded-full bg-white/10 blur-xl" />
-                        <div className="absolute bottom-10 right-8 w-24 h-24 rounded-full bg-white/8 blur-2xl" />
-                        <div className="absolute top-1/3 left-1/4 w-40 h-[2px] bg-white/20 rotate-[12deg]" />
-                      </div>
                       <div className="absolute top-4 left-4 flex gap-2">
                         <div className="bg-black/50 backdrop-blur-sm rounded-lg px-3 py-1">
                           <span className="text-[10px] font-mono text-white uppercase tracking-wider">{img.type}</span>
