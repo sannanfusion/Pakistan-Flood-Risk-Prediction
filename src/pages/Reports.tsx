@@ -77,7 +77,7 @@ const Reports = () => {
         <div>
           <h1 className="text-xl sm:text-2xl font-bold text-foreground">Risk Reports</h1>
           <div className="flex flex-wrap items-center gap-2 mt-1">
-            <p className="text-xs sm:text-sm text-muted-foreground">Provincial risk assessment summaries</p>
+            <p className="text-xs sm:text-sm text-muted-foreground">Provincial Risk Assessment Summaries</p>
             <DataSourceBadge sources={['nasa', 'ndma', 'wapda']} />
           </div>
         </div>

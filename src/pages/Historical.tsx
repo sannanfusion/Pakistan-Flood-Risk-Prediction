@@ -9,7 +9,7 @@ const Historical = () => {
       <div>
         <h1 className="text-xl sm:text-2xl font-bold text-foreground">Historical Flood Events</h1>
         <p className="text-sm text-muted-foreground mt-1">
-          Analysis of past flood events across Pakistan since 2010
+          Analysis of Past Flood events across Pakistan since 2010
         </p>
       </div>
 
