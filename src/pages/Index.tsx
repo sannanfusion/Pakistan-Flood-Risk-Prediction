@@ -138,11 +138,15 @@ const Index = () => {
             </div>
             <DataSourceBadge sources={['nasa']} />
           </div>
-          <LeafletMap
-            provinces={provinces}
-            selectedProvince={selectedProvince}
-            onProvinceSelect={setSelectedProvince}
-          />
+          <div className="relative h-[calc(100%-44px)]">
+            <LeafletMap
+              provinces={provinces}
+              selectedProvince={selectedProvince}
+              onProvinceSelect={setSelectedProvince}
+              layerVisibility={layerVisibility}
+            />
+            <MapLayersPanel layers={layerVisibility} onToggle={toggleLayer} />
+          </div>
         </DashCard>
       </motion.div>
 
