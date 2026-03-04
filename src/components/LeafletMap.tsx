@@ -1,12 +1,14 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { ProvinceData, RISK_COLORS } from '@/lib/types';
+import { LayerVisibility } from './MapLayersPanel';
 
 interface LeafletMapProps {
   provinces: ProvinceData[];
   selectedProvince: string | null;
   onProvinceSelect: (id: string) => void;
+  layerVisibility: LayerVisibility;
 }
 
 const PROVINCE_POLYGONS: Record<string, [number, number][]> = {
@@ -95,8 +97,8 @@ function getRiskLevel(score: number) {
 }
 
 function getCityMarkerColor(score: number) {
-  if (score >= 80) return 'hsl(0, 72%, 51%)';
-  if (score >= 60) return 'hsl(27, 96%, 54%)';
+  if (score >= 80) return 'hsl(0, 84%, 40%)';
+  if (score >= 60) return 'hsl(0, 72%, 51%)';
   if (score >= 40) return 'hsl(45, 93%, 47%)';
   return 'hsl(142, 71%, 45%)';
 }
@@ -107,10 +109,15 @@ const FLOOD_COLORS = {
   heavy: { fill: 'hsl(220, 80%, 45%)', border: 'hsl(220, 70%, 35%)' },
 };
 
-export function LeafletMap({ provinces, selectedProvince, onProvinceSelect }: LeafletMapProps) {
+export function LeafletMap({ provinces, selectedProvince, onProvinceSelect, layerVisibility }: LeafletMapProps) {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<L.Map | null>(null);
-  const layersRef = useRef<Record<string, L.Polygon>>({});
+  const provinceLayersRef = useRef<L.LayerGroup | null>(null);
+  const floodLayersRef = useRef<L.LayerGroup | null>(null);
+  const riverLayersRef = useRef<L.LayerGroup | null>(null);
+  const cityLayersRef = useRef<L.LayerGroup | null>(null);
+  const stationLayersRef = useRef<L.LayerGroup | null>(null);
+  const provincePolygonsRef = useRef<Record<string, L.Polygon>>({});
 
   useEffect(() => {
     if (!mapRef.current || mapInstanceRef.current) return;
@@ -124,59 +131,51 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect }: Le
       maxZoom: 12,
     });
 
-    // Use Esri World Imagery for satellite look
     const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
       attribution: '© Esri',
     });
-
+    const lightLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '© CartoDB',
+    });
     const labelLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png', {
       attribution: '© CartoDB',
     });
 
-    // Light base for reference
-    const lightLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-      attribution: '© CartoDB',
-    });
-
     lightLayer.addTo(map);
-
-    // Layer control
-    const baseMaps = {
-      'Street Map': lightLayer,
-      'Satellite': satelliteLayer,
-    };
-    const overlays = {
-      'Labels': labelLayer,
-    };
-    L.control.layers(baseMaps, overlays, { position: 'topright' }).addTo(map);
-
+    L.control.layers({ 'Street Map': lightLayer, 'Satellite': satelliteLayer }, { 'Labels': labelLayer }, { position: 'topright' }).addTo(map);
     L.control.zoom({ position: 'bottomright' }).addTo(map);
+
+    // Create layer groups
+    const provinceGroup = L.layerGroup().addTo(map);
+    const floodGroup = L.layerGroup().addTo(map);
+    const riverGroup = L.layerGroup().addTo(map);
+    const cityGroup = L.layerGroup().addTo(map);
+    const stationGroup = L.layerGroup().addTo(map);
+
+    provinceLayersRef.current = provinceGroup;
+    floodLayersRef.current = floodGroup;
+    riverLayersRef.current = riverGroup;
+    cityLayersRef.current = cityGroup;
+    stationLayersRef.current = stationGroup;
 
     // Flood extent zones
     FLOOD_ZONES.forEach((zone) => {
       const colors = FLOOD_COLORS[zone.severity];
       L.polygon(zone.path, {
-        color: colors.border,
-        weight: 1.5,
-        fillColor: colors.fill,
-        fillOpacity: 0.35,
+        color: colors.border, weight: 1.5, fillColor: colors.fill, fillOpacity: 0.35,
         dashArray: zone.severity === 'light' ? '4 4' : undefined,
-      }).addTo(map).bindTooltip(
+      }).addTo(floodGroup).bindTooltip(
         `<div style="font-size:11px;padding:2px 6px;"><strong>Flood Extent</strong><br/>Severity: <span style="text-transform:capitalize;font-weight:600;">${zone.severity}</span></div>`,
         { sticky: true }
       );
     });
 
-    // Rivers with varying width
+    // Rivers
     RIVERS.forEach((river) => {
-      const polyline = L.polyline(river.path, {
-        color: 'hsl(204, 80%, 45%)',
-        weight: river.width,
-        opacity: 0.6,
-        lineCap: 'round',
-        lineJoin: 'round',
-      }).addTo(map);
-      polyline.bindTooltip(`<div style="font-size:11px;padding:2px 6px;">🌊 ${river.name}</div>`, { sticky: true, direction: 'top' });
+      L.polyline(river.path, {
+        color: 'hsl(204, 80%, 45%)', weight: river.width, opacity: 0.6,
+        lineCap: 'round', lineJoin: 'round',
+      }).addTo(riverGroup).bindTooltip(`<div style="font-size:11px;padding:2px 6px;">🌊 ${river.name}</div>`, { sticky: true, direction: 'top' });
     });
 
     // Province polygons
@@ -185,11 +184,8 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect }: Le
       if (!coords) return;
       const color = RISK_COLORS[province.riskLevel];
       const polygon = L.polygon(coords, {
-        color,
-        weight: 2,
-        fillColor: color,
-        fillOpacity: 0.12,
-      }).addTo(map);
+        color, weight: 2, fillColor: color, fillOpacity: 0.12,
+      }).addTo(provinceGroup);
 
       polygon.bindTooltip(
         `<div style="font-size:12px;text-align:center;padding:4px 8px;">
@@ -211,22 +207,22 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect }: Le
           </div>`,
           iconSize: [18, 18],
         });
-        L.marker([province.coordinates.lat, province.coordinates.lng], { icon: alertIcon }).addTo(map);
+        L.marker([province.coordinates.lat, province.coordinates.lng], { icon: alertIcon }).addTo(provinceGroup);
       }
 
-      layersRef.current[province.id] = polygon;
+      provincePolygonsRef.current[province.id] = polygon;
     });
 
-    // City/station markers
+    // District markers — separated into city & station groups
     DISTRICT_MARKERS.forEach((district) => {
       const color = getCityMarkerColor(district.riskScore);
       const riskLevel = getRiskLevel(district.riskScore);
       const isStation = district.type === 'station';
-      const size = district.riskScore >= 80 ? 12 : district.riskScore >= 60 ? 10 : 7;
+      const size = district.riskScore >= 80 ? 14 : district.riskScore >= 60 ? 11 : 8;
 
       const markerHtml = isStation
-        ? `<div style="width:${size}px;height:${size}px;border-radius:2px;transform:rotate(45deg);background:${color};border:2px solid white;box-shadow:0 1px 6px rgba(0,0,0,0.3);"></div>`
-        : `<div style="width:${size}px;height:${size}px;border-radius:50%;background:${color};border:2px solid white;box-shadow:0 1px 6px rgba(0,0,0,0.3);"></div>`;
+        ? `<div style="width:${size}px;height:${size}px;border-radius:2px;transform:rotate(45deg);background:${color};border:2px solid white;box-shadow:0 1px 8px rgba(0,0,0,0.3);"></div>`
+        : `<div style="width:${size}px;height:${size}px;border-radius:50%;background:${color};border:2px solid white;box-shadow:0 1px 8px rgba(0,0,0,0.3);"></div>`;
 
       const icon = L.divIcon({
         className: 'city-marker',
@@ -235,24 +231,49 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect }: Le
         iconAnchor: [size / 2, size / 2],
       });
 
-      const marker = L.marker([district.lat, district.lng], { icon }).addTo(map);
+      const marker = L.marker([district.lat, district.lng], { icon });
       marker.bindTooltip(
-        `<div style="font-size:11px;text-align:center;min-width:120px;padding:4px 6px;">
+        `<div style="font-size:11px;text-align:center;min-width:130px;padding:6px 8px;border-left:3px solid ${color};border-radius:6px;">
           <strong>${district.name}</strong> ${isStation ? '📡' : '🏙️'}<br/>
-          Risk: <span style="color:${color};font-weight:700;font-size:14px;">${district.riskScore}%</span><br/>
+          Risk: <span style="color:${color};font-weight:700;font-size:15px;">${district.riskScore}%</span><br/>
           <span style="text-transform:uppercase;font-size:9px;color:${color};font-weight:600;letter-spacing:0.5px;">${riskLevel}</span>
         </div>`,
         { direction: 'top', offset: [0, -4] }
       );
       marker.on('click', () => onProvinceSelect(district.provinceId));
+
+      if (isStation) {
+        marker.addTo(stationGroup);
+      } else {
+        marker.addTo(cityGroup);
+      }
     });
 
     mapInstanceRef.current = map;
     return () => { map.remove(); mapInstanceRef.current = null; };
   }, []);
 
+  // Layer visibility toggling
   useEffect(() => {
-    Object.entries(layersRef.current).forEach(([id, polygon]) => {
+    const map = mapInstanceRef.current;
+    if (!map) return;
+
+    const toggle = (group: L.LayerGroup | null, visible: boolean) => {
+      if (!group) return;
+      if (visible && !map.hasLayer(group)) map.addLayer(group);
+      if (!visible && map.hasLayer(group)) map.removeLayer(group);
+    };
+
+    toggle(provinceLayersRef.current, layerVisibility.provinces);
+    toggle(floodLayersRef.current, layerVisibility.floodZones);
+    toggle(riverLayersRef.current, layerVisibility.rivers);
+    toggle(cityLayersRef.current, layerVisibility.cities);
+    toggle(stationLayersRef.current, layerVisibility.stations);
+  }, [layerVisibility]);
+
+  // Selected province highlight
+  useEffect(() => {
+    Object.entries(provincePolygonsRef.current).forEach(([id, polygon]) => {
       const province = provinces.find(p => p.id === id);
       if (!province) return;
       const color = RISK_COLORS[province.riskLevel];
@@ -270,57 +291,6 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect }: Le
   return (
     <div className="relative w-full h-full min-h-[380px] rounded-xl overflow-hidden border border-border">
       <div ref={mapRef} className="w-full h-full min-h-[380px]" />
-
-      {/* Professional Legend */}
-      <div className="absolute top-3 left-3 z-[1000] bg-card/95 rounded-xl border border-border shadow-lg backdrop-blur-sm" style={{ minWidth: 180 }}>
-        <div className="px-3 py-2 border-b border-border">
-          <div className="text-[10px] font-bold text-foreground uppercase tracking-wider">Map Legend</div>
-        </div>
-        <div className="p-3 space-y-3">
-          {/* Flood Extent */}
-          <div className="space-y-1.5">
-            <div className="text-[9px] font-semibold text-muted-foreground uppercase tracking-wider">Flood Extent</div>
-            {[
-              { label: 'Heavy Inundation', color: 'hsl(220, 80%, 45%)' },
-              { label: 'Moderate Flooding', color: 'hsl(204, 70%, 55%)' },
-              { label: 'Light Flooding', color: 'hsl(199, 80%, 70%)' },
-            ].map((item) => (
-              <div key={item.label} className="flex items-center gap-2">
-                <div className="w-5 h-3 rounded-sm" style={{ background: item.color, opacity: 0.7 }} />
-                <span className="text-[10px] text-muted-foreground">{item.label}</span>
-              </div>
-            ))}
-          </div>
-
-          {/* Infrastructure */}
-          <div className="space-y-1.5">
-            <div className="text-[9px] font-semibold text-muted-foreground uppercase tracking-wider">Infrastructure</div>
-            <div className="flex items-center gap-2">
-              <div className="w-5 h-[3px] rounded" style={{ background: 'hsl(204, 80%, 45%)' }} />
-              <span className="text-[10px] text-muted-foreground">Major Rivers</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-2.5 h-2.5 rounded-full" style={{ background: 'hsl(215, 16%, 47%)', border: '1.5px solid white', boxShadow: '0 0 2px rgba(0,0,0,0.2)' }} />
-              <span className="text-[10px] text-muted-foreground">Cities</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-2.5 h-2.5 rotate-45 rounded-sm" style={{ background: 'hsl(27, 96%, 54%)', border: '1.5px solid white', boxShadow: '0 0 2px rgba(0,0,0,0.2)' }} />
-              <span className="text-[10px] text-muted-foreground">Monitoring Stations</span>
-            </div>
-          </div>
-
-          {/* Risk Levels */}
-          <div className="space-y-1.5">
-            <div className="text-[9px] font-semibold text-muted-foreground uppercase tracking-wider">Risk Level</div>
-            {(['critical', 'high', 'medium', 'low'] as const).map((level) => (
-              <div key={level} className="flex items-center gap-2">
-                <div className="w-3.5 h-2.5 rounded-sm" style={{ background: RISK_COLORS[level], opacity: 0.8 }} />
-                <span className="text-[10px] text-muted-foreground capitalize">{level}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
 
       {/* Scale bar */}
       <div className="absolute bottom-3 left-3 z-[1000] bg-card/90 rounded-lg border border-border px-3 py-1.5 shadow-sm">

@@ -51,8 +51,8 @@ export interface Alert {
 export const RISK_COLORS: Record<RiskLevel, string> = {
   low: 'hsl(142, 71%, 45%)',
   medium: 'hsl(45, 93%, 47%)',
-  high: 'hsl(27, 96%, 54%)',
-  critical: 'hsl(0, 72%, 51%)',
+  high: 'hsl(0, 72%, 51%)',
+  critical: 'hsl(0, 84%, 40%)',
 };
 
 export const RISK_LABELS: Record<RiskLevel, string> = {

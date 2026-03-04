@@ -65,21 +65,21 @@ export function DonutStatCards() {
       max: 100,
       label: 'River Capacity',
       sublabel: `${Math.round(avgDischarge * 100)}% threshold`,
-      color: 'hsl(204, 63%, 28%)',
+      color: 'hsl(45, 93%, 47%)',
     },
     {
       value: avgRainfall,
       max: 200,
       label: 'Avg Rainfall',
       sublabel: `${Math.round(avgRainfall)}mm / 7 days`,
-      color: 'hsl(210, 60%, 50%)',
+      color: 'hsl(204, 63%, 28%)',
     },
     {
       value: criticalDistricts,
       max: totalDistricts,
       label: 'High Risk Districts',
       sublabel: `${criticalDistricts} of ${totalDistricts}`,
-      color: 'hsl(27, 96%, 54%)',
+      color: 'hsl(0, 84%, 40%)',
     },
   ];
 

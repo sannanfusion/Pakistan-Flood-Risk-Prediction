@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { LeafletMap } from '@/components/LeafletMap';
+import { MapLayersPanel, LayerVisibility } from '@/components/MapLayersPanel';
 import { ProvinceDetail } from '@/components/ProvinceDetail';
 import { AlertsPanel } from '@/components/AlertsPanel';
 import { RainfallChart } from '@/components/RainfallChart';
@@ -26,7 +27,18 @@ const DashCard = ({ children, className = '', ...props }: React.HTMLAttributes<H
 
 const Index = () => {
   const [selectedProvince, setSelectedProvince] = useState<string | null>('sindh');
+  const [layerVisibility, setLayerVisibility] = useState<LayerVisibility>({
+    provinces: true,
+    floodZones: true,
+    rivers: true,
+    cities: true,
+    stations: true,
+  });
   const selected = provinces.find((p) => p.id === selectedProvince) || null;
+
+  const toggleLayer = useCallback((layer: keyof LayerVisibility) => {
+    setLayerVisibility((prev) => ({ ...prev, [layer]: !prev[layer] }));
+  }, []);
 
   const highRiskCount = provinces.filter((p) => p.riskLevel === 'high' || p.riskLevel === 'critical').length;
   const totalRainfall = Math.round(provinces.reduce((s, p) => s + p.rainfall7Day, 0) / provinces.length);
@@ -126,11 +138,15 @@ const Index = () => {
             </div>
             <DataSourceBadge sources={['nasa']} />
           </div>
-          <LeafletMap
-            provinces={provinces}
-            selectedProvince={selectedProvince}
-            onProvinceSelect={setSelectedProvince}
-          />
+          <div className="relative h-[calc(100%-44px)]">
+            <LeafletMap
+              provinces={provinces}
+              selectedProvince={selectedProvince}
+              onProvinceSelect={setSelectedProvince}
+              layerVisibility={layerVisibility}
+            />
+            <MapLayersPanel layers={layerVisibility} onToggle={toggleLayer} />
+          </div>
         </DashCard>
       </motion.div>
 
