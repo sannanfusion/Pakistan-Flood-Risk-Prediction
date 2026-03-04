@@ -27,7 +27,18 @@ const DashCard = ({ children, className = '', ...props }: React.HTMLAttributes<H
 
 const Index = () => {
   const [selectedProvince, setSelectedProvince] = useState<string | null>('sindh');
+  const [layerVisibility, setLayerVisibility] = useState<LayerVisibility>({
+    provinces: true,
+    floodZones: true,
+    rivers: true,
+    cities: true,
+    stations: true,
+  });
   const selected = provinces.find((p) => p.id === selectedProvince) || null;
+
+  const toggleLayer = useCallback((layer: keyof LayerVisibility) => {
+    setLayerVisibility((prev) => ({ ...prev, [layer]: !prev[layer] }));
+  }, []);
 
   const highRiskCount = provinces.filter((p) => p.riskLevel === 'high' || p.riskLevel === 'critical').length;
   const totalRainfall = Math.round(provinces.reduce((s, p) => s + p.rainfall7Day, 0) / provinces.length);
