@@ -8,7 +8,7 @@ interface LeafletMapProps {
   provinces: ProvinceData[];
   selectedProvince: string | null;
   onProvinceSelect: (id: string) => void;
-  layerVisibility: LayerVisibility;
+  layerVisibility?: LayerVisibility;
 }
 
 const PROVINCE_POLYGONS: Record<string, [number, number][]> = {
@@ -256,7 +256,7 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect, laye
   // Layer visibility toggling
   useEffect(() => {
     const map = mapInstanceRef.current;
-    if (!map) return;
+    if (!map || !layerVisibility) return;
 
     const toggle = (group: L.LayerGroup | null, visible: boolean) => {
       if (!group) return;
