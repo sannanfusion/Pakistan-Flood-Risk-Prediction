@@ -25,55 +25,30 @@ interface LayerRowProps {
   description?: string;
 }
 
-function LayerRow({ label, icon, color, active, onToggle, description }: LayerRowProps) {
+function LayerRow({ label, icon, color, active, onToggle }: LayerRowProps) {
   return (
     <div
-      className={`flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer transition-all duration-200 select-none ${
+      className={`flex items-center gap-2 px-2 py-1.5 rounded-lg cursor-pointer transition-all duration-200 select-none ${
         active
-          ? 'bg-card border border-border shadow-sm'
-          : 'bg-transparent border border-transparent opacity-60 hover:opacity-80'
+          ? 'bg-card border border-border'
+          : 'bg-transparent border border-transparent opacity-50 hover:opacity-75'
       }`}
       onClick={onToggle}
     >
-      {/* Color indicator dot */}
       <div
-        className="w-2.5 h-2.5 rounded-full shrink-0 transition-all duration-300"
-        style={{
-          background: active ? color : 'hsl(var(--muted-foreground))',
-          boxShadow: active ? `0 0 6px ${color}40` : 'none',
-        }}
+        className="w-2 h-2 rounded-full shrink-0"
+        style={{ background: active ? color : 'hsl(var(--muted-foreground))' }}
       />
-
-      {/* Icon */}
-      <div
-        className={`shrink-0 transition-colors duration-200 ${
-          active ? 'text-foreground' : 'text-muted-foreground'
-        }`}
-      >
+      <div className={`shrink-0 ${active ? 'text-foreground' : 'text-muted-foreground'}`}>
         {icon}
       </div>
-
-      {/* Label + description */}
-      <div className="flex-1 min-w-0">
-        <span
-          className={`text-[11px] font-semibold transition-colors duration-200 ${
-            active ? 'text-foreground' : 'text-muted-foreground'
-          }`}
-        >
-          {label}
-        </span>
-        {description && (
-          <span className="block text-[9px] text-muted-foreground leading-tight mt-0.5">
-            {description}
-          </span>
-        )}
-      </div>
-
-      {/* Toggle */}
+      <span className={`flex-1 text-[10px] font-medium truncate ${active ? 'text-foreground' : 'text-muted-foreground'}`}>
+        {label}
+      </span>
       <Switch
         checked={active}
         onCheckedChange={onToggle}
-        className="shrink-0 scale-[0.85] data-[state=checked]:bg-primary"
+        className="shrink-0 scale-75 data-[state=checked]:bg-primary"
         onClick={(e) => e.stopPropagation()}
       />
     </div>
@@ -81,81 +56,45 @@ function LayerRow({ label, icon, color, active, onToggle, description }: LayerRo
 }
 
 export function MapLayersPanel({ layers, onToggle }: MapLayersPanelProps) {
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
 
-  const layerConfig: { key: keyof LayerVisibility; label: string; icon: React.ReactNode; color: string; description: string }[] = [
-    {
-      key: 'provinces',
-      label: 'Province Boundaries',
-      icon: <Triangle className="w-3.5 h-3.5" />,
-      color: 'hsl(204, 63%, 28%)',
-      description: 'Risk-colored region polygons',
-    },
-    {
-      key: 'floodZones',
-      label: 'Flood Extent Zones',
-      icon: <Droplets className="w-3.5 h-3.5" />,
-      color: 'hsl(220, 80%, 45%)',
-      description: 'Active inundation areas',
-    },
-    {
-      key: 'rivers',
-      label: 'Major Rivers',
-      icon: <Droplets className="w-3.5 h-3.5" />,
-      color: 'hsl(204, 80%, 45%)',
-      description: 'Indus, Chenab, Jhelum, Ravi, Sutlej',
-    },
-    {
-      key: 'cities',
-      label: 'City Markers',
-      icon: <MapPin className="w-3.5 h-3.5" />,
-      color: 'hsl(142, 71%, 45%)',
-      description: 'Urban centers with risk data',
-    },
-    {
-      key: 'stations',
-      label: 'Monitoring Stations',
-      icon: <Radio className="w-3.5 h-3.5" />,
-      color: 'hsl(0, 72%, 51%)',
-      description: 'Flood gauges & sensors',
-    },
+  const layerConfig = [
+    { key: 'provinces' as const, label: 'Provinces', icon: <Triangle className="w-3 h-3" />, color: 'hsl(204, 63%, 28%)' },
+    { key: 'floodZones' as const, label: 'Flood Zones', icon: <Droplets className="w-3 h-3" />, color: 'hsl(220, 80%, 45%)' },
+    { key: 'rivers' as const, label: 'Rivers', icon: <Droplets className="w-3 h-3" />, color: 'hsl(204, 80%, 45%)' },
+    { key: 'cities' as const, label: 'Cities', icon: <MapPin className="w-3 h-3" />, color: 'hsl(142, 71%, 45%)' },
+    { key: 'stations' as const, label: 'Stations', icon: <Radio className="w-3 h-3" />, color: 'hsl(0, 72%, 51%)' },
   ];
 
   const activeCount = Object.values(layers).filter(Boolean).length;
 
   return (
-    <div className="absolute top-3 left-3 z-[1000] w-[210px]">
-      {/* Header */}
+    <div className="absolute top-3 left-3 z-[1000] w-[180px]">
       <div
-        className="flex items-center justify-between gap-2 px-3 py-2 bg-card/95 backdrop-blur-sm rounded-t-xl border border-border shadow-lg cursor-pointer select-none"
+        className="flex items-center justify-between gap-1.5 px-2.5 py-1.5 bg-card/95 backdrop-blur-sm border border-border shadow-lg cursor-pointer select-none"
         onClick={() => setCollapsed(!collapsed)}
-        style={{ borderBottom: collapsed ? undefined : 'none', borderRadius: collapsed ? '12px' : undefined }}
+        style={{ borderBottom: collapsed ? undefined : 'none', borderRadius: collapsed ? '10px' : '10px 10px 0 0' }}
       >
-        <div className="flex items-center gap-2">
-          <Layers className="w-3.5 h-3.5 text-primary" />
-          <span className="text-[10px] font-bold text-foreground uppercase tracking-wider">Layers</span>
-          <span className="text-[9px] font-mono text-muted-foreground bg-muted rounded-full px-1.5 py-0.5">
+        <div className="flex items-center gap-1.5">
+          <Layers className="w-3 h-3 text-primary" />
+          <span className="text-[9px] font-bold text-foreground uppercase tracking-wider">Layers</span>
+          <span className="text-[8px] font-mono text-muted-foreground bg-muted rounded-full px-1 py-0.5">
             {activeCount}/{layerConfig.length}
           </span>
         </div>
-        {collapsed ? (
-          <ChevronDown className="w-3.5 h-3.5 text-muted-foreground" />
-        ) : (
-          <ChevronUp className="w-3.5 h-3.5 text-muted-foreground" />
-        )}
+        {collapsed ? <ChevronDown className="w-3 h-3 text-muted-foreground" /> : <ChevronUp className="w-3 h-3 text-muted-foreground" />}
       </div>
 
-      {/* Body */}
       <AnimatePresence>
         {!collapsed && (
           <motion.div
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="overflow-hidden bg-card/95 backdrop-blur-sm rounded-b-xl border border-t-0 border-border shadow-lg"
+            transition={{ duration: 0.15 }}
+            className="overflow-hidden bg-card/95 backdrop-blur-sm rounded-b-[10px] border border-t-0 border-border shadow-lg"
           >
-            <div className="p-2 space-y-1">
+            <div className="p-1.5 space-y-0.5">
               {layerConfig.map((layer) => (
                 <LayerRow
                   key={layer.key}
@@ -164,7 +103,6 @@ export function MapLayersPanel({ layers, onToggle }: MapLayersPanelProps) {
                   color={layer.color}
                   active={layers[layer.key]}
                   onToggle={() => onToggle(layer.key)}
-                  description={layer.description}
                 />
               ))}
             </div>
