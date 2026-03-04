@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { LeafletMap } from '@/components/LeafletMap';
+import { MapLayersPanel, LayerVisibility } from '@/components/MapLayersPanel';
 import { ProvinceDetail } from '@/components/ProvinceDetail';
 import { AlertsPanel } from '@/components/AlertsPanel';
 import { RainfallChart } from '@/components/RainfallChart';
