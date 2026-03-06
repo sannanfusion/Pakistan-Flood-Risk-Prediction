@@ -17,8 +17,8 @@ export function ProvinceDetail({ province }: ProvinceDetailProps) {
     province.riskLevel === 'medium' ? 'bg-risk-medium/10 border-risk-medium/30' : 'bg-risk-low/10 border-risk-low/30';
 
   const riskStroke =
-    province.riskLevel === 'critical' ? 'hsl(0, 72%, 51%)' :
-    province.riskLevel === 'high' ? 'hsl(27, 96%, 54%)' :
+    province.riskLevel === 'critical' ? 'hsl(0, 84%, 40%)' :
+    province.riskLevel === 'high' ? 'hsl(0, 72%, 51%)' :
     province.riskLevel === 'medium' ? 'hsl(45, 93%, 47%)' : 'hsl(142, 71%, 45%)';
 
   const circumference = 2 * Math.PI * 40;
