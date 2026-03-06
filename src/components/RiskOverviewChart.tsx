@@ -15,28 +15,28 @@ export function RiskOverviewChart() {
         <BarChart data={data} margin={{ top: 5, right: 5, left: -20, bottom: 0 }}>
           <XAxis
             dataKey="name"
-            tick={{ fill: 'hsl(215, 16%, 47%)', fontSize: 10, fontFamily: 'JetBrains Mono' }}
-            axisLine={{ stroke: 'hsl(214, 18%, 89%)' }}
+            tick={{ fill: 'hsl(215, 14%, 46%)', fontSize: 10, fontFamily: 'JetBrains Mono' }}
+            axisLine={{ stroke: 'hsl(214, 20%, 90%)' }}
             tickLine={false}
           />
           <YAxis
-            tick={{ fill: 'hsl(215, 16%, 47%)', fontSize: 10, fontFamily: 'JetBrains Mono' }}
+            tick={{ fill: 'hsl(215, 14%, 46%)', fontSize: 10, fontFamily: 'JetBrains Mono' }}
             axisLine={false}
             tickLine={false}
             domain={[0, 100]}
           />
           <Tooltip
             contentStyle={{
-              backgroundColor: 'white',
-              border: '1px solid hsl(214, 18%, 89%)',
-              borderRadius: '12px',
+              backgroundColor: 'hsl(0, 0%, 100%)',
+              border: '1px solid hsl(214, 20%, 90%)',
+              borderRadius: '8px',
               fontSize: '12px',
               fontFamily: 'JetBrains Mono',
-              color: 'hsl(210, 29%, 24%)',
+              color: 'hsl(220, 20%, 10%)',
               boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
             }}
           />
-          <Bar dataKey="riskScore" radius={[6, 6, 0, 0]} name="Risk Score">
+          <Bar dataKey="riskScore" radius={[4, 4, 0, 0]} name="Risk Score">
             {data.map((entry, i) => (
               <Cell key={i} fill={RISK_COLORS[entry.riskLevel]} fillOpacity={0.85} />
             ))}
