@@ -156,17 +156,22 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect, laye
       }).addTo(riverGroup).bindTooltip(`<div style="font-size:11px;padding:2px 6px;">🌊 ${river.name}</div>`, { sticky: true, direction: 'top' });
     });
 
-    // Province polygons
+    // Province circles
     provinces.forEach((province) => {
-      const coords = PROVINCE_POLYGONS[province.id];
-      if (!coords) return;
+      const circleData = PROVINCE_CIRCLES[province.id];
+      if (!circleData) return;
       const color = RISK_COLORS[province.riskLevel];
-      const polygon = L.polygon(coords, {
-        color, weight: 2, fillColor: color, fillOpacity: 0.12,
+      const circle = L.circle(circleData.center, {
+        radius: circleData.radius,
+        color,
+        weight: 2,
+        fillColor: color,
+        fillOpacity: 0.15,
+        opacity: 0.7,
       }).addTo(provinceGroup);
 
-      polygon.bindTooltip(
-        `<div style="font-size:12px;text-align:center;padding:4px 8px;">
+      circle.bindTooltip(
+        `<div style="font-size:12px;text-align:center;padding:6px 10px;background:white;border-radius:8px;">
           <strong style="font-size:13px;">${province.name}</strong><br/>
           <span style="color:${color};font-weight:700;font-size:16px;">${province.riskScore}%</span> risk<br/>
           <span style="font-size:10px;color:#666;">Rain (7d): ${province.rainfall7Day}mm</span><br/>
@@ -174,21 +179,30 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect, laye
         </div>`,
         { sticky: true, direction: 'top' }
       );
-      polygon.on('click', () => onProvinceSelect(province.id));
+      circle.on('click', () => onProvinceSelect(province.id));
+
+      // Province label
+      const labelIcon = L.divIcon({
+        className: 'province-label',
+        html: `<div style="font-size:11px;font-weight:600;color:${color};text-shadow:0 0 4px white,0 0 4px white,0 0 4px white;white-space:nowrap;pointer-events:none;">${province.name}</div>`,
+        iconSize: [0, 0],
+        iconAnchor: [0, 0],
+      });
+      L.marker(circleData.center, { icon: labelIcon, interactive: false }).addTo(provinceGroup);
 
       if (province.alertActive) {
         const alertIcon = L.divIcon({
           className: 'alert-pulse-marker',
           html: `<div style="position:relative;">
-            <div style="width:18px;height:18px;border-radius:50%;background:${color};opacity:0.9;box-shadow:0 0 12px ${color};"></div>
-            <div style="position:absolute;inset:-6px;border-radius:50%;border:2px solid ${color};opacity:0.4;animation:pulse 2s infinite;"></div>
+            <div style="width:14px;height:14px;border-radius:50%;background:${color};opacity:0.9;box-shadow:0 0 10px ${color};"></div>
+            <div style="position:absolute;inset:-5px;border-radius:50%;border:2px solid ${color};opacity:0.4;animation:pulse 2s infinite;"></div>
           </div>`,
-          iconSize: [18, 18],
+          iconSize: [14, 14],
         });
-        L.marker([province.coordinates.lat, province.coordinates.lng], { icon: alertIcon }).addTo(provinceGroup);
+        L.marker([circleData.center[0] + 0.3, circleData.center[1] + 0.3], { icon: alertIcon }).addTo(provinceGroup);
       }
 
-      provincePolygonsRef.current[province.id] = polygon;
+      provincePolygonsRef.current[province.id] = circle;
     });
 
     // District markers — separated into city & station groups
