@@ -265,17 +265,17 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect, laye
 
   // Selected province highlight
   useEffect(() => {
-    Object.entries(provincePolygonsRef.current).forEach(([id, polygon]) => {
+    Object.entries(provincePolygonsRef.current).forEach(([id, circle]) => {
       const province = provinces.find(p => p.id === id);
       if (!province) return;
       const color = RISK_COLORS[province.riskLevel];
       if (id === selectedProvince) {
-        polygon.setStyle({ weight: 3, fillOpacity: 0.25, color: 'hsl(204, 63%, 28%)' });
+        circle.setStyle({ weight: 3, fillOpacity: 0.3, color: 'hsl(210, 70%, 35%)' });
         if (mapInstanceRef.current) {
-          mapInstanceRef.current.flyToBounds(polygon.getBounds(), { padding: [40, 40], maxZoom: 7, duration: 0.8 });
+          mapInstanceRef.current.flyTo(circle.getLatLng(), 6, { duration: 0.8 });
         }
       } else {
-        polygon.setStyle({ weight: 2, fillOpacity: 0.12, color });
+        circle.setStyle({ weight: 2, fillOpacity: 0.15, color });
       }
     });
   }, [selectedProvince, provinces]);
