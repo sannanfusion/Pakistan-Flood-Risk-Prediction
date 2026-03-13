@@ -109,15 +109,18 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect, laye
     const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
       attribution: '© Esri',
     });
-    const lightLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-      attribution: '© CartoDB',
+    const gmapsStyle = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+      attribution: '© CartoDB Voyager',
+      subdomains: 'abcd',
+      maxZoom: 19,
     });
-    const labelLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png', {
+    const labelLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{z}/{x}/{y}{r}.png', {
       attribution: '© CartoDB',
+      subdomains: 'abcd',
     });
 
-    lightLayer.addTo(map);
-    L.control.layers({ 'Street Map': lightLayer, 'Satellite': satelliteLayer }, { 'Labels': labelLayer }, { position: 'topright' }).addTo(map);
+    gmapsStyle.addTo(map);
+    L.control.layers({ 'Map': gmapsStyle, 'Satellite': satelliteLayer }, { 'Labels': labelLayer }, { position: 'topright' }).addTo(map);
     L.control.zoom({ position: 'bottomright' }).addTo(map);
 
     // Create layer groups
