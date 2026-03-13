@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { ProvinceData, RISK_COLORS } from '@/lib/types';
@@ -11,7 +11,6 @@ interface LeafletMapProps {
   layerVisibility?: LayerVisibility;
 }
 
-// Province center coordinates and radius (in meters) for circle markers
 const PROVINCE_CIRCLES: Record<string, { center: [number, number]; radius: number }> = {
   sindh: { center: [26.2, 68.0], radius: 180000 },
   punjab: { center: [31.2, 72.0], radius: 200000 },
@@ -21,7 +20,6 @@ const PROVINCE_CIRCLES: Record<string, { center: [number, number]; radius: numbe
   ajk: { center: [34.2, 73.8], radius: 50000 },
 };
 
-// Flood extent zones (simulated inundation areas along rivers)
 const FLOOD_ZONES: { path: [number, number][]; severity: 'light' | 'moderate' | 'heavy' }[] = [
   { path: [[27.8, 68.2], [27.5, 68.5], [27.0, 68.8], [26.5, 68.5], [26.0, 68.2], [25.8, 68.5], [26.2, 68.8], [26.8, 69.0], [27.3, 68.9], [27.8, 68.6], [27.8, 68.2]], severity: 'heavy' },
   { path: [[30.5, 70.5], [30.2, 70.8], [29.8, 71.0], [29.5, 70.8], [29.3, 70.5], [29.5, 70.2], [29.8, 70.0], [30.2, 70.2], [30.5, 70.5]], severity: 'moderate' },
@@ -71,18 +69,82 @@ function getRiskLevel(score: number) {
   return 'low';
 }
 
-function getCityMarkerColor(score: number) {
-  if (score >= 80) return 'hsl(0, 84%, 40%)';
-  if (score >= 60) return 'hsl(0, 72%, 51%)';
-  if (score >= 40) return 'hsl(45, 93%, 47%)';
-  return 'hsl(142, 71%, 45%)';
+function getMarkerColor(score: number) {
+  if (score >= 80) return { bg: '#dc2626', border: '#991b1b', glow: 'rgba(220,38,38,0.4)' };
+  if (score >= 60) return { bg: '#ea580c', border: '#c2410c', glow: 'rgba(234,88,12,0.3)' };
+  if (score >= 40) return { bg: '#eab308', border: '#a16207', glow: 'rgba(234,179,8,0.3)' };
+  return { bg: '#16a34a', border: '#15803d', glow: 'rgba(22,163,74,0.3)' };
 }
 
 const FLOOD_COLORS = {
-  light: { fill: 'hsl(199, 80%, 70%)', border: 'hsl(199, 60%, 50%)' },
-  moderate: { fill: 'hsl(204, 70%, 55%)', border: 'hsl(204, 63%, 40%)' },
-  heavy: { fill: 'hsl(220, 80%, 45%)', border: 'hsl(220, 70%, 35%)' },
+  light: { fill: 'rgba(96,165,250,0.2)', border: 'rgba(59,130,246,0.5)' },
+  moderate: { fill: 'rgba(59,130,246,0.25)', border: 'rgba(37,99,235,0.6)' },
+  heavy: { fill: 'rgba(37,99,235,0.3)', border: 'rgba(29,78,216,0.7)' },
 };
+
+function createCityMarkerHtml(district: typeof DISTRICT_MARKERS[0]) {
+  const colors = getMarkerColor(district.riskScore);
+  const size = district.riskScore >= 80 ? 32 : district.riskScore >= 60 ? 28 : 24;
+  const innerSize = size - 8;
+  const isStation = district.type === 'station';
+  const riskLabel = getRiskLevel(district.riskScore).toUpperCase();
+
+  return `<div style="
+    position:relative;
+    width:${size}px;height:${size}px;
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;
+  ">
+    <div style="
+      width:${innerSize}px;height:${innerSize}px;
+      background:${colors.bg};
+      border:2.5px solid white;
+      border-radius:${isStation ? '4px' : '50%'};
+      ${isStation ? 'transform:rotate(45deg);' : ''}
+      box-shadow: 0 0 0 1px ${colors.border}, 0 2px 8px ${colors.glow}, 0 1px 3px rgba(0,0,0,0.2);
+      transition: transform 0.2s, box-shadow 0.2s;
+    "></div>
+    ${district.riskScore >= 80 ? `<div style="
+      position:absolute;inset:-4px;
+      border-radius:${isStation ? '6px' : '50%'};
+      border:2px solid ${colors.bg};
+      opacity:0.5;
+      animation: markerPulse 2s ease-out infinite;
+    "></div>` : ''}
+  </div>`;
+}
+
+function createTooltipHtml(district: typeof DISTRICT_MARKERS[0]) {
+  const colors = getMarkerColor(district.riskScore);
+  const riskLabel = getRiskLevel(district.riskScore);
+  const icon = district.type === 'station' ? '📡' : '🏙️';
+
+  return `<div style="
+    font-family:'Inter',system-ui,sans-serif;
+    min-width:140px;padding:10px 12px;
+    background:white;border-radius:10px;
+    box-shadow:0 4px 20px rgba(0,0,0,0.12);
+    border:1px solid #e5e7eb;
+    border-left:4px solid ${colors.bg};
+  ">
+    <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;">
+      <span style="font-size:13px;">${icon}</span>
+      <span style="font-size:12px;font-weight:700;color:#1a1a2e;">${district.name}</span>
+    </div>
+    <div style="display:flex;align-items:baseline;gap:4px;margin-bottom:4px;">
+      <span style="font-size:22px;font-weight:800;color:${colors.bg};line-height:1;">${district.riskScore}</span>
+      <span style="font-size:10px;color:#6b7280;font-weight:500;">/ 100</span>
+    </div>
+    <div style="
+      display:inline-block;
+      font-size:9px;font-weight:700;
+      color:${colors.bg};
+      background:${colors.glow};
+      padding:2px 8px;border-radius:4px;
+      text-transform:uppercase;letter-spacing:0.5px;
+    ">${riskLabel} RISK</div>
+  </div>`;
+}
 
 export function LeafletMap({ provinces, selectedProvince, onProvinceSelect, layerVisibility }: LeafletMapProps) {
   const mapRef = useRef<HTMLDivElement>(null);
@@ -106,24 +168,33 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect, laye
       maxZoom: 12,
     });
 
-    const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-      attribution: '© Esri',
+    // Clean, modern map style
+    const lightMap = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '© CartoDB',
+      subdomains: 'abcd',
+      maxZoom: 19,
     });
-    const gmapsStyle = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+
+    const voyagerMap = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
       attribution: '© CartoDB Voyager',
       subdomains: 'abcd',
       maxZoom: 19,
     });
-    const labelLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{z}/{x}/{y}{r}.png', {
-      attribution: '© CartoDB',
-      subdomains: 'abcd',
+
+    const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      attribution: '© Esri',
     });
 
-    gmapsStyle.addTo(map);
-    L.control.layers({ 'Map': gmapsStyle, 'Satellite': satelliteLayer }, { 'Labels': labelLayer }, { position: 'topright' }).addTo(map);
+    // Default to light clean style
+    lightMap.addTo(map);
+
+    L.control.layers(
+      { 'Light': lightMap, 'Voyager': voyagerMap, 'Satellite': satelliteLayer },
+      {},
+      { position: 'topright' }
+    ).addTo(map);
     L.control.zoom({ position: 'bottomright' }).addTo(map);
 
-    // Create layer groups
     const provinceGroup = L.layerGroup().addTo(map);
     const floodGroup = L.layerGroup().addTo(map);
     const riverGroup = L.layerGroup().addTo(map);
@@ -136,46 +207,72 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect, laye
     cityLayersRef.current = cityGroup;
     stationLayersRef.current = stationGroup;
 
-    // Flood extent zones
+    // Flood zones
     FLOOD_ZONES.forEach((zone) => {
       const colors = FLOOD_COLORS[zone.severity];
       L.polygon(zone.path, {
-        color: colors.border, weight: 1.5, fillColor: colors.fill, fillOpacity: 0.35,
-        dashArray: zone.severity === 'light' ? '4 4' : undefined,
+        color: colors.border, weight: 1.5, fillColor: colors.fill, fillOpacity: 0.5,
+        dashArray: zone.severity === 'light' ? '6 4' : undefined,
       }).addTo(floodGroup).bindTooltip(
-        `<div style="font-size:11px;padding:2px 6px;"><strong>Flood Extent</strong><br/>Severity: <span style="text-transform:capitalize;font-weight:600;">${zone.severity}</span></div>`,
+        `<div style="font-family:'Inter',sans-serif;font-size:11px;padding:4px 8px;background:white;border-radius:6px;box-shadow:0 2px 8px rgba(0,0,0,0.1);border:1px solid #e5e7eb;">
+          <strong>Flood Extent</strong><br/>
+          <span style="text-transform:capitalize;font-weight:600;color:#2563eb;">${zone.severity}</span> severity
+        </div>`,
         { sticky: true }
       );
     });
 
     // Rivers
     RIVERS.forEach((river) => {
+      // River shadow
       L.polyline(river.path, {
-        color: 'hsl(204, 80%, 45%)', weight: river.width, opacity: 0.6,
+        color: 'rgba(37,99,235,0.15)', weight: river.width + 4, opacity: 1,
         lineCap: 'round', lineJoin: 'round',
-      }).addTo(riverGroup).bindTooltip(`<div style="font-size:11px;padding:2px 6px;">🌊 ${river.name}</div>`, { sticky: true, direction: 'top' });
+      }).addTo(riverGroup);
+      // River line
+      L.polyline(river.path, {
+        color: '#3b82f6', weight: river.width, opacity: 0.7,
+        lineCap: 'round', lineJoin: 'round',
+      }).addTo(riverGroup).bindTooltip(
+        `<div style="font-family:'Inter',sans-serif;font-size:11px;padding:4px 8px;background:white;border-radius:6px;box-shadow:0 2px 8px rgba(0,0,0,0.1);border:1px solid #e5e7eb;">
+          💧 ${river.name}
+        </div>`,
+        { sticky: true, direction: 'top' }
+      );
     });
 
-    // Province circles
+    // Province circles — soft, elegant zones
     provinces.forEach((province) => {
       const circleData = PROVINCE_CIRCLES[province.id];
       if (!circleData) return;
       const color = RISK_COLORS[province.riskLevel];
+
       const circle = L.circle(circleData.center, {
         radius: circleData.radius,
         color,
         weight: 2,
         fillColor: color,
-        fillOpacity: 0.15,
-        opacity: 0.7,
+        fillOpacity: 0.08,
+        opacity: 0.5,
+        dashArray: '8 4',
       }).addTo(provinceGroup);
 
       circle.bindTooltip(
-        `<div style="font-size:12px;text-align:center;padding:6px 10px;background:white;border-radius:8px;">
-          <strong style="font-size:13px;">${province.name}</strong><br/>
-          <span style="color:${color};font-weight:700;font-size:16px;">${province.riskScore}%</span> risk<br/>
-          <span style="font-size:10px;color:#666;">Rain (7d): ${province.rainfall7Day}mm</span><br/>
-          <span style="font-size:10px;color:#666;">Pop: ${(province.population / 1e6).toFixed(1)}M</span>
+        `<div style="
+          font-family:'Inter',sans-serif;
+          text-align:center;padding:12px 16px;
+          background:white;border-radius:12px;
+          box-shadow:0 4px 20px rgba(0,0,0,0.12);
+          border:1px solid #e5e7eb;
+          min-width:150px;
+        ">
+          <div style="font-size:14px;font-weight:800;color:#1a1a2e;margin-bottom:8px;">${province.name}</div>
+          <div style="font-size:28px;font-weight:900;color:${color};line-height:1;margin-bottom:4px;">${province.riskScore}%</div>
+          <div style="font-size:10px;color:#6b7280;margin-bottom:8px;">Risk Score</div>
+          <div style="display:flex;justify-content:space-between;gap:12px;font-size:10px;color:#6b7280;">
+            <div><span style="font-weight:600;color:#1a1a2e;">${province.rainfall7Day}</span>mm rain</div>
+            <div><span style="font-weight:600;color:#1a1a2e;">${(province.population / 1e6).toFixed(1)}M</span> pop</div>
+          </div>
         </div>`,
         { sticky: true, direction: 'top' }
       );
@@ -183,58 +280,42 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect, laye
 
       // Province label
       const labelIcon = L.divIcon({
-        className: 'province-label',
-        html: `<div style="font-size:11px;font-weight:600;color:${color};text-shadow:0 0 4px white,0 0 4px white,0 0 4px white;white-space:nowrap;pointer-events:none;">${province.name}</div>`,
+        className: 'province-label-marker',
+        html: `<div style="
+          font-family:'Inter',sans-serif;
+          font-size:11px;font-weight:700;
+          color:#1a1a2e;
+          background:rgba(255,255,255,0.85);
+          padding:2px 8px;border-radius:6px;
+          white-space:nowrap;pointer-events:none;
+          box-shadow:0 1px 4px rgba(0,0,0,0.08);
+          border:1px solid rgba(0,0,0,0.06);
+        ">${province.name}</div>`,
         iconSize: [0, 0],
         iconAnchor: [0, 0],
       });
       L.marker(circleData.center, { icon: labelIcon, interactive: false }).addTo(provinceGroup);
 
-      if (province.alertActive) {
-        const alertIcon = L.divIcon({
-          className: 'alert-pulse-marker',
-          html: `<div style="position:relative;">
-            <div style="width:14px;height:14px;border-radius:50%;background:${color};opacity:0.9;box-shadow:0 0 10px ${color};"></div>
-            <div style="position:absolute;inset:-5px;border-radius:50%;border:2px solid ${color};opacity:0.4;animation:pulse 2s infinite;"></div>
-          </div>`,
-          iconSize: [14, 14],
-        });
-        L.marker([circleData.center[0] + 0.3, circleData.center[1] + 0.3], { icon: alertIcon }).addTo(provinceGroup);
-      }
-
       provincePolygonsRef.current[province.id] = circle;
     });
 
-    // District markers — separated into city & station groups
+    // District markers
     DISTRICT_MARKERS.forEach((district) => {
-      const color = getCityMarkerColor(district.riskScore);
-      const riskLevel = getRiskLevel(district.riskScore);
-      const isStation = district.type === 'station';
-      const size = district.riskScore >= 80 ? 14 : district.riskScore >= 60 ? 11 : 8;
-
-      const markerHtml = isStation
-        ? `<div style="width:${size}px;height:${size}px;border-radius:2px;transform:rotate(45deg);background:${color};border:2px solid white;box-shadow:0 1px 8px rgba(0,0,0,0.3);"></div>`
-        : `<div style="width:${size}px;height:${size}px;border-radius:50%;background:${color};border:2px solid white;box-shadow:0 1px 8px rgba(0,0,0,0.3);"></div>`;
-
+      const size = district.riskScore >= 80 ? 32 : district.riskScore >= 60 ? 28 : 24;
       const icon = L.divIcon({
-        className: 'city-marker',
-        html: markerHtml,
+        className: 'district-marker',
+        html: createCityMarkerHtml(district),
         iconSize: [size, size],
         iconAnchor: [size / 2, size / 2],
       });
 
       const marker = L.marker([district.lat, district.lng], { icon });
-      marker.bindTooltip(
-        `<div style="font-size:11px;text-align:center;min-width:130px;padding:6px 8px;border-left:3px solid ${color};border-radius:6px;">
-          <strong>${district.name}</strong> ${isStation ? '📡' : '🏙️'}<br/>
-          Risk: <span style="color:${color};font-weight:700;font-size:15px;">${district.riskScore}%</span><br/>
-          <span style="text-transform:uppercase;font-size:9px;color:${color};font-weight:600;letter-spacing:0.5px;">${riskLevel}</span>
-        </div>`,
-        { direction: 'top', offset: [0, -4] }
-      );
+      marker.bindTooltip(createTooltipHtml(district), {
+        direction: 'top', offset: [0, -8], className: 'clean-tooltip',
+      });
       marker.on('click', () => onProvinceSelect(district.provinceId));
 
-      if (isStation) {
+      if (district.type === 'station') {
         marker.addTo(stationGroup);
       } else {
         marker.addTo(cityGroup);
@@ -245,17 +326,15 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect, laye
     return () => { map.remove(); mapInstanceRef.current = null; };
   }, []);
 
-  // Layer visibility toggling
+  // Layer visibility
   useEffect(() => {
     const map = mapInstanceRef.current;
     if (!map || !layerVisibility) return;
-
     const toggle = (group: L.LayerGroup | null, visible: boolean) => {
       if (!group) return;
       if (visible && !map.hasLayer(group)) map.addLayer(group);
       if (!visible && map.hasLayer(group)) map.removeLayer(group);
     };
-
     toggle(provinceLayersRef.current, layerVisibility.provinces);
     toggle(floodLayersRef.current, layerVisibility.floodZones);
     toggle(riverLayersRef.current, layerVisibility.rivers);
@@ -270,66 +349,76 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect, laye
       if (!province) return;
       const color = RISK_COLORS[province.riskLevel];
       if (id === selectedProvince) {
-        circle.setStyle({ weight: 3, fillOpacity: 0.3, color: 'hsl(210, 70%, 35%)' });
+        circle.setStyle({ weight: 3, fillOpacity: 0.18, opacity: 0.8, dashArray: undefined });
         if (mapInstanceRef.current) {
           mapInstanceRef.current.flyTo(circle.getLatLng(), 6, { duration: 0.8 });
         }
       } else {
-        circle.setStyle({ weight: 2, fillOpacity: 0.15, color });
+        circle.setStyle({ weight: 2, fillOpacity: 0.08, color, opacity: 0.5, dashArray: '8 4' });
       }
     });
   }, [selectedProvince, provinces]);
 
   return (
-    <div className="relative w-full h-full min-h-[380px] rounded-xl overflow-hidden border border-border">
+    <div className="relative w-full h-full min-h-[380px] rounded-xl overflow-hidden border border-border shadow-sm">
       <div ref={mapRef} className="w-full h-full min-h-[380px]" />
 
-      {/* Scale bar */}
-      <div className="absolute bottom-3 left-3 z-[1000] bg-card/90 rounded-lg border border-border px-3 py-1.5 shadow-sm">
-        <div className="flex items-center gap-2">
-          <div className="flex flex-col items-center">
-            <div className="w-16 h-0.5 bg-foreground/50 relative">
-              <div className="absolute -left-0.5 -top-1 w-0.5 h-2.5 bg-foreground/50" />
-              <div className="absolute -right-0.5 -top-1 w-0.5 h-2.5 bg-foreground/50" />
-              <div className="absolute left-1/2 -translate-x-1/2 -top-0.5 w-0.5 h-1.5 bg-foreground/30" />
+      {/* Legend */}
+      <div className="absolute bottom-3 left-3 z-[1000] bg-white/95 backdrop-blur-sm rounded-lg border border-border px-3 py-2 shadow-sm">
+        <div className="text-[9px] font-semibold text-foreground uppercase tracking-wider mb-1.5">Risk Level</div>
+        <div className="flex flex-col gap-1">
+          {[
+            { label: 'Critical', color: '#991b1b' },
+            { label: 'High', color: '#dc2626' },
+            { label: 'Medium', color: '#eab308' },
+            { label: 'Low', color: '#16a34a' },
+          ].map(item => (
+            <div key={item.label} className="flex items-center gap-1.5">
+              <div className="w-2.5 h-2.5 rounded-full" style={{ background: item.color }} />
+              <span className="text-[9px] text-muted-foreground">{item.label}</span>
             </div>
-            <span className="text-[8px] font-mono text-muted-foreground mt-0.5">0 ——— 200 km</span>
-          </div>
+          ))}
+        </div>
+        <div className="mt-1.5 pt-1.5 border-t border-border flex items-center gap-1.5">
+          <div className="w-2.5 h-2.5 rounded-sm border border-muted-foreground/30 bg-muted" style={{ transform: 'rotate(45deg)' }} />
+          <span className="text-[9px] text-muted-foreground">Station</span>
+          <div className="w-2.5 h-2.5 rounded-full border border-muted-foreground/30 bg-muted ml-1" />
+          <span className="text-[9px] text-muted-foreground">City</span>
         </div>
       </div>
 
-      {/* Map stats overlay */}
-      <div className="absolute bottom-3 right-16 z-[1000] bg-card/90 rounded-lg border border-border px-3 py-2 shadow-sm">
-        <div className="text-[9px] font-mono text-muted-foreground space-y-0.5">
-          <div>Lat: 30.38° N · Lng: 69.35° E</div>
-          <div>Source: NASA GPM/IMERG · MODIS</div>
+      {/* Coordinates */}
+      <div className="absolute bottom-3 right-16 z-[1000] bg-white/95 backdrop-blur-sm rounded-lg border border-border px-3 py-1.5 shadow-sm">
+        <div className="text-[9px] font-mono text-muted-foreground">
+          NASA GPM/IMERG · MODIS
         </div>
       </div>
 
       <style>{`
         .leaflet-control-zoom a {
           background: white !important;
-          color: hsl(210, 29%, 24%) !important;
-          border-color: hsl(214, 18%, 89%) !important;
+          color: #1a1a2e !important;
+          border-color: #e5e7eb !important;
           border-radius: 8px !important;
           width: 32px !important;
           height: 32px !important;
           line-height: 32px !important;
           font-size: 16px !important;
+          font-weight: 300 !important;
         }
         .leaflet-control-zoom a:hover {
-          background: hsl(210, 14%, 95%) !important;
+          background: #f9fafb !important;
         }
         .leaflet-control-zoom {
           border-radius: 10px !important;
           overflow: hidden;
-          box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
-          border: 1px solid hsl(214, 18%, 89%) !important;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
+          border: 1px solid #e5e7eb !important;
         }
         .leaflet-control-layers {
           border-radius: 10px !important;
-          box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
-          border: 1px solid hsl(214, 18%, 89%) !important;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
+          border: 1px solid #e5e7eb !important;
           font-family: 'Inter', sans-serif !important;
           font-size: 11px !important;
         }
@@ -337,9 +426,22 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect, laye
           width: 32px !important;
           height: 32px !important;
         }
-        @keyframes pulse {
-          0%, 100% { opacity: 0.4; transform: scale(1); }
-          50% { opacity: 0; transform: scale(2); }
+        .clean-tooltip {
+          background: transparent !important;
+          border: none !important;
+          box-shadow: none !important;
+          padding: 0 !important;
+        }
+        .clean-tooltip::before {
+          display: none !important;
+        }
+        .district-marker:hover > div > div:first-child {
+          transform: scale(1.15);
+          box-shadow: 0 0 0 2px rgba(59,130,246,0.3), 0 4px 12px rgba(0,0,0,0.2);
+        }
+        @keyframes markerPulse {
+          0% { opacity: 0.6; transform: scale(1); }
+          100% { opacity: 0; transform: scale(2.2); }
         }
       `}</style>
     </div>
