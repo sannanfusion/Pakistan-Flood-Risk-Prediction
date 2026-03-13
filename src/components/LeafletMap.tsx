@@ -92,7 +92,7 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect, laye
   const riverLayersRef = useRef<L.LayerGroup | null>(null);
   const cityLayersRef = useRef<L.LayerGroup | null>(null);
   const stationLayersRef = useRef<L.LayerGroup | null>(null);
-  const provincePolygonsRef = useRef<Record<string, L.Polygon>>({});
+  const provincePolygonsRef = useRef<Record<string, L.Circle>>({});
 
   useEffect(() => {
     if (!mapRef.current || mapInstanceRef.current) return;
