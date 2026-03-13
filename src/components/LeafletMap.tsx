@@ -11,39 +11,14 @@ interface LeafletMapProps {
   layerVisibility?: LayerVisibility;
 }
 
-const PROVINCE_POLYGONS: Record<string, [number, number][]> = {
-  sindh: [
-    [28.5, 66.5], [27.5, 67.0], [26.0, 67.5], [24.5, 67.0],
-    [23.8, 67.5], [24.0, 68.5], [24.8, 69.5], [25.5, 70.0],
-    [27.0, 70.5], [28.0, 69.5], [28.5, 68.5], [28.5, 66.5],
-  ],
-  punjab: [
-    [33.5, 70.5], [33.0, 71.5], [32.0, 71.0], [31.0, 70.5],
-    [30.0, 70.0], [29.0, 70.5], [28.5, 69.5], [28.5, 71.0],
-    [29.5, 72.0], [30.5, 72.5], [31.5, 73.5], [32.5, 74.5],
-    [33.5, 74.0], [34.0, 73.0], [33.5, 71.5], [33.5, 70.5],
-  ],
-  kpk: [
-    [36.0, 71.0], [35.5, 71.5], [35.0, 71.0], [34.5, 71.5],
-    [34.0, 72.0], [33.5, 71.5], [33.5, 70.5], [34.0, 70.0],
-    [34.5, 70.5], [35.0, 70.0], [35.5, 70.5], [36.0, 71.0],
-  ],
-  balochistan: [
-    [32.0, 66.5], [31.0, 66.0], [30.0, 66.5], [29.0, 66.0],
-    [28.0, 63.0], [27.0, 62.5], [26.0, 63.0], [25.5, 64.0],
-    [25.0, 65.0], [25.5, 66.5], [26.5, 67.0], [27.5, 67.0],
-    [28.5, 66.5], [29.5, 67.0], [30.5, 67.5], [31.0, 67.0],
-    [31.5, 67.0], [32.0, 66.5],
-  ],
-  gb: [
-    [37.0, 74.5], [36.5, 75.0], [36.0, 76.0], [35.5, 76.5],
-    [35.0, 76.0], [35.0, 75.0], [35.5, 74.5], [36.0, 74.0],
-    [36.5, 74.0], [37.0, 74.5],
-  ],
-  ajk: [
-    [35.0, 73.5], [34.5, 74.0], [34.0, 74.5], [33.5, 74.0],
-    [33.5, 73.5], [34.0, 73.0], [34.5, 73.0], [35.0, 73.5],
-  ],
+// Province center coordinates and radius (in meters) for circle markers
+const PROVINCE_CIRCLES: Record<string, { center: [number, number]; radius: number }> = {
+  sindh: { center: [26.2, 68.0], radius: 180000 },
+  punjab: { center: [31.2, 72.0], radius: 200000 },
+  kpk: { center: [34.5, 71.2], radius: 100000 },
+  balochistan: { center: [28.5, 65.5], radius: 250000 },
+  gb: { center: [35.8, 75.0], radius: 80000 },
+  ajk: { center: [34.2, 73.8], radius: 50000 },
 };
 
 // Flood extent zones (simulated inundation areas along rivers)
@@ -117,7 +92,7 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect, laye
   const riverLayersRef = useRef<L.LayerGroup | null>(null);
   const cityLayersRef = useRef<L.LayerGroup | null>(null);
   const stationLayersRef = useRef<L.LayerGroup | null>(null);
-  const provincePolygonsRef = useRef<Record<string, L.Polygon>>({});
+  const provincePolygonsRef = useRef<Record<string, L.Circle>>({});
 
   useEffect(() => {
     if (!mapRef.current || mapInstanceRef.current) return;
@@ -134,15 +109,18 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect, laye
     const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
       attribution: '© Esri',
     });
-    const lightLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-      attribution: '© CartoDB',
+    const gmapsStyle = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+      attribution: '© CartoDB Voyager',
+      subdomains: 'abcd',
+      maxZoom: 19,
     });
-    const labelLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png', {
+    const labelLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{z}/{x}/{y}{r}.png', {
       attribution: '© CartoDB',
+      subdomains: 'abcd',
     });
 
-    lightLayer.addTo(map);
-    L.control.layers({ 'Street Map': lightLayer, 'Satellite': satelliteLayer }, { 'Labels': labelLayer }, { position: 'topright' }).addTo(map);
+    gmapsStyle.addTo(map);
+    L.control.layers({ 'Map': gmapsStyle, 'Satellite': satelliteLayer }, { 'Labels': labelLayer }, { position: 'topright' }).addTo(map);
     L.control.zoom({ position: 'bottomright' }).addTo(map);
 
     // Create layer groups
@@ -178,17 +156,22 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect, laye
       }).addTo(riverGroup).bindTooltip(`<div style="font-size:11px;padding:2px 6px;">🌊 ${river.name}</div>`, { sticky: true, direction: 'top' });
     });
 
-    // Province polygons
+    // Province circles
     provinces.forEach((province) => {
-      const coords = PROVINCE_POLYGONS[province.id];
-      if (!coords) return;
+      const circleData = PROVINCE_CIRCLES[province.id];
+      if (!circleData) return;
       const color = RISK_COLORS[province.riskLevel];
-      const polygon = L.polygon(coords, {
-        color, weight: 2, fillColor: color, fillOpacity: 0.12,
+      const circle = L.circle(circleData.center, {
+        radius: circleData.radius,
+        color,
+        weight: 2,
+        fillColor: color,
+        fillOpacity: 0.15,
+        opacity: 0.7,
       }).addTo(provinceGroup);
 
-      polygon.bindTooltip(
-        `<div style="font-size:12px;text-align:center;padding:4px 8px;">
+      circle.bindTooltip(
+        `<div style="font-size:12px;text-align:center;padding:6px 10px;background:white;border-radius:8px;">
           <strong style="font-size:13px;">${province.name}</strong><br/>
           <span style="color:${color};font-weight:700;font-size:16px;">${province.riskScore}%</span> risk<br/>
           <span style="font-size:10px;color:#666;">Rain (7d): ${province.rainfall7Day}mm</span><br/>
@@ -196,21 +179,30 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect, laye
         </div>`,
         { sticky: true, direction: 'top' }
       );
-      polygon.on('click', () => onProvinceSelect(province.id));
+      circle.on('click', () => onProvinceSelect(province.id));
+
+      // Province label
+      const labelIcon = L.divIcon({
+        className: 'province-label',
+        html: `<div style="font-size:11px;font-weight:600;color:${color};text-shadow:0 0 4px white,0 0 4px white,0 0 4px white;white-space:nowrap;pointer-events:none;">${province.name}</div>`,
+        iconSize: [0, 0],
+        iconAnchor: [0, 0],
+      });
+      L.marker(circleData.center, { icon: labelIcon, interactive: false }).addTo(provinceGroup);
 
       if (province.alertActive) {
         const alertIcon = L.divIcon({
           className: 'alert-pulse-marker',
           html: `<div style="position:relative;">
-            <div style="width:18px;height:18px;border-radius:50%;background:${color};opacity:0.9;box-shadow:0 0 12px ${color};"></div>
-            <div style="position:absolute;inset:-6px;border-radius:50%;border:2px solid ${color};opacity:0.4;animation:pulse 2s infinite;"></div>
+            <div style="width:14px;height:14px;border-radius:50%;background:${color};opacity:0.9;box-shadow:0 0 10px ${color};"></div>
+            <div style="position:absolute;inset:-5px;border-radius:50%;border:2px solid ${color};opacity:0.4;animation:pulse 2s infinite;"></div>
           </div>`,
-          iconSize: [18, 18],
+          iconSize: [14, 14],
         });
-        L.marker([province.coordinates.lat, province.coordinates.lng], { icon: alertIcon }).addTo(provinceGroup);
+        L.marker([circleData.center[0] + 0.3, circleData.center[1] + 0.3], { icon: alertIcon }).addTo(provinceGroup);
       }
 
-      provincePolygonsRef.current[province.id] = polygon;
+      provincePolygonsRef.current[province.id] = circle;
     });
 
     // District markers — separated into city & station groups
@@ -273,17 +265,17 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect, laye
 
   // Selected province highlight
   useEffect(() => {
-    Object.entries(provincePolygonsRef.current).forEach(([id, polygon]) => {
+    Object.entries(provincePolygonsRef.current).forEach(([id, circle]) => {
       const province = provinces.find(p => p.id === id);
       if (!province) return;
       const color = RISK_COLORS[province.riskLevel];
       if (id === selectedProvince) {
-        polygon.setStyle({ weight: 3, fillOpacity: 0.25, color: 'hsl(204, 63%, 28%)' });
+        circle.setStyle({ weight: 3, fillOpacity: 0.3, color: 'hsl(210, 70%, 35%)' });
         if (mapInstanceRef.current) {
-          mapInstanceRef.current.flyToBounds(polygon.getBounds(), { padding: [40, 40], maxZoom: 7, duration: 0.8 });
+          mapInstanceRef.current.flyTo(circle.getLatLng(), 6, { duration: 0.8 });
         }
       } else {
-        polygon.setStyle({ weight: 2, fillOpacity: 0.12, color });
+        circle.setStyle({ weight: 2, fillOpacity: 0.15, color });
       }
     });
   }, [selectedProvince, provinces]);
