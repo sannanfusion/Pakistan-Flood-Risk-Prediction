@@ -186,7 +186,7 @@ export const alerts: Alert[] = [
 ];
 
 export const recentFloodEvents: FloodEvent[] = [
-  { id: '1', date: '2022-08-15', region: 'Sindh', severity: 'critical', description: 'Catastrophic monsoon flooding across southern Sindh', affectedPopulation: 14500000 },
+  { id: '1', date: '2022-08-15', region: 'Sindh', severity: 'high', description: 'Catastrophic monsoon flooding across southern Sindh', affectedPopulation: 14500000 },
   { id: '2', date: '2023-07-20', region: 'Punjab', severity: 'high', description: 'Heavy monsoon rains cause widespread river overflow', affectedPopulation: 3200000 },
   { id: '3', date: '2022-08-28', region: 'KPK', severity: 'high', description: 'Flash floods in northern valleys', affectedPopulation: 1800000 },
   { id: '4', date: '2022-07-10', region: 'Balochistan', severity: 'medium', description: 'Seasonal flooding in western districts', affectedPopulation: 950000 },

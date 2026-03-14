@@ -88,7 +88,6 @@ export function ProvinceDetail({ province }: ProvinceDetailProps) {
                 <div className="w-16 h-1.5 bg-muted rounded-full overflow-hidden">
                   <div
                     className={`h-full rounded-full transition-all duration-700 ${
-                      d.riskLevel === 'critical' ? 'bg-risk-critical' :
                       d.riskLevel === 'high' ? 'bg-risk-high' :
                       d.riskLevel === 'medium' ? 'bg-risk-medium' : 'bg-risk-low'
                     }`}

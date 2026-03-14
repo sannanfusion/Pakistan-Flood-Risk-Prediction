@@ -75,11 +75,11 @@ export function DonutStatCards() {
       color: 'hsl(204, 63%, 28%)',
     },
     {
-      value: criticalDistricts,
+      value: highRiskDistricts,
       max: totalDistricts,
       label: 'High Risk Districts',
-      sublabel: `${criticalDistricts} of ${totalDistricts}`,
-      color: 'hsl(0, 84%, 40%)',
+      sublabel: `${highRiskDistricts} of ${totalDistricts}`,
+      color: 'hsl(0, 72%, 51%)',
     },
   ];
 

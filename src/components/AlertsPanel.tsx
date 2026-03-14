@@ -56,7 +56,6 @@ function AlertCard({ alert }: { alert: AlertType }) {
           <p className="text-[11px] text-muted-foreground leading-relaxed">{alert.message}</p>
           <div className="flex items-center gap-3 mt-2">
             <span className={`text-[10px] font-mono font-semibold px-2 py-0.5 rounded-md ${
-              alert.level === 'critical' ? 'bg-risk-critical/10 text-risk-critical' :
               alert.level === 'high' ? 'bg-risk-high/10 text-risk-high' :
               alert.level === 'medium' ? 'bg-risk-medium/10 text-risk-medium' : 'bg-risk-low/10 text-risk-low'
             }`}>{RISK_LABELS[alert.level]}</span>
