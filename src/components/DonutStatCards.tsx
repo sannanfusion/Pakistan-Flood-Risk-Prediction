@@ -49,7 +49,7 @@ export function DonutStatCards() {
   const affectedPop = provinces.reduce((s, p) => s + p.population * (p.riskScore / 100) * 0.15, 0);
   const avgDischarge = provinces.reduce((s, p) => s + (p.riverDischarge / p.riverDischargeThreshold), 0) / provinces.length;
   const avgRainfall = provinces.reduce((s, p) => s + p.rainfall7Day, 0) / provinces.length;
-  const criticalDistricts = provinces.reduce((s, p) => s + p.districts.filter(d => d.riskLevel === 'critical' || d.riskLevel === 'high').length, 0);
+  const highRiskDistricts = provinces.reduce((s, p) => s + p.districts.filter(d => d.riskLevel === 'high').length, 0);
   const totalDistricts = provinces.reduce((s, p) => s + p.districts.length, 0);
 
   const stats = [
