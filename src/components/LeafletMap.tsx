@@ -166,14 +166,13 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect, laye
       maxZoom: 12,
     });
 
-    // Clean, modern map style
-    const lightMap = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-      attribution: '© CartoDB',
-      subdomains: 'abcd',
+    // OpenStreetMap style (Google Maps-like)
+    const osmMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap',
       maxZoom: 19,
     });
 
-    const voyagerMap = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+    const voyagerMap = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_labels_under/{z}/{x}/{y}{r}.png', {
       attribution: '© CartoDB Voyager',
       subdomains: 'abcd',
       maxZoom: 19,
@@ -183,8 +182,8 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect, laye
       attribution: '© Esri',
     });
 
-    // Default to light clean style
-    lightMap.addTo(map);
+    // Default to OSM (Google Maps-like)
+    osmMap.addTo(map);
 
     L.control.layers(
       { 'Light': lightMap, 'Voyager': voyagerMap, 'Satellite': satelliteLayer },
