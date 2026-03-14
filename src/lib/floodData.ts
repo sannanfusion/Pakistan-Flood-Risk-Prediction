@@ -16,7 +16,7 @@ export const provinces: ProvinceData[] = [
     alertActive: true,
     coordinates: { lat: 26.0, lng: 68.5 },
     districts: [
-      { name: 'Sukkur', riskScore: 91, riskLevel: 'critical' },
+      { name: 'Sukkur', riskScore: 91, riskLevel: 'high' },
       { name: 'Larkana', riskScore: 85, riskLevel: 'high' },
       { name: 'Dadu', riskScore: 78, riskLevel: 'high' },
       { name: 'Hyderabad', riskScore: 65, riskLevel: 'medium' },
