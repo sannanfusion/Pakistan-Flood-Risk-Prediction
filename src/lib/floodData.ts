@@ -146,7 +146,7 @@ export const alerts: Alert[] = [
   {
     id: '1',
     region: 'Sindh — Sukkur',
-    level: 'critical',
+    level: 'high',
     message: 'River discharge exceeding safe threshold. Immediate flood risk in low-lying areas.',
     timestamp: '2026-02-16T08:30:00Z',
     isNew: true,
