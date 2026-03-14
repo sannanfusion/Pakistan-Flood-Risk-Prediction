@@ -186,7 +186,7 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect, laye
     osmMap.addTo(map);
 
     L.control.layers(
-      { 'Light': lightMap, 'Voyager': voyagerMap, 'Satellite': satelliteLayer },
+      { 'Street': osmMap, 'Voyager': voyagerMap, 'Satellite': satelliteLayer },
       {},
       { position: 'topright' }
     ).addTo(map);
