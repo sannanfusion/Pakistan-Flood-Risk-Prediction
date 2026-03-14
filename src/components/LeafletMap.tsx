@@ -84,29 +84,27 @@ const FLOOD_COLORS = {
 
 function createCityMarkerHtml(district: typeof DISTRICT_MARKERS[0]) {
   const colors = getMarkerColor(district.riskScore);
-  const size = district.riskScore >= 80 ? 32 : district.riskScore >= 60 ? 28 : 24;
-  const innerSize = size - 8;
   const isStation = district.type === 'station';
-  const riskLabel = getRiskLevel(district.riskScore).toUpperCase();
 
   return `<div style="
     position:relative;
-    width:${size}px;height:${size}px;
-    display:flex;align-items:center;justify-content:center;
+    width:28px;height:40px;
     cursor:pointer;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
   ">
-    <div style="
-      width:${innerSize}px;height:${innerSize}px;
-      background:${colors.bg};
-      border:2.5px solid white;
-      border-radius:${isStation ? '4px' : '50%'};
-      ${isStation ? 'transform:rotate(45deg);' : ''}
-      box-shadow: 0 0 0 1px ${colors.border}, 0 2px 8px ${colors.glow}, 0 1px 3px rgba(0,0,0,0.2);
-      transition: transform 0.2s, box-shadow 0.2s;
-    "></div>
+    <svg width="28" height="40" viewBox="0 0 28 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M14 0C6.268 0 0 6.268 0 14c0 10.5 14 26 14 26s14-15.5 14-26C28 6.268 21.732 0 14 0z" fill="${colors.bg}"/>
+      <path d="M14 1C6.82 1 1 6.82 1 14c0 9.94 13 24.5 13 24.5S27 23.94 27 14C27 6.82 21.18 1 14 1z" fill="${colors.bg}" stroke="white" stroke-width="1.5"/>
+      <circle cx="14" cy="13" r="5.5" fill="white" opacity="0.95"/>
+      ${isStation 
+        ? `<rect x="10.5" y="9.5" width="7" height="7" rx="1.5" fill="${colors.bg}" transform="rotate(45 14 13)"/>`
+        : `<circle cx="14" cy="13" r="3.5" fill="${colors.bg}"/>`
+      }
+    </svg>
     ${district.riskScore >= 80 ? `<div style="
-      position:absolute;inset:-4px;
-      border-radius:${isStation ? '6px' : '50%'};
+      position:absolute;top:-4px;left:-4px;
+      width:36px;height:36px;
+      border-radius:50%;
       border:2px solid ${colors.bg};
       opacity:0.5;
       animation: markerPulse 2s ease-out infinite;
