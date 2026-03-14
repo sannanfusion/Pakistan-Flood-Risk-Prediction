@@ -92,7 +92,4 @@
     background-color: hsl(var(--risk-high));
   }
 
-  .risk-indicator-critical {
-    background-color: hsl(var(--risk-critical));
-  }
 }
