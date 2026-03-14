@@ -26,17 +26,14 @@ export function AlertsPanel({ alerts }: AlertsPanelProps) {
 
 function AlertCard({ alert }: { alert: AlertType }) {
   const bgClass =
-    alert.level === 'critical' ? 'bg-risk-critical/5 border-risk-critical/20' :
     alert.level === 'high' ? 'bg-risk-high/5 border-risk-high/20' :
     alert.level === 'medium' ? 'bg-risk-medium/5 border-risk-medium/15' : 'bg-risk-low/5 border-risk-low/15';
 
   const barColor =
-    alert.level === 'critical' ? 'bg-risk-critical' :
     alert.level === 'high' ? 'bg-risk-high' :
     alert.level === 'medium' ? 'bg-risk-medium' : 'bg-risk-low';
 
   const iconColor =
-    alert.level === 'critical' ? 'text-risk-critical' :
     alert.level === 'high' ? 'text-risk-high' :
     alert.level === 'medium' ? 'text-risk-medium' : 'text-risk-low';
 
@@ -59,7 +56,6 @@ function AlertCard({ alert }: { alert: AlertType }) {
           <p className="text-[11px] text-muted-foreground leading-relaxed">{alert.message}</p>
           <div className="flex items-center gap-3 mt-2">
             <span className={`text-[10px] font-mono font-semibold px-2 py-0.5 rounded-md ${
-              alert.level === 'critical' ? 'bg-risk-critical/10 text-risk-critical' :
               alert.level === 'high' ? 'bg-risk-high/10 text-risk-high' :
               alert.level === 'medium' ? 'bg-risk-medium/10 text-risk-medium' : 'bg-risk-low/10 text-risk-low'
             }`}>{RISK_LABELS[alert.level]}</span>

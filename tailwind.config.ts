@@ -66,7 +66,6 @@ export default {
           low: "hsl(var(--risk-low))",
           medium: "hsl(var(--risk-medium))",
           high: "hsl(var(--risk-high))",
-          critical: "hsl(var(--risk-critical))",
         },
         water: "hsl(var(--water))",
         rain: "hsl(var(--rain))",

@@ -63,7 +63,6 @@ const DISTRICT_MARKERS: { name: string; lat: number; lng: number; riskScore: num
 ];
 
 function getRiskLevel(score: number) {
-  if (score >= 80) return 'critical';
   if (score >= 60) return 'high';
   if (score >= 40) return 'medium';
   return 'low';
@@ -364,7 +363,6 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect, laye
         <div className="text-[9px] font-semibold text-foreground uppercase tracking-wider mb-1.5">Risk Level</div>
         <div className="flex flex-col gap-1">
           {[
-            { label: 'Critical', color: '#991b1b' },
             { label: 'High', color: '#dc2626' },
             { label: 'Medium', color: '#eab308' },
             { label: 'Low', color: '#16a34a' },

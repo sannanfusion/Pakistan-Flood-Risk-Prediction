@@ -2,7 +2,7 @@ import { Droplets, Waves, AlertTriangle, Shield } from 'lucide-react';
 import { provinces } from '@/lib/floodData';
 
 export function StatsBar() {
-  const highRiskCount = provinces.filter((p) => p.riskLevel === 'high' || p.riskLevel === 'critical').length;
+  const highRiskCount = provinces.filter((p) => p.riskLevel === 'high').length;
   const totalRainfall = Math.round(provinces.reduce((s, p) => s + p.rainfall7Day, 0) / provinces.length);
   const alertCount = provinces.filter((p) => p.alertActive).length;
   const avgRisk = Math.round(provinces.reduce((s, p) => s + p.riskScore, 0) / provinces.length);
