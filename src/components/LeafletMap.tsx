@@ -298,12 +298,11 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect, laye
 
     // District markers
     DISTRICT_MARKERS.forEach((district) => {
-      const size = district.riskScore >= 80 ? 32 : district.riskScore >= 60 ? 28 : 24;
       const icon = L.divIcon({
         className: 'district-marker',
         html: createCityMarkerHtml(district),
-        iconSize: [size, size],
-        iconAnchor: [size / 2, size / 2],
+        iconSize: [28, 40],
+        iconAnchor: [14, 40],
       });
 
       const marker = L.marker([district.lat, district.lng], { icon });
