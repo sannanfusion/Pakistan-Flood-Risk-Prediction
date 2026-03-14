@@ -58,5 +58,4 @@ export const RISK_LABELS: Record<RiskLevel, string> = {
   low: 'Low Risk',
   medium: 'Medium Risk',
   high: 'High Risk',
-  critical: 'Critical',
 };
