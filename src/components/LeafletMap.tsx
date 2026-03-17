@@ -181,20 +181,11 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect, laye
       attribution: '© Esri',
     });
 
-    const satelliteLabels = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png', {
-      attribution: '© CartoDB Labels',
-      subdomains: 'abcd',
-      maxZoom: 19,
-      pane: 'shadowPane',
-    });
-
-    const satelliteWithLabels = L.layerGroup([satelliteLayer, satelliteLabels]);
-
     // Default to OSM (Google Maps-like)
     osmMap.addTo(map);
 
     L.control.layers(
-      { 'Street': osmMap, 'Voyager': voyagerMap, 'Satellite': satelliteWithLabels },
+      { 'Street': osmMap, 'Voyager': voyagerMap, 'Satellite': satelliteLayer },
       {},
       { position: 'topright' }
     ).addTo(map);
