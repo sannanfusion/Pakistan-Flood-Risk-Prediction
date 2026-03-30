@@ -1,47 +1,43 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
-import os
 import pandas as pd
+import os
 
 def create_app():
     app = Flask(__name__)
     CORS(app)
 
+    # Path to processed data
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
     DATA_PATH = os.path.join(BASE_DIR, "data", "processed", "final_output.csv")
 
-    # -------------------------------
-    # Health Check
-    # -------------------------------
-    @app.route("/api/health")
+    @app.route("/api/health", methods=["GET"])
     def health():
         return jsonify({"status": "ok"})
 
-    # -------------------------------
-    # REAL PROVINCE DATA FROM CSV
-    # -------------------------------
-    @app.route("/api/provinces")
-    def provinces():
-        if not os.path.exists(DATA_PATH):
-            return jsonify({"error": "No processed data found"}), 500
+    @app.route("/api/provinces", methods=["GET"])
+    def get_provinces():
+        try:
+            df = pd.read_csv(DATA_PATH)
 
-        df = pd.read_csv(DATA_PATH)
+            provinces = []
 
-        provinces = []
+            for _, row in df.iterrows():
+                provinces.append({
+                    "name": row["region"],
+                    "riskLevel": row["risk"],
+                    "riskScore": round(row["rainfall_7day"], 2),
+                    "rainfall": row["rainfall_mm"]
+                })
 
-        for _, row in df.iterrows():
-            provinces.append({
-                "name": row["region"],
-                "risk": row["risk"],
-                "rainfall": float(row["rainfall_mm"]),
-                "rainfall7day": float(row["rainfall_7day"])
-            })
+            return jsonify({"provinces": provinces})
 
-        return jsonify({"provinces": provinces})
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
 
     return app
 
 
 if __name__ == "__main__":
     app = create_app()
-    app.run(debug=True)
+    app.run(debug=True, port=5000)

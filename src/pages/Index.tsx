@@ -12,7 +12,6 @@ import { SatelliteImageryPanels } from '@/components/SatelliteImageryPanels';
 import { LiveIndicator } from '@/components/LiveIndicator';
 import { AnimatedCounter } from '@/components/AnimatedCounter';
 import { DataSourceBadge } from '@/components/DataSourceBadge';
-import { provinces, rainfallTrend, alerts } from '@/lib/floodData';
 import { Droplets, Waves, AlertTriangle, Shield, MapPin, Satellite, BarChart3, Activity } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -27,6 +26,9 @@ const DashCard = ({ children, className = '', ...props }: React.HTMLAttributes<H
 
 const Index = () => {
   const [selectedProvince, setSelectedProvince] = useState<string | null>('sindh');
+  const [provinces, setProvinces] = useState([]);
+  const [rainfallTrend, setRainfallTrend] = useState([]);
+  const [alerts, setAlerts] = useState<any[]>([]);
   const [layerVisibility, setLayerVisibility] = useState<LayerVisibility>({
     provinces: true,
     floodZones: true,
@@ -34,8 +36,7 @@ const Index = () => {
     cities: true,
     stations: true,
   });
-  const selected = provinces.find((p) => p.id === selectedProvince) || null;
-
+  const selected = provinces?.find((p) => p.id === selectedProvince) || null;
   const toggleLayer = useCallback((layer: keyof LayerVisibility) => {
     setLayerVisibility((prev) => ({ ...prev, [layer]: !prev[layer] }));
   }, []);
@@ -55,7 +56,24 @@ const Index = () => {
     }, 4000);
     return () => clearInterval(interval);
   }, [totalRainfall, avgRisk]);
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const res = await fetch('http://localhost:5000/api/provinces');
 
+      const data = await res.json();
+
+      setProvinces(data.provinces);
+      setRainfallTrend(data.rainfallTrend);
+      setAlerts(data.alerts);
+
+    } catch (error) {
+      console.error("API error:", error);
+    }
+  };
+
+  fetchData();
+}, []);
   const stats = [
     { icon: <AlertTriangle className="w-4 h-4 text-risk-high" />, label: 'High Risk Regions', value: highRiskCount, suffix: `/${provinces.length}`, trend: '+1' },
     { icon: <Droplets className="w-4 h-4 text-primary" />, label: 'Avg 7-Day Rain', value: simRainfall, suffix: 'mm', trend: '+12%' },
