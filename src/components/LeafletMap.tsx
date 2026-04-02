@@ -267,7 +267,8 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect, laye
           <div style="font-size:10px;color:#6b7280;margin-bottom:8px;">Risk Score</div>
           <div style="display:flex;justify-content:space-between;gap:12px;font-size:10px;color:#6b7280;">
             <div><span style="font-weight:600;color:#1a1a2e;">${province.rainfall7Day}</span>mm rain</div>
-            <div><span style="font-weight:600;color:#1a1a2e;">${(province.population / 1e6).toFixed(1)}M</span> pop</div>
+            <div><div><span style="font-weight:600;color:#1a1a2e;">N/A</span> pop</div>
+
           </div>
         </div>`,
         { sticky: true, direction: 'top' }

@@ -42,9 +42,13 @@ const Index = () => {
   }, []);
 
   const highRiskCount = provinces.filter((p) => p.riskLevel === 'high').length;
-  const totalRainfall = Math.round(provinces.reduce((s, p) => s + p.rainfall7Day, 0) / provinces.length);
+  const totalRainfall = provinces.length > 0
+  ? Math.round(provinces.reduce((s, p) => s + p.rainfall7Day, 0) / provinces.length)
+  : 0;
   const alertCount = provinces.filter((p) => p.alertActive).length;
-  const avgRisk = Math.round(provinces.reduce((s, p) => s + p.riskScore, 0) / provinces.length);
+  const avgRisk = provinces.length > 0
+  ? Math.round(provinces.reduce((s, p) => s + p.riskScore, 0) / provinces.length)
+  : 0;
 
   const [simRainfall, setSimRainfall] = useState(totalRainfall);
   const [simRisk, setSimRisk] = useState(avgRisk);
@@ -59,7 +63,7 @@ const Index = () => {
 useEffect(() => {
   const fetchData = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/provinces');
+      const res = await fetch('http://localhost:5000/api/all');
 
       const data = await res.json();
 
