@@ -63,16 +63,16 @@ export function ProvinceDetail({ province }: ProvinceDetailProps) {
       {/* Metrics Grid */}
       <div className="grid grid-cols-2 gap-3">
         <MetricCard icon={<Droplets className="w-4 h-4 text-primary" />} label="7-Day Rain" value={`${province.rainfall7Day}mm`} />
-        <MetricCard icon={<Droplets className="w-4 h-4 text-rain" />} label="30-Day Rain" value={`${province.rainfall30Day}mm`} />
+        <MetricCard icon={<Droplets className="w-4 h-4 text-rain" />} label="30-Day Rain" value={`${province.rainfall30Day || 0}mm`} />
         <MetricCard
           icon={<Waves className="w-4 h-4 text-river" />}
           label="River Discharge"
-          value={`${(province.riverDischarge / 1000).toFixed(1)}k`}
-          alert={province.riverDischarge > province.riverDischargeThreshold}
+          value={`${((province.riverDischarge || 0) / 1000).toFixed(1)}k`}
+          alert={(province.riverDischarge || 0) > (province.riverDischargeThreshold || 0)}
         />
-        <MetricCard icon={<Users className="w-4 h-4 text-primary" />} label="Population" value={`${(province.population / 1e6).toFixed(1)}M`} />
-        <MetricCard icon={<AlertTriangle className="w-4 h-4 text-risk-medium" />} label="Past Floods" value={`${province.historicalFloods}`} />
-        <MetricCard icon={<Calendar className="w-4 h-4 text-muted-foreground" />} label="Last Flood" value={province.lastFloodDate.slice(0, 7)} />
+        <MetricCard icon={<Users className="w-4 h-4 text-primary" />} label="Population" value={`${((province.population || 0) / 1e6).toFixed(1)}M`} />
+        <MetricCard icon={<AlertTriangle className="w-4 h-4 text-risk-medium" />} label="Past Floods" value={`${province.historicalFloods || 0}`} />
+        <MetricCard icon={<Calendar className="w-4 h-4 text-muted-foreground" />} label="Last Flood" value={province?.lastFloodDate?.slice(0, 7) || "N/A"} />
       </div>
 
       {/* Districts */}
@@ -81,7 +81,7 @@ export function ProvinceDetail({ province }: ProvinceDetailProps) {
           <TrendingUp className="w-4 h-4 text-primary" /> District Breakdown
         </h4>
         <div className="space-y-2">
-          {province.districts.map((d) => (
+          {(province.districts || []).map((d) => (
             <div key={d.name} className="flex items-center justify-between text-sm">
               <span className="text-muted-foreground">{d.name}</span>
               <div className="flex items-center gap-2">

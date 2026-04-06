@@ -1,19 +1,16 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
-import pandas as pd
-import os
 from datetime import datetime, timedelta
-import random
 import requests
+import pandas as pd
 
 def create_app():
     app = Flask(__name__)
     CORS(app)
 
-    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-    DATA_PATH = os.path.join(BASE_DIR, "data", "processed", "final_output.csv")
-
-    # ✅ NASA FUNCTION
+    # ==============================
+    # ✅ NASA REAL RAINFALL FUNCTION
+    # ==============================
     def get_nasa_rainfall(lat, lon):
         try:
             url = f"https://power.larc.nasa.gov/api/temporal/daily/point?parameters=PRECTOTCORR&community=AG&longitude={lon}&latitude={lat}&start=20260101&end=20260107&format=JSON"
@@ -27,35 +24,40 @@ def create_app():
             return round(rainfall_7day, 2)
 
         except:
-            return random.randint(40, 120)  # fallback
+            return 70  # safe fallback
 
-    @app.route("/api/health", methods=["GET"])
+    # ==============================
+    # ✅ NDMA LOAD FROM CSV (DYNAMIC)
+    # ==============================
+    def load_ndma_data():
+        try:
+            df = pd.read_csv("data/ndma_data.csv")
+
+            ndma_dict = {}
+            for _, row in df.iterrows():
+                ndma_dict[row["province"]] = {
+                    "deaths": row["deaths"],
+                    "injured": row["injured"],
+                    "houses": row["houses"]
+                }
+
+            return ndma_dict
+
+        except:
+            return {}
+
+    # ==============================
+    # HEALTH CHECK
+    # ==============================
+    @app.route("/api/health")
     def health():
         return jsonify({"status": "ok"})
 
-    @app.route("/api/provinces", methods=["GET"])
-    def get_provinces():
-        try:
-            df = pd.read_csv(DATA_PATH)
-
-            provinces = []
-
-            for _, row in df.iterrows():
-                provinces.append({
-                    "name": row["region"],
-                    "riskLevel": row["risk"],
-                    "riskScore": round(row["rainfall_7day"], 2),
-                    "rainfall": row["rainfall_mm"]
-                })
-
-            return jsonify({"provinces": provinces})
-
-        except Exception as e:
-            return jsonify({"error": str(e)}), 500
-
-    # ✅ MAIN API (SMART LOGIC + NASA)
-    @app.route("/api/all", methods=["GET"])
-    def get_all_data():
+    # ==============================
+    # MAIN API
+    # ==============================
+    @app.route("/api/all")
+    def get_all():
         try:
             provinces = [
                 {"name": "Punjab", "lat": 31.0, "lon": 72.5},
@@ -64,21 +66,26 @@ def create_app():
                 {"name": "Balochistan", "lat": 28.5, "lon": 65.0},
             ]
 
-            result_provinces = []
+            # ✅ LOAD NDMA HERE
+            ndma_data = load_ndma_data()
+
+            result = []
             alerts = []
             rainfall_trend = []
 
             for p in provinces:
-                # ✅ NASA REAL DATA
-                rainfall_7day = get_nasa_rainfall(p["lat"], p["lon"])
+                rainfall = get_nasa_rainfall(p["lat"], p["lon"])
 
-                # ✅ SMART TREND (future prediction feel)
-                trend = random.randint(-10, 30)
+                # NDMA data (dynamic)
+                ndma = ndma_data.get(p["name"], {})
+                deaths = ndma.get("deaths", 0)
+                houses = ndma.get("houses", 0)
 
-                # ✅ FINAL SCORE
-                score = rainfall_7day + trend
+                # ==============================
+                # ✅ FINAL RISK LOGIC
+                # ==============================
+                score = rainfall + (deaths * 0.2) + (houses / 10000)
 
-                # ✅ SMART RISK
                 if score > 130:
                     risk = "high"
                 elif score > 80:
@@ -86,41 +93,44 @@ def create_app():
                 else:
                     risk = "low"
 
-                alert_active = True if (risk == "high" or score > 110) else False
+                alert_active = risk == "high"
 
-                result_provinces.append({
+                result.append({
                     "id": p["name"].lower(),
                     "name": p["name"],
                     "riskLevel": risk,
                     "riskScore": round(score, 2),
-                    "rainfall7Day": rainfall_7day,
-                    "alertActive": alert_active,
-                    "trend": trend
+                    "rainfall7Day": rainfall,
+                    "deaths": deaths,
+                    "housesDamaged": houses,
+                    "alertActive": alert_active
                 })
 
-                # ✅ ALERTS (EARLY WARNING)
-                if risk == "high" or score > 110:
+                if alert_active:
                     alerts.append({
                         "id": str(len(alerts) + 1),
                         "region": p["name"],
                         "level": risk,
-                        "message": "⚠️ Early flood risk detected based on rainfall trend",
+                        "message": "⚠️ High flood risk based on rainfall + NDMA impact",
                         "timestamp": datetime.utcnow().isoformat(),
                         "isNew": True
                     })
 
-            # ✅ RAINFALL TREND GRAPH
+            # ==============================
+            # RAINFALL TREND
+            # ==============================
             for i in range(7):
                 date = datetime.utcnow() - timedelta(days=i)
+
                 rainfall_trend.append({
                     "date": date.strftime("%Y-%m-%d"),
-                    "rainfall": random.randint(20, 100),
-                    "predicted": random.randint(30, 110),
+                    "rainfall": 60 + i * 3,
+                    "predicted": 70 + i * 4,
                     "threshold": 80
                 })
 
             return jsonify({
-                "provinces": result_provinces,
+                "provinces": result,
                 "alerts": alerts,
                 "rainfallTrend": rainfall_trend
             })
@@ -129,6 +139,7 @@ def create_app():
             return jsonify({"error": str(e)}), 500
 
     return app
+
 
 if __name__ == "__main__":
     app = create_app()
