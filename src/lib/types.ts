@@ -3,18 +3,31 @@ export type RiskLevel = 'low' | 'medium' | 'high';
 export interface ProvinceData {
   id: string;
   name: string;
-  riskLevel: RiskLevel;
+  riskLevel: 'low' | 'medium' | 'high';
   riskScore: number;
+
   rainfall7Day: number;
-  rainfall30Day: number;
-  riverDischarge: number;
-  riverDischargeThreshold: number;
-  population: number;
-  historicalFloods: number;
-  lastFloodDate: string;
-  alertActive: boolean;
-  districts: DistrictRisk[];
-  coordinates: { lat: number; lng: number };
+  prediction?: number;
+
+  deaths?: number;
+  housesDamaged?: number;
+
+  // ✅ ADD THIS LINE
+  alertActive?: boolean;
+
+  // optional fields
+  rainfall30Day?: number;
+  riverDischarge?: number;
+  riverDischargeThreshold?: number;
+  population?: number;
+  historicalFloods?: number;
+  lastFloodDate?: string;
+
+  districts?: {
+    name: string;
+    riskLevel: 'low' | 'medium' | 'high';
+    riskScore: number;
+  }[];
 }
 
 export interface DistrictRisk {

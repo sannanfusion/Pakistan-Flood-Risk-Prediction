@@ -30,13 +30,14 @@ export function ProvinceDetail({ province }: ProvinceDetailProps) {
         </span>
       </div>
 
-      {/* Circular Risk Score */}
+      {/* Risk Circle */}
       <div className="flex items-center gap-5">
         <div className="relative w-20 h-20 shrink-0">
           <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
             <circle cx="50" cy="50" r="40" fill="none" stroke="hsl(var(--border))" strokeWidth="6" />
             <circle
-              cx="50" cy="50" r="40" fill="none"
+              cx="50" cy="50" r="40"
+              fill="none"
               stroke={riskStroke}
               strokeWidth="6"
               strokeLinecap="round"
@@ -50,6 +51,7 @@ export function ProvinceDetail({ province }: ProvinceDetailProps) {
             <span className="text-[8px] text-muted-foreground">/100</span>
           </div>
         </div>
+
         <div className="space-y-1">
           <p className="text-xs text-muted-foreground">Risk Score</p>
           <p className="text-sm text-foreground font-medium">
@@ -60,18 +62,40 @@ export function ProvinceDetail({ province }: ProvinceDetailProps) {
         </div>
       </div>
 
-      {/* Metrics Grid */}
+      {/* Metrics */}
       <div className="grid grid-cols-2 gap-3">
         <MetricCard icon={<Droplets className="w-4 h-4 text-primary" />} label="7-Day Rain" value={`${province.rainfall7Day}mm`} />
+
+        <MetricCard
+          icon={<TrendingUp className="w-4 h-4 text-primary" />}
+          label="Prediction (Next Days)"
+          value={`${province.prediction || 0}mm`}
+        />
+
         <MetricCard icon={<Droplets className="w-4 h-4 text-rain" />} label="30-Day Rain" value={`${province.rainfall30Day || 0}mm`} />
+
         <MetricCard
           icon={<Waves className="w-4 h-4 text-river" />}
           label="River Discharge"
           value={`${((province.riverDischarge || 0) / 1000).toFixed(1)}k`}
           alert={(province.riverDischarge || 0) > (province.riverDischargeThreshold || 0)}
         />
+
         <MetricCard icon={<Users className="w-4 h-4 text-primary" />} label="Population" value={`${((province.population || 0) / 1e6).toFixed(1)}M`} />
-        <MetricCard icon={<AlertTriangle className="w-4 h-4 text-risk-medium" />} label="Past Floods" value={`${province.historicalFloods || 0}`} />
+
+        {/* ✅ NDMA DATA (NEW — IMPORTANT) */}
+        <MetricCard
+          icon={<AlertTriangle className="w-4 h-4 text-risk-high" />}
+          label="Deaths (NDMA)"
+          value={`${province.deaths || 0}`}
+        />
+
+        <MetricCard
+          icon={<AlertTriangle className="w-4 h-4 text-risk-medium" />}
+          label="Houses Damaged"
+          value={`${province.housesDamaged || 0}`}
+        />
+
         <MetricCard icon={<Calendar className="w-4 h-4 text-muted-foreground" />} label="Last Flood" value={province?.lastFloodDate?.slice(0, 7) || "N/A"} />
       </div>
 
@@ -80,10 +104,12 @@ export function ProvinceDetail({ province }: ProvinceDetailProps) {
         <h4 className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2">
           <TrendingUp className="w-4 h-4 text-primary" /> District Breakdown
         </h4>
+
         <div className="space-y-2">
           {(province.districts || []).map((d) => (
             <div key={d.name} className="flex items-center justify-between text-sm">
               <span className="text-muted-foreground">{d.name}</span>
+
               <div className="flex items-center gap-2">
                 <div className="w-16 h-1.5 bg-muted rounded-full overflow-hidden">
                   <div

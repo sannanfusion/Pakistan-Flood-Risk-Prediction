@@ -1,4 +1,15 @@
-import { ProvinceData, RainfallDataPoint, Alert, FloodEvent } from './types';
+export const modelMetrics = {
+  accuracy: 0.89,
+  precision: 0.86,
+  recall: 0.92,
+  f1Score: 0.89,
+  rocAuc: 0.94,
+  lastTrained: '2026-02-10',
+  dataPoints: 145000,
+  features: 24,
+};
+
+/*  import { ProvinceData, RainfallDataPoint, Alert, FloodEvent } from './types';
 
 export const provinces: ProvinceData[] = [
   {
@@ -192,14 +203,5 @@ export const recentFloodEvents: FloodEvent[] = [
   { id: '4', date: '2022-07-10', region: 'Balochistan', severity: 'medium', description: 'Seasonal flooding in western districts', affectedPopulation: 950000 },
   { id: '5', date: '2021-06-15', region: 'Gilgit-Baltistan', severity: 'medium', description: 'Glacial lake outburst flood in Hunza valley', affectedPopulation: 120000 },
 ];
+*/
 
-export const modelMetrics = {
-  accuracy: 0.89,
-  precision: 0.86,
-  recall: 0.92,
-  f1Score: 0.89,
-  rocAuc: 0.94,
-  lastTrained: '2026-02-10',
-  dataPoints: 145000,
-  features: 24,
-};

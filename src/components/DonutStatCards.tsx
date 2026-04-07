@@ -1,5 +1,5 @@
-import { provinces } from '@/lib/floodData';
 import { motion } from 'framer-motion';
+import { ProvinceData } from '@/lib/types';
 
 interface DonutProps {
   value: number;
@@ -22,7 +22,10 @@ function DonutStat({ value, max, label, sublabel, color, size = 80 }: DonutProps
         <svg viewBox="0 0 80 80" className="w-full h-full -rotate-90">
           <circle cx="40" cy="40" r={radius} fill="none" stroke="hsl(var(--border))" strokeWidth="5" />
           <motion.circle
-            cx="40" cy="40" r={radius} fill="none"
+            cx="40"
+            cy="40"
+            r={radius}
+            fill="none"
             stroke={color}
             strokeWidth="5"
             strokeLinecap="round"
@@ -32,30 +35,68 @@ function DonutStat({ value, max, label, sublabel, color, size = 80 }: DonutProps
             transition={{ duration: 1.2, ease: 'easeOut' }}
           />
         </svg>
+
         <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className="font-mono text-sm font-bold text-foreground">{Math.round(pct * 100)}%</span>
+          <span className="font-mono text-sm font-bold text-foreground">
+            {Math.round(pct * 100)}%
+          </span>
         </div>
       </div>
+
       <div className="text-center">
-        <div className="text-xs font-semibold text-foreground leading-tight">{label}</div>
+        <div className="text-xs font-semibold text-foreground">{label}</div>
         <div className="text-[10px] text-muted-foreground font-mono">{sublabel}</div>
       </div>
     </div>
   );
 }
 
-export function DonutStatCards() {
-  const totalPop = provinces.reduce((s, p) => s + p.population, 0);
-  const affectedPop = provinces.reduce((s, p) => s + p.population * (p.riskScore / 100) * 0.15, 0);
-  const avgDischarge = provinces.reduce((s, p) => s + (p.riverDischarge / p.riverDischargeThreshold), 0) / provinces.length;
-  const avgRainfall = provinces.reduce((s, p) => s + p.rainfall7Day, 0) / provinces.length;
-  const highRiskDistricts = provinces.reduce((s, p) => s + p.districts.filter(d => d.riskLevel === 'high').length, 0);
-  const totalDistricts = provinces.reduce((s, p) => s + p.districts.length, 0);
+interface Props {
+  data: ProvinceData[];
+}
+
+export function DonutStatCards({ data }: Props) {
+  const safeData = data || [];
+
+  const totalPop = safeData.reduce((s, p) => s + (p.population || 0), 0);
+
+  const affectedPop = safeData.reduce(
+    (s, p) => s + (p.population || 0) * ((p.riskScore || 0) / 100) * 0.15,
+    0
+  );
+
+  const avgDischarge =
+    safeData.length > 0
+      ? safeData.reduce(
+          (s, p) =>
+            s +
+            ((p.riverDischarge || 0) /
+              (p.riverDischargeThreshold || 1)),
+          0
+        ) / safeData.length
+      : 0;
+
+  const avgRainfall =
+    safeData.length > 0
+      ? safeData.reduce((s, p) => s + (p.rainfall7Day || 0), 0) /
+        safeData.length
+      : 0;
+
+  const highRiskDistricts = safeData.reduce(
+    (s, p) =>
+      s + (p.districts?.filter((d) => d.riskLevel === 'high').length || 0),
+    0
+  );
+
+  const totalDistricts = safeData.reduce(
+    (s, p) => s + (p.districts?.length || 0),
+    0
+  );
 
   const stats = [
     {
       value: affectedPop,
-      max: totalPop,
+      max: totalPop || 1,
       label: 'Population Affected',
       sublabel: `${(affectedPop / 1e6).toFixed(1)}M of ${(totalPop / 1e6).toFixed(0)}M`,
       color: 'hsl(0, 72%, 51%)',
@@ -76,7 +117,7 @@ export function DonutStatCards() {
     },
     {
       value: highRiskDistricts,
-      max: totalDistricts,
+      max: totalDistricts || 1,
       label: 'High Risk Districts',
       sublabel: `${highRiskDistricts} of ${totalDistricts}`,
       color: 'hsl(0, 72%, 51%)',
