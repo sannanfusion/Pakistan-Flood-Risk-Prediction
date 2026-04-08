@@ -98,35 +98,7 @@ export function ProvinceDetail({ province }: ProvinceDetailProps) {
 
         <MetricCard icon={<Calendar className="w-4 h-4 text-muted-foreground" />} label="Last Flood" value={province?.lastFloodDate?.slice(0, 7) || "N/A"} />
       </div>
-
-      {/* Districts */}
-      <div>
-        <h4 className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2">
-          <TrendingUp className="w-4 h-4 text-primary" /> District Breakdown
-        </h4>
-
-        <div className="space-y-2">
-          {(province.districts || []).map((d) => (
-            <div key={d.name} className="flex items-center justify-between text-sm">
-              <span className="text-muted-foreground">{d.name}</span>
-
-              <div className="flex items-center gap-2">
-                <div className="w-16 h-1.5 bg-muted rounded-full overflow-hidden">
-                  <div
-                    className={`h-full rounded-full transition-all duration-700 ${
-                      d.riskLevel === 'high' ? 'bg-risk-high' :
-                      d.riskLevel === 'medium' ? 'bg-risk-medium' : 'bg-risk-low'
-                    }`}
-                    style={{ width: `${d.riskScore}%` }}
-                  />
-                </div>
-                <span className="font-mono text-xs w-8 text-right text-foreground">{d.riskScore}</span>
-              </div>
-            </div>
-          ))}
         </div>
-      </div>
-    </div>
   );
 }
 

@@ -1,8 +1,25 @@
-import { modelMetrics } from '@/lib/floodData';
 import { Brain, Database, Layers, Clock } from 'lucide-react';
 
-export function ModelMetrics() {
-  const m = modelMetrics;
+interface ModelMetricsProps {
+  data?: {
+    accuracy: number;
+    precision: number;
+    recall: number;
+    f1Score: number;
+    rocAuc: number;
+    lastTrained: string;
+    dataPoints: number;
+    features: number;
+  } | null;
+}
+
+export function ModelMetrics({ data }: ModelMetricsProps) {
+  // Fallback if data hasn't loaded yet
+  const m = data || {
+    accuracy: 0, precision: 0, recall: 0, f1Score: 0,
+    rocAuc: 0, lastTrained: 'N/A', dataPoints: 0, features: 0,
+  };
+
   const circumference = 2 * Math.PI * 40;
   const dashOffset = circumference - m.rocAuc * circumference;
 

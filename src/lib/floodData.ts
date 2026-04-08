@@ -1,207 +1,93 @@
-export const modelMetrics = {
-  accuracy: 0.89,
-  precision: 0.86,
-  recall: 0.92,
-  f1Score: 0.89,
-  rocAuc: 0.94,
-  lastTrained: '2026-02-10',
-  dataPoints: 145000,
-  features: 24,
-};
+/**
+ * floodData.ts — API Service Layer
+ * =================================
+ * Single source of truth for all backend data.
+ * No hardcoded/mock data remains.
+ */
 
-/*  import { ProvinceData, RainfallDataPoint, Alert, FloodEvent } from './types';
+import { ProvinceData, RainfallDataPoint, Alert } from './types';
 
-export const provinces: ProvinceData[] = [
-  {
-    id: 'sindh',
-    name: 'Sindh',
-    riskLevel: 'high',
-    riskScore: 82,
-    rainfall7Day: 145,
-    rainfall30Day: 380,
-    riverDischarge: 18500,
-    riverDischargeThreshold: 15000,
-    population: 47900000,
-    historicalFloods: 8,
-    lastFloodDate: '2022-08-15',
-    alertActive: true,
-    coordinates: { lat: 26.0, lng: 68.5 },
-    districts: [
-      { name: 'Sukkur', riskScore: 91, riskLevel: 'high' },
-      { name: 'Larkana', riskScore: 85, riskLevel: 'high' },
-      { name: 'Dadu', riskScore: 78, riskLevel: 'high' },
-      { name: 'Hyderabad', riskScore: 65, riskLevel: 'medium' },
-      { name: 'Thatta', riskScore: 72, riskLevel: 'high' },
-    ],
-  },
-  {
-    id: 'punjab',
-    name: 'Punjab',
-    riskLevel: 'high',
-    riskScore: 76,
-    rainfall7Day: 120,
-    rainfall30Day: 310,
-    riverDischarge: 16200,
-    riverDischargeThreshold: 14000,
-    population: 110000000,
-    historicalFloods: 7,
-    lastFloodDate: '2023-07-20',
-    alertActive: true,
-    coordinates: { lat: 31.0, lng: 72.5 },
-    districts: [
-      { name: 'Muzaffargarh', riskScore: 88, riskLevel: 'high' },
-      { name: 'Rajanpur', riskScore: 84, riskLevel: 'high' },
-      { name: 'D.G. Khan', riskScore: 79, riskLevel: 'high' },
-      { name: 'Lahore', riskScore: 45, riskLevel: 'medium' },
-      { name: 'Multan', riskScore: 62, riskLevel: 'medium' },
-    ],
-  },
-  {
-    id: 'kpk',
-    name: 'Khyber Pakhtunkhwa',
-    riskLevel: 'medium',
-    riskScore: 58,
-    rainfall7Day: 95,
-    rainfall30Day: 240,
-    riverDischarge: 9800,
-    riverDischargeThreshold: 12000,
-    population: 35500000,
-    historicalFloods: 6,
-    lastFloodDate: '2022-08-28',
-    alertActive: false,
-    coordinates: { lat: 34.5, lng: 71.5 },
-    districts: [
-      { name: 'Swat', riskScore: 72, riskLevel: 'high' },
-      { name: 'Nowshera', riskScore: 65, riskLevel: 'medium' },
-      { name: 'Charsadda', riskScore: 60, riskLevel: 'medium' },
-      { name: 'Peshawar', riskScore: 42, riskLevel: 'medium' },
-    ],
-  },
-  {
-    id: 'balochistan',
-    name: 'Balochistan',
-    riskLevel: 'medium',
-    riskScore: 52,
-    rainfall7Day: 68,
-    rainfall30Day: 180,
-    riverDischarge: 4200,
-    riverDischargeThreshold: 6000,
-    population: 12300000,
-    historicalFloods: 5,
-    lastFloodDate: '2022-07-10',
-    alertActive: false,
-    coordinates: { lat: 28.5, lng: 65.0 },
-    districts: [
-      { name: 'Lasbela', riskScore: 68, riskLevel: 'medium' },
-      { name: 'Jaffarabad', riskScore: 63, riskLevel: 'medium' },
-      { name: 'Nasirabad', riskScore: 55, riskLevel: 'medium' },
-      { name: 'Quetta', riskScore: 30, riskLevel: 'low' },
-    ],
-  },
-  {
-    id: 'gb',
-    name: 'Gilgit-Baltistan',
-    riskLevel: 'low',
-    riskScore: 35,
-    rainfall7Day: 42,
-    rainfall30Day: 120,
-    riverDischarge: 3100,
-    riverDischargeThreshold: 5000,
-    population: 1800000,
-    historicalFloods: 3,
-    lastFloodDate: '2021-06-15',
-    alertActive: false,
-    coordinates: { lat: 35.8, lng: 75.0 },
-    districts: [
-      { name: 'Gilgit', riskScore: 38, riskLevel: 'low' },
-      { name: 'Skardu', riskScore: 32, riskLevel: 'low' },
-      { name: 'Hunza', riskScore: 28, riskLevel: 'low' },
-    ],
-  },
-  {
-    id: 'ajk',
-    name: 'Azad Kashmir',
-    riskLevel: 'medium',
-    riskScore: 48,
-    rainfall7Day: 78,
-    rainfall30Day: 195,
-    riverDischarge: 5400,
-    riverDischargeThreshold: 7000,
-    population: 4000000,
-    historicalFloods: 4,
-    lastFloodDate: '2022-08-05',
-    alertActive: false,
-    coordinates: { lat: 33.9, lng: 73.8 },
-    districts: [
-      { name: 'Muzaffarabad', riskScore: 55, riskLevel: 'medium' },
-      { name: 'Neelum', riskScore: 48, riskLevel: 'medium' },
-      { name: 'Mirpur', riskScore: 38, riskLevel: 'low' },
-    ],
-  },
-];
+const API_BASE = 'http://localhost:5000';
 
-export const rainfallTrend: RainfallDataPoint[] = Array.from({ length: 30 }, (_, i) => {
-  const date = new Date(2026, 1, 16);
-  date.setDate(date.getDate() - (29 - i));
-  const base = 15 + Math.sin(i / 4) * 20;
-  const spike = i > 20 ? (i - 20) * 8 : 0;
-  return {
-    date: date.toISOString().split('T')[0],
-    rainfall: Math.max(0, Math.round(base + spike + Math.random() * 15)),
-    predicted: Math.max(0, Math.round(base + spike + Math.random() * 10 + 5)),
-    threshold: 80,
+export interface FloodApiResponse {
+  provinces: ProvinceData[];
+  alerts: Alert[];
+  rainfallTrend: RainfallDataPoint[];
+  modelMetrics: {
+    accuracy: number;
+    precision: number;
+    recall: number;
+    f1Score: number;
+    rocAuc: number;
+    lastTrained: string;
+    dataPoints: number;
+    features: number;
   };
-});
+}
 
-export const alerts: Alert[] = [
-  {
-    id: '1',
-    region: 'Sindh — Sukkur',
-    level: 'high',
-    message: 'River discharge exceeding safe threshold. Immediate flood risk in low-lying areas.',
-    timestamp: '2026-02-16T08:30:00Z',
-    isNew: true,
-  },
-  {
-    id: '2',
-    region: 'Punjab — Muzaffargarh',
-    level: 'high',
-    message: '7-day cumulative rainfall 40% above seasonal average. Flash flood risk elevated.',
-    timestamp: '2026-02-16T06:15:00Z',
-    isNew: true,
-  },
-  {
-    id: '3',
-    region: 'Sindh — Larkana',
-    level: 'high',
-    message: 'Combined high rainfall and elevated Indus river levels. Monitoring escalated.',
-    timestamp: '2026-02-15T22:00:00Z',
-    isNew: false,
-  },
-  {
-    id: '4',
-    region: 'KPK — Swat',
-    level: 'medium',
-    message: 'Moderate rainfall predicted over next 72 hours. River levels rising.',
-    timestamp: '2026-02-15T18:45:00Z',
-    isNew: false,
-  },
-  {
-    id: '5',
-    region: 'Balochistan — Lasbela',
-    level: 'medium',
-    message: 'Localized heavy rainfall expected. Urban drainage systems may be strained.',
-    timestamp: '2026-02-15T14:00:00Z',
-    isNew: false,
-  },
-];
+/**
+ * Fetch all flood data from the backend — single call, no duplicates.
+ * Every component should use data from this response.
+ */
+export async function fetchFloodData(): Promise<FloodApiResponse> {
+  const res = await fetch(`${API_BASE}/api/all`);
+  if (!res.ok) throw new Error(`API error: ${res.status}`);
+  const data = await res.json();
 
-export const recentFloodEvents: FloodEvent[] = [
-  { id: '1', date: '2022-08-15', region: 'Sindh', severity: 'high', description: 'Catastrophic monsoon flooding across southern Sindh', affectedPopulation: 14500000 },
-  { id: '2', date: '2023-07-20', region: 'Punjab', severity: 'high', description: 'Heavy monsoon rains cause widespread river overflow', affectedPopulation: 3200000 },
-  { id: '3', date: '2022-08-28', region: 'KPK', severity: 'high', description: 'Flash floods in northern valleys', affectedPopulation: 1800000 },
-  { id: '4', date: '2022-07-10', region: 'Balochistan', severity: 'medium', description: 'Seasonal flooding in western districts', affectedPopulation: 950000 },
-  { id: '5', date: '2021-06-15', region: 'Gilgit-Baltistan', severity: 'medium', description: 'Glacial lake outburst flood in Hunza valley', affectedPopulation: 120000 },
-];
-*/
+  // Sanitize provinces — clamp negatives, fill missing fields
+  const provinces: ProvinceData[] = (data.provinces || []).map((p: any) => ({
+    id:                      p.id || '',
+    name:                    p.name || 'Unknown',
+    riskLevel:               (['low', 'medium', 'high'].includes(p.riskLevel) ? p.riskLevel : 'low') as ProvinceData['riskLevel'],
+    riskScore:               Math.max(0, Math.min(100, p.riskScore ?? 0)),
+    rainfall7Day:            Math.max(0, p.rainfall7Day ?? 0),
+    rainfall30Day:           Math.max(0, p.rainfall30Day ?? 0),
+    prediction:              Math.max(0, p.prediction ?? 0),
+    riverDischarge:          Math.max(0, p.riverDischarge ?? 0),
+    riverDischargeThreshold: Math.max(1, p.riverDischargeThreshold ?? 1),
+    population:              Math.max(0, p.population ?? 0),
+    historicalFloods:        Math.max(0, p.historicalFloods ?? 0),
+    lastFloodDate:           p.lastFloodDate || '',
+    alertActive:             !!p.alertActive,
+    coordinates:             p.coordinates || { lat: 30, lng: 70 },
+    districts:               (p.districts || []).map((d: any) => ({
+      name:      d.name || '',
+      riskScore: Math.max(0, Math.min(100, d.riskScore ?? 0)),
+      riskLevel: (['low', 'medium', 'high'].includes(d.riskLevel) ? d.riskLevel : 'low') as 'low' | 'medium' | 'high',
+    })),
+    deaths:                  Math.max(0, p.deaths ?? 0),
+    housesDamaged:           Math.max(0, p.housesDamaged ?? 0),
+  }));
 
+  // Sanitize alerts
+  const alerts: Alert[] = (data.alerts || []).map((a: any) => ({
+    id:         a.id || String(Math.random()),
+    region:     a.region || 'Unknown',
+    level:      (['low', 'medium', 'high'].includes(a.level) ? a.level : 'medium') as Alert['level'],
+    message:    a.message || '',
+    timestamp:  a.timestamp || new Date().toISOString(),
+    isNew:      !!a.isNew,
+  }));
+
+  // Sanitize rainfall trend
+  const rainfallTrend: RainfallDataPoint[] = (data.rainfallTrend || []).map((r: any) => ({
+    date:      r.date || '',
+    rainfall:  Math.max(0, r.rainfall ?? 0),
+    predicted: Math.max(0, r.predicted ?? 0),
+    threshold: r.threshold ?? 80,
+  }));
+
+  // Model metrics (pass through with defaults)
+  const modelMetrics = {
+    accuracy:    data.modelMetrics?.accuracy    ?? 0,
+    precision:   data.modelMetrics?.precision   ?? 0,
+    recall:      data.modelMetrics?.recall      ?? 0,
+    f1Score:     data.modelMetrics?.f1Score     ?? 0,
+    rocAuc:      data.modelMetrics?.rocAuc      ?? 0,
+    lastTrained: data.modelMetrics?.lastTrained ?? 'N/A',
+    dataPoints:  data.modelMetrics?.dataPoints  ?? 0,
+    features:    data.modelMetrics?.features    ?? 0,
+  };
+
+  return { provinces, alerts, rainfallTrend, modelMetrics };
+}
