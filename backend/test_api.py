@@ -5,13 +5,13 @@ import time
 print("=== TESTING: Do values change between requests? ===\n")
 
 # First request
-r1 = urllib.request.urlopen("http://localhost:5000/api/all")
+r1 = urllib.request.urlopen("https://pakistan-flood-risk-prediction.onrender.com/api/all")
 d1 = json.loads(r1.read())
 
 time.sleep(1)
 
 # Second request
-r2 = urllib.request.urlopen("http://localhost:5000/api/all")
+r2 = urllib.request.urlopen("https://pakistan-flood-risk-prediction.onrender.com/api/all")
 d2 = json.loads(r2.read())
 
 print(f"{'Province':<22} | {'Request 1':>12} | {'Request 2':>12} | {'Changed?':>8}")

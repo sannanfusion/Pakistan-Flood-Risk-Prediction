@@ -397,6 +397,6 @@ def create_app():
 if __name__ == "__main__":
     app = create_app()
     print("\n  Flood Risk API v3.0 (ML-powered)")
-    print("  http://localhost:5000/api/health")
-    print("  http://localhost:5000/api/all\n")
+    print("  https://pakistan-flood-risk-prediction.onrender.com/api/all")
+    print(" https://pakistan-flood-risk-prediction.onrender.com/api/all\n")
     app.run(debug=True, port=5000)
