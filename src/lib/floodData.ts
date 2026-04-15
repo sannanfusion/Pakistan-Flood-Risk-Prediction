@@ -7,7 +7,7 @@
 
 import { ProvinceData, RainfallDataPoint, Alert } from './types';
 
-const API_BASE = 'http://localhost:5000';
+const API_BASE = 'https://pakistan-flood-risk-prediction.onrender.com';
 
 export interface FloodApiResponse {
   provinces: ProvinceData[];
