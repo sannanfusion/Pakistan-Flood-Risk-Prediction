@@ -394,9 +394,12 @@ def create_app():
 
     return app
 
+import os
+
 if __name__ == "__main__":
     app = create_app()
-    print("\n  Flood Risk API v3.0 (ML-powered)")
-    print("https://pakistan-flood-risk-prediction.onrender.com/api/all")
-    print("https://pakistan-flood-risk-prediction.onrender.com/api/all\n")
-    app.run(debug=True, port=5000)
+    print("\nFlood Risk API v3.0 (ML-powered)")
+
+    port = int(os.environ.get("PORT", 5000))
+
+    app.run(host="0.0.0.0", port=port)
