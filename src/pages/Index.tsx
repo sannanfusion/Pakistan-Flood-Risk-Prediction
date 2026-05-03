@@ -103,15 +103,76 @@ const Index = () => {
   ];
 
   // Loading state
-  if (loading) {
-    return (
-      <div className="flex flex-col items-center justify-center h-[60vh] gap-4">
-        <div className="w-10 h-10 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin" />
-        <div className="text-muted-foreground text-sm">Loading flood data from NASA & NDMA...</div>
-      </div>
-    );
-  }
+  // Loading state (Upgraded Satellite Scanning UI)
+  if (loading) {
+    return (
+      <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-background overflow-hidden">
+        {/* Subtle Background Grid */}
+        <div 
+          className="absolute inset-0 opacity-[0.03] pointer-events-none" 
+          style={{ 
+            backgroundImage: `linear-gradient(#4f46e5 1px, transparent 1px), linear-gradient(90deg, #4f46e5 1px, transparent 1px)`,
+            backgroundSize: '40px 40px' 
+          }} 
+        />
 
+        <div className="relative flex flex-col items-center">
+          {/* Radar Scanner Animation */}
+          <div className="relative w-48 h-48 mb-8">
+            {/* Outer Ring */}
+            <div className="absolute inset-0 border-2 border-primary/20 rounded-full" />
+            
+            {/* Pulsing Circles */}
+            <div className="absolute inset-0 border border-primary/40 rounded-full animate-ping" style={{ animationDuration: '3s' }} />
+            
+            {/* The Scanner Sweep */}
+            <div 
+              className="absolute inset-0 rounded-full"
+              style={{
+                background: 'conic-gradient(from 0deg, transparent 0%, rgba(59, 130, 246, 0.4) 100%)',
+                animation: 'spin 2s linear infinite'
+              }}
+            />
+
+            {/* Central Icon */}
+            <div className="absolute inset-0 flex items-center justify-center">
+              <Satellite className="w-10 h-10 text-primary animate-pulse" />
+            </div>
+
+            {/* Scanning Dots (Simulating Data Points) */}
+            <div className="absolute top-1/4 left-1/4 w-1.5 h-1.5 bg-risk-high rounded-full animate-pulse" />
+            <div className="absolute bottom-1/3 right-1/4 w-1.5 h-1.5 bg-primary rounded-full animate-pulse" style={{ animationDelay: '0.5s' }} />
+          </div>
+
+          {/* Text Content */}
+          <div className="text-center z-10">
+            <h2 className="text-xl font-bold tracking-tight text-foreground mb-2">
+              Pakistan Flood Risk Prediction
+            </h2>
+            <div className="flex flex-col items-center gap-1">
+              <p className="text-muted-foreground text-sm font-medium animate-pulse">
+                Please wait while we load the dashboard for you
+              </p>
+              <div className="flex items-center gap-2 mt-4 px-3 py-1 bg-muted rounded-full border border-border">
+                <div className="w-2 h-2 rounded-full bg-primary animate-bounce" />
+                <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
+                  Synchronizing NASA & NDMA Streams
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* CSS for the sweep animation */}
+        <style dangerouslySetInnerHTML={{ __html: `
+          @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+          }
+        `}} />
+      </div>
+    );
+  }
   // Error state
   if (error) {
     return (
