@@ -1,4 +1,4 @@
-import { LayoutDashboard, History, FileText, Settings, Droplets, Activity } from 'lucide-react';
+import { LayoutDashboard, History, FileText, Settings, Droplets, Activity, BookOpen } from 'lucide-react';
 import { NavLink } from '@/components/NavLink';
 import {
   Sidebar,
@@ -16,6 +16,7 @@ const mainItems = [
   { title: 'Dashboard', url: '/', icon: LayoutDashboard },
   { title: 'Historical', url: '/historical', icon: History },
   { title: 'Reports', url: '/reports', icon: FileText },
+  { title: 'White Paper', url: '/research', icon: BookOpen },
   { title: 'Settings', url: '/settings', icon: Settings },
 ];
 

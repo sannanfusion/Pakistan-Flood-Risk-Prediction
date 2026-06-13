@@ -9,6 +9,7 @@ import Index from "./pages/Index";
 import Historical from "./pages/Historical";
 import Reports from "./pages/Reports";
 import SettingsPage from "./pages/SettingsPage";
+import WhitePaper from "./pages/White Paper";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -42,6 +43,7 @@ const App = () => (
           <Route path="/historical" element={<AppLayout><Historical /></AppLayout>} />
           <Route path="/reports" element={<AppLayout><Reports /></AppLayout>} />
           <Route path="/settings" element={<AppLayout><SettingsPage /></AppLayout>} />
+          <Route path="/research" element={<AppLayout><WhitePaper /></AppLayout>} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
