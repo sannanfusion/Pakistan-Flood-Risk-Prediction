@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -6,56 +6,64 @@
 
 @layer base {
   :root {
-    --background: 210 20% 98%;
-    --foreground: 220 20% 10%;
+    /* Deep navy command-center surface */
+    --background: 202 30% 6%;
+    --foreground: 180 20% 96%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 220 20% 10%;
+    --card: 203 28% 9%;
+    --card-foreground: 180 20% 96%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 220 20% 10%;
+    --popover: 203 30% 10%;
+    --popover-foreground: 180 20% 96%;
 
-    --primary: 210 100% 45%;
-    --primary-foreground: 0 0% 100%;
+    /* Teal / emerald authority accent */
+    --primary: 165 72% 45%;
+    --primary-foreground: 202 40% 6%;
+    --primary-glow: 160 84% 60%;
 
-    --secondary: 210 15% 93%;
-    --secondary-foreground: 220 20% 10%;
+    --secondary: 203 22% 14%;
+    --secondary-foreground: 180 20% 94%;
 
-    --muted: 210 15% 95%;
-    --muted-foreground: 215 14% 46%;
+    --muted: 203 20% 13%;
+    --muted-foreground: 200 12% 62%;
 
-    --accent: 210 20% 93%;
-    --accent-foreground: 220 20% 10%;
+    --accent: 203 24% 15%;
+    --accent-foreground: 180 20% 96%;
 
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 214 20% 90%;
-    --input: 214 20% 90%;
-    --ring: 210 100% 45%;
+    --border: 203 20% 16%;
+    --input: 203 20% 16%;
+    --ring: 165 72% 45%;
 
-    --radius: 0.75rem;
+    --radius: 0.85rem;
 
-    /* Risk status colors */
-    --risk-low: 142 71% 45%;
-    --risk-medium: 45 93% 47%;
-    --risk-high: 0 72% 51%;
+    /* Risk status colors (three-tier + no-data) */
+    --risk-low: 152 65% 46%;
+    --risk-medium: 40 92% 55%;
+    --risk-high: 0 78% 58%;
+    --risk-none: 210 12% 48%;
 
-    --water: 210 100% 45%;
-    --rain: 210 70% 55%;
-    --river: 200 65% 42%;
+    --water: 196 80% 52%;
+    --rain: 205 85% 60%;
+    --river: 195 70% 45%;
 
-    --surface-elevated: 0 0% 100%;
+    --surface-elevated: 203 26% 12%;
 
-    --sidebar-background: 220 20% 8%;
-    --sidebar-foreground: 210 15% 85%;
-    --sidebar-primary: 210 100% 55%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 220 15% 14%;
-    --sidebar-accent-foreground: 210 15% 90%;
-    --sidebar-border: 220 15% 16%;
-    --sidebar-ring: 210 100% 55%;
-    --sidebar-muted: 215 14% 50%;
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
+    --shadow-panel: 0 14px 40px -18px hsl(202 60% 2% / 0.9);
+    --shadow-glow: 0 0 28px -6px hsl(var(--primary) / 0.35);
+
+    --sidebar-background: 204 32% 7%;
+    --sidebar-foreground: 190 16% 88%;
+    --sidebar-primary: 165 72% 45%;
+    --sidebar-primary-foreground: 202 40% 6%;
+    --sidebar-accent: 203 24% 13%;
+    --sidebar-accent-foreground: 180 20% 96%;
+    --sidebar-border: 203 20% 14%;
+    --sidebar-ring: 165 72% 45%;
+    --sidebar-muted: 200 12% 58%;
   }
 }
 
@@ -80,6 +88,16 @@
     scrollbar-color: hsl(var(--border)) transparent;
   }
 
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: hsl(var(--border));
+    border-radius: 999px;
+  }
+
   .risk-indicator-low {
     background-color: hsl(var(--risk-low));
   }
@@ -92,4 +110,33 @@
     background-color: hsl(var(--risk-high));
   }
 
+  .panel {
+    background-color: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-panel);
+  }
+}
+
+/* Dark map chrome */
+.leaflet-container {
+  background: hsl(var(--background));
+}
+
+.leaflet-tooltip.dark-tooltip,
+.leaflet-tooltip.clean-tooltip {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+.leaflet-tooltip.dark-tooltip::before,
+.leaflet-tooltip.clean-tooltip::before {
+  display: none !important;
+}
+
+@keyframes markerPulse {
+  0% { transform: scale(0.7); opacity: 0.8; }
+  100% { transform: scale(1.6); opacity: 0; }
 }

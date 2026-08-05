@@ -69,7 +69,7 @@ export function MapLayersPanel({ layers, onToggle }: MapLayersPanelProps) {
   const activeCount = Object.values(layers).filter(Boolean).length;
 
   return (
-    <div className="absolute top-3 left-3 z-[1000] w-[180px]">
+    <div className="absolute top-[52px] right-3 z-[1000] w-[180px]">
       <div
         className="flex items-center justify-between gap-1.5 px-2.5 py-1.5 bg-card/95 backdrop-blur-sm border border-border shadow-lg cursor-pointer select-none"
         onClick={() => setCollapsed(!collapsed)}

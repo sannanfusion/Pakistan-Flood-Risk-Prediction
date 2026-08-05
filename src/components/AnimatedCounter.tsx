@@ -7,9 +7,10 @@ interface AnimatedCounterProps {
   prefix?: string;
   decimals?: number;
   duration?: number;
+  className?: string;
 }
 
-export function AnimatedCounter({ value, suffix = '', prefix = '', decimals = 0, duration = 1.5 }: AnimatedCounterProps) {
+export function AnimatedCounter({ value, suffix = '', prefix = '', decimals = 0, duration = 1.5, className = 'font-mono text-lg font-bold text-foreground tabular-nums' }: AnimatedCounterProps) {
   const [displayed, setDisplayed] = useState(0);
 
   useEffect(() => {
@@ -37,7 +38,7 @@ export function AnimatedCounter({ value, suffix = '', prefix = '', decimals = 0,
     <motion.span
       initial={{ opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0 }}
-      className="font-mono text-lg font-bold text-foreground tabular-nums"
+      className={className}
     >
       {prefix}{displayed.toFixed(decimals)}{suffix}
     </motion.span>

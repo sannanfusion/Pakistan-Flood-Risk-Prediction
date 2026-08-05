@@ -1,29 +1,22 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { LeafletMap } from '@/components/LeafletMap';
 import { MapLayersPanel, LayerVisibility } from '@/components/MapLayersPanel';
+import { RiskTiles } from '@/components/RiskTiles';
+import { CurrentRainfallCard } from '@/components/CurrentRainfallCard';
+import { RecentAlertsCard } from '@/components/RecentAlertsCard';
+import { RiskDistributionChart } from '@/components/RiskDistributionChart';
+import { ProvinceWiseDonut } from '@/components/ProvinceWiseDonut';
+import { RecentReportsCard } from '@/components/RecentReportsCard';
+import { DataSourcesBar } from '@/components/DataSourcesBar';
 import { ProvinceDetail } from '@/components/ProvinceDetail';
-import { AlertsPanel } from '@/components/AlertsPanel';
-import { RainfallChart } from '@/components/RainfallChart';
 import { ModelMetrics } from '@/components/ModelMetrics';
-import { RiskOverviewChart } from '@/components/RiskOverviewChart';
+import { RainfallChart } from '@/components/RainfallChart';
 import { PopulationAffectedChart } from '@/components/PopulationAffectedChart';
-import { DonutStatCards } from '@/components/DonutStatCards';
-import { LiveIndicator } from '@/components/LiveIndicator';
-import { AnimatedCounter } from '@/components/AnimatedCounter';
-import { DataSourceBadge } from '@/components/DataSourceBadge';
 import { fetchFloodData, FloodApiResponse } from '@/lib/floodData';
-import { ProvinceData, RainfallDataPoint, Alert } from '@/lib/types';
-import { Droplets, Waves, AlertTriangle, Shield, MapPin, Satellite, Activity } from 'lucide-react';
+import { ProvinceData, RainfallDataPoint, Alert, RISK_LABELS } from '@/lib/types';
+import { flattenDistricts } from '@/lib/riskTiers';
+import { AlertTriangle, Satellite, Activity, TrendingUp, Hand } from 'lucide-react';
 import { motion } from 'framer-motion';
-
-const DashCard = ({ children, className = '', ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div
-    className={`rounded-xl bg-card border border-border shadow-sm hover:shadow-md transition-shadow duration-300 ${className}`}
-    {...props}
-  >
-    {children}
-  </div>
-);
 
 const Index = () => {
   const [selectedProvince, setSelectedProvince] = useState<string | null>('sindh');
@@ -33,6 +26,7 @@ const Index = () => {
   const [modelMetricsData, setModelMetricsData] = useState<FloodApiResponse['modelMetrics'] | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [now, setNow] = useState(new Date());
 
   const [layerVisibility, setLayerVisibility] = useState<LayerVisibility>({
     provinces: true,
@@ -43,9 +37,16 @@ const Index = () => {
   });
 
   const selected = provinces.find((p) => p.id === selectedProvince) || null;
+  const districts = useMemo(() => flattenDistricts(provinces), [provinces]);
 
   const toggleLayer = useCallback((layer: keyof LayerVisibility) => {
     setLayerVisibility((prev) => ({ ...prev, [layer]: !prev[layer] }));
+  }, []);
+
+  // Live clock
+  useEffect(() => {
+    const t = setInterval(() => setNow(new Date()), 30000);
+    return () => clearInterval(t);
   }, []);
 
   // Single API call — all data comes from here
@@ -59,10 +60,8 @@ const Index = () => {
         setRainfallTrend(data.rainfallTrend);
         setAlerts(data.alerts);
         setModelMetricsData(data.modelMetrics);
-        console.log('✅ API data loaded:', data);
       } catch (err: any) {
         if (!cancelled) setError(err.message || 'Failed to load data');
-        console.error('❌ API error:', err);
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -71,108 +70,63 @@ const Index = () => {
     return () => { cancelled = true; };
   }, []);
 
-  // Stats (computed from live data)
-  const highRiskCount = provinces.filter((p) => p.riskLevel === 'high').length;
-  const totalRainfall = provinces.length > 0
-    ? Math.round(provinces.reduce((s, p) => s + p.rainfall7Day, 0) / provinces.length)
-    : 0;
-  const alertCount = provinces.filter((p) => p.alertActive).length;
-  const avgRisk = provinces.length > 0
-    ? Math.round(provinces.reduce((s, p) => s + p.riskScore, 0) / provinces.length)
-    : 0;
+  const scrollToMap = () => document.getElementById('risk-map')?.scrollIntoView({ behavior: 'smooth' });
 
-  // Subtle live fluctuation
-  const [simRainfall, setSimRainfall] = useState(0);
-  const [simRisk, setSimRisk] = useState(0);
-
-  useEffect(() => {
-    setSimRainfall(totalRainfall);
-    setSimRisk(avgRisk);
-    const interval = setInterval(() => {
-      setSimRainfall(totalRainfall + Math.round((Math.random() - 0.5) * 6));
-      setSimRisk(avgRisk + Math.round((Math.random() - 0.5) * 3));
-    }, 4000);
-    return () => clearInterval(interval);
-  }, [totalRainfall, avgRisk]);
-
-  const stats = [
-    { icon: <AlertTriangle className="w-4 h-4 text-risk-high" />, label: 'High Risk Regions', value: highRiskCount, suffix: `/${provinces.length}`, trend: highRiskCount > 0 ? `+${highRiskCount}` : '—' },
-    { icon: <Droplets className="w-4 h-4 text-primary" />, label: 'Avg 7-Day Rain', value: simRainfall, suffix: 'mm', trend: totalRainfall > 80 ? '⚠' : '—' },
-    { icon: <Waves className="w-4 h-4 text-risk-medium" />, label: 'Active Alerts', value: alertCount, suffix: '', trend: '—' },
-    { icon: <Shield className="w-4 h-4 text-primary" />, label: 'Mean Risk Score', value: simRisk, suffix: '/100', trend: avgRisk > 50 ? '↑' : '—' },
-  ];
+  const selectByRegionName = (region: string) => {
+    const match = provinces.find(
+      (p) =>
+        region.toLowerCase().includes(p.name.toLowerCase()) ||
+        (p.districts || []).some((d) => region.toLowerCase().includes(d.name.toLowerCase())),
+    );
+    if (match) setSelectedProvince(match.id);
+  };
 
   // Loading state
-  // Loading state (Upgraded Satellite Scanning UI)
-  if (loading) {
-    return (
-      <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-background overflow-hidden">
-        {/* Subtle Background Grid */}
-        <div 
-          className="absolute inset-0 opacity-[0.03] pointer-events-none" 
-          style={{ 
-            backgroundImage: `linear-gradient(#4f46e5 1px, transparent 1px), linear-gradient(90deg, #4f46e5 1px, transparent 1px)`,
-            backgroundSize: '40px 40px' 
-          }} 
+  if (loading) {
+    return (
+      <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-background overflow-hidden">
+        <div
+          className="absolute inset-0 opacity-[0.05] pointer-events-none"
+          style={{
+            backgroundImage: `linear-gradient(hsl(var(--primary)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--primary)) 1px, transparent 1px)`,
+            backgroundSize: '40px 40px',
+          }}
         />
-
         <div className="relative flex flex-col items-center">
-          {/* Radar Scanner Animation */}
           <div className="relative w-48 h-48 mb-8">
-            {/* Outer Ring */}
             <div className="absolute inset-0 border-2 border-primary/20 rounded-full" />
-            
-            {/* Pulsing Circles */}
             <div className="absolute inset-0 border border-primary/40 rounded-full animate-ping" style={{ animationDuration: '3s' }} />
-            
-            {/* The Scanner Sweep */}
-            <div 
+            <div
               className="absolute inset-0 rounded-full"
               style={{
-                background: 'conic-gradient(from 0deg, transparent 0%, rgba(59, 130, 246, 0.4) 100%)',
-                animation: 'spin 2s linear infinite'
+                background: 'conic-gradient(from 0deg, transparent 0%, hsl(var(--primary) / 0.35) 100%)',
+                animation: 'spin 2s linear infinite',
               }}
             />
-
-            {/* Central Icon */}
             <div className="absolute inset-0 flex items-center justify-center">
               <Satellite className="w-10 h-10 text-primary animate-pulse" />
             </div>
-
-            {/* Scanning Dots (Simulating Data Points) */}
             <div className="absolute top-1/4 left-1/4 w-1.5 h-1.5 bg-risk-high rounded-full animate-pulse" />
             <div className="absolute bottom-1/3 right-1/4 w-1.5 h-1.5 bg-primary rounded-full animate-pulse" style={{ animationDelay: '0.5s' }} />
           </div>
-
-          {/* Text Content */}
           <div className="text-center z-10">
-            <h2 className="text-xl font-bold tracking-tight text-foreground mb-2">
-              Pakistan Flood Risk Prediction
-            </h2>
-            <div className="flex flex-col items-center gap-1">
-              <p className="text-muted-foreground text-sm font-medium animate-pulse">
-                Please wait while we load the dashboard for you
-              </p>
-              <div className="flex items-center gap-2 mt-4 px-3 py-1 bg-muted rounded-full border border-border">
-                <div className="w-2 h-2 rounded-full bg-primary animate-bounce" />
-                <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
-                  Synchronizing NASA & NDMA Streams
-                </span>
-              </div>
+            <h2 className="text-xl font-bold tracking-tight text-foreground mb-2">Pakistan Flood Risk Prediction</h2>
+            <p className="text-muted-foreground text-sm font-medium animate-pulse">
+              Please wait while we load the dashboard for you
+            </p>
+            <div className="flex items-center justify-center gap-2 mt-4 px-3 py-1 bg-muted rounded-full border border-border mx-auto w-fit">
+              <div className="w-2 h-2 rounded-full bg-primary animate-bounce" />
+              <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
+                Synchronizing NASA &amp; NDMA Streams
+              </span>
             </div>
           </div>
         </div>
-
-        {/* CSS for the sweep animation */}
-        <style dangerouslySetInnerHTML={{ __html: `
-          @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-          }
-        `}} />
+        <style dangerouslySetInnerHTML={{ __html: `@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }` }} />
       </div>
-    );
-  }
+    );
+  }
+
   // Error state
   if (error) {
     return (
@@ -182,7 +136,7 @@ const Index = () => {
         <div className="text-muted-foreground text-sm">{error}</div>
         <button
           onClick={() => { setLoading(true); setError(null); window.location.reload(); }}
-          className="px-4 py-2 rounded-lg bg-primary text-primary-foreground text-sm"
+          className="px-4 py-2 rounded-xl bg-primary text-primary-foreground text-sm font-semibold"
         >
           Retry
         </button>
@@ -190,189 +144,164 @@ const Index = () => {
     );
   }
 
+  const lastSync = now.toLocaleString([], { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+
   return (
-    <div className="space-y-8">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div className="space-y-4">
+      {/* Welcome row */}
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
         <div>
-          <h1 className="text-xl sm:text-2xl font-bold text-foreground tracking-tight">
-            Pakistan Flood Risk Dashboard
+          <h1 className="text-[22px] font-extrabold text-foreground tracking-tight flex items-center gap-2">
+            Welcome back, Admin
+            <Hand className="w-5 h-5 text-risk-medium" />
           </h1>
-          <p className="text-xs text-muted-foreground mt-1">Real-time satellite-based prediction system</p>
-          <div className="flex flex-wrap items-center gap-2 mt-2">
-            <DataSourceBadge sources={['nasa', 'ndma', 'wapda']} />
+          <p className="text-[12.5px] text-muted-foreground mt-0.5">
+            Here&apos;s the overview of Pakistan Flood Risk
+          </p>
+        </div>
+        <div className="flex items-center gap-6">
+          <div className="text-right">
+            <div className="text-[12px] text-muted-foreground">
+              {now.toLocaleDateString([], { month: 'long', day: 'numeric', year: 'numeric' })}
+            </div>
+            <div className="text-[18px] font-bold text-foreground font-mono tabular-nums">
+              {now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+            </div>
+          </div>
+          <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-primary/10 border border-primary/25">
+            <Activity className="w-4 h-4 text-primary animate-pulse" />
+            <span className="text-[12px] font-semibold text-primary">Live Updates</span>
           </div>
         </div>
-        <LiveIndicator />
       </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        {stats.map((s, i) => (
-          <motion.div
-            key={s.label}
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.06 }}
+      {/* Main grid: left column (tiles + map) / right rail */}
+      <div className="grid grid-cols-1 xl:grid-cols-[1fr_320px] gap-4 items-start">
+        <div className="space-y-4 min-w-0">
+          <RiskTiles districts={districts} />
+
+          {/* Risk map */}
+          <motion.section
+            id="risk-map"
+            initial={{ opacity: 0, scale: 0.995 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="relative panel p-0 overflow-hidden h-[520px]"
           >
-            <DashCard className="p-4 flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-muted">{s.icon}</div>
-              <div className="min-w-0">
-                <div className="text-[11px] text-muted-foreground font-medium">{s.label}</div>
-                <div className="flex items-baseline gap-2">
-                  <AnimatedCounter value={s.value} suffix={s.suffix} />
-                  <span className="text-[10px] font-mono text-risk-low font-semibold">{s.trend}</span>
+            <div className="absolute inset-0">
+              <LeafletMap
+                provinces={provinces}
+                selectedProvince={selectedProvince}
+                onProvinceSelect={setSelectedProvince}
+                layerVisibility={layerVisibility}
+              />
+              <MapLayersPanel layers={layerVisibility} onToggle={toggleLayer} />
+            </div>
+
+            {/* Selected region info card */}
+            {selected && (
+              <div className="absolute bottom-4 right-16 z-[1000] w-[196px] bg-card/95 backdrop-blur-md rounded-2xl border border-border shadow-xl p-4">
+                <div className="flex items-start justify-between gap-2 mb-2.5">
+                  <div className="text-[15px] font-bold text-foreground truncate">{selected.name}</div>
                 </div>
-              </div>
-            </DashCard>
-          </motion.div>
-        ))}
-      </div>
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-[11px] text-muted-foreground">Province</span>
+                  <span
+                    className={`px-2 py-0.5 rounded-md text-[9.5px] font-mono font-bold ${
+                      selected.riskLevel === 'high'
+                        ? 'bg-risk-high/15 text-risk-high'
+                        : selected.riskLevel === 'medium'
+                        ? 'bg-risk-medium/15 text-risk-medium'
+                        : 'bg-risk-low/15 text-risk-low'
+                    }`}
+                  >
+                    {RISK_LABELS[selected.riskLevel]}
+                  </span>
+                </div>
 
-      {/* Donut Statistics Overview */}
-      <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
-        <DashCard className="p-5">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2">
-              <div className="p-1.5 rounded-lg bg-muted">
-                <Activity className="w-4 h-4 text-primary" />
-              </div>
-              <h2 className="text-sm font-semibold text-foreground">Risk Overview Summary</h2>
-            </div>
-            <DataSourceBadge sources={['nasa', 'ndma', 'wapda']} />
-          </div>
-          <DonutStatCards data={provinces} />
-        </DashCard>
-      </motion.div>
+                <div className="pt-3 border-t border-border">
+                  <div className="text-[10.5px] text-muted-foreground mb-1">Risk Score</div>
+                  <div className="text-[26px] font-extrabold text-foreground font-mono leading-none">
+                    {selected.riskScore}
+                    <span className="text-[13px] text-muted-foreground font-semibold">/100</span>
+                  </div>
+                </div>
 
-      {/* Map */}
-      <motion.div initial={{ opacity: 0, scale: 0.99 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.15 }}>
-        <DashCard className="p-5 h-[500px] lg:h-[620px]">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-3 gap-2">
-            <div className="flex items-center gap-2">
-              <div className="p-1.5 rounded-lg bg-muted">
-                <MapPin className="w-4 h-4 text-primary" />
-              </div>
-              <h2 className="text-sm font-semibold text-foreground">Satellite Risk Map — Flood Extent & Monitoring</h2>
-            </div>
-            <DataSourceBadge sources={['nasa']} />
-          </div>
-          <div className="relative h-[calc(100%-40px)]">
-            <LeafletMap
-              provinces={provinces}
-              selectedProvince={selectedProvince}
-              onProvinceSelect={setSelectedProvince}
-              layerVisibility={layerVisibility}
-            />
-            <MapLayersPanel layers={layerVisibility} onToggle={toggleLayer} />
-          </div>
-        </DashCard>
-      </motion.div>
+                <div className="pt-3 mt-3 border-t border-border">
+                  <div className="text-[10.5px] text-muted-foreground mb-1">Trend</div>
+                  <div className="flex items-center gap-1.5 text-[13px] font-bold text-foreground">
+                    {selected.prediction >= selected.rainfall7Day ? 'Increasing' : 'Stable'}
+                    <TrendingUp
+                      className={`w-3.5 h-3.5 ${
+                        selected.prediction >= selected.rainfall7Day ? 'text-risk-high' : 'text-risk-low'
+                      }`}
+                    />
+                  </div>
+                </div>
 
-      {/* Province + Alerts Row */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
-        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="lg:col-span-5">
-          <DashCard className="p-5 h-full">
-            {selected ? (
-              <ProvinceDetail province={selected} />
-            ) : (
-              <div className="flex items-center justify-center h-full text-muted-foreground text-sm">
-                Select a region on the map
+                <div className="pt-3 mt-3 border-t border-border">
+                  <div className="text-[10px] text-muted-foreground">Last Updated</div>
+                  <div className="text-[10.5px] font-mono text-foreground">{lastSync}</div>
+                </div>
               </div>
             )}
-          </DashCard>
-        </motion.div>
-
-        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }} className="lg:col-span-7">
-          <DashCard className="p-5 h-full">
-            <AlertsPanel alerts={alerts} />
-          </DashCard>
-        </motion.div>
-      </div>
-
-      {/* Charts Row (FIXED ALIGNMENT) */}
-<div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-
-  <motion.div
-    initial={{ opacity: 0, y: 16 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ delay: 0.35 }}
-  >
-    <DashCard className="p-5 h-full">
-      <PopulationAffectedChart data={provinces} />
-    </DashCard>
-  </motion.div>
-
-  <motion.div
-    initial={{ opacity: 0, y: 16 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ delay: 0.4 }}
-  >
-    <DashCard className="p-5 h-full">
-      <ModelMetrics data={modelMetricsData} />
-    </DashCard>
-  </motion.div>
-
-</div>
-
-      {/* Provincial Risk Comparison */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.45 }}>
-          <DashCard className="p-5">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-3 gap-2">
-              <h2 className="text-sm font-semibold text-foreground flex items-center gap-2">
-                <div className="p-1.5 rounded-lg bg-muted">
-                  <AlertTriangle className="w-4 h-4 text-risk-medium" />
-                </div>
-                Provincial Risk Comparison
-              </h2>
-              <DataSourceBadge sources={['ndma']} />
-            </div>
-            <RiskOverviewChart data={provinces} />
-          </DashCard>
-        </motion.div>
-
-        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}>
-          <DashCard className="p-5">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-3 gap-2">
-              <h2 className="text-sm font-semibold text-foreground flex items-center gap-2">
-                <div className="p-1.5 rounded-lg bg-muted">
-                  <Satellite className="w-4 h-4 text-primary" />
-                </div>
-                Cumulative Rainfall Analysis
-              </h2>
-              <DataSourceBadge sources={['nasa', 'wapda']} />
-            </div>
-            <p className="text-[10px] text-muted-foreground mb-3 font-mono">
-              Actual vs predicted · Red line = flood threshold (80mm)
-            </p>
-            <RainfallChart data={rainfallTrend} />
-          </DashCard>
-        </motion.div>
-      </div>
-
-      {/* Footer */}
-      <footer className="text-center text-[10px] text-muted-foreground font-mono py-6 mt-4 border-t border-border">
-        <div className="flex flex-wrap items-center justify-center gap-4">
-          <span className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full inline-block bg-primary" />
-            NASA GPM/IMERG
-          </span>
-          <span className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full inline-block bg-risk-low" />
-            NDMA Pakistan
-          </span>
-          <span className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full inline-block bg-risk-medium" />
-            WAPDA River Discharge
-          </span>
-          <span className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full inline-block bg-risk-high" />
-            Sentinel-2 / MODIS
-          </span>
-          <span>· Model: Random Forest (v2.4)</span>
+          </motion.section>
         </div>
-      </footer>
+
+        {/* Right rail */}
+        <div className="space-y-4 xl:sticky xl:top-2">
+          <CurrentRainfallCard province={selected} onViewMap={scrollToMap} />
+          <RecentAlertsCard alerts={alerts} onSelectRegion={selectByRegionName} />
+        </div>
+      </div>
+
+      {/* Charts row */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <RiskDistributionChart districts={districts} />
+        <ProvinceWiseDonut
+          provinces={provinces}
+          selectedProvince={selectedProvince}
+          onSelect={setSelectedProvince}
+        />
+        <RecentReportsCard provinces={provinces} />
+      </div>
+
+      {/* Province detail + rainfall analysis */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <section id="province-detail" className="panel p-4">
+          {selected ? (
+            <ProvinceDetail province={selected} />
+          ) : (
+            <div className="flex items-center justify-center h-full text-muted-foreground text-sm">
+              Select a region on the map
+            </div>
+          )}
+        </section>
+
+        <section id="imagery" className="panel p-4">
+          <div className="flex items-center gap-2 mb-3">
+            <span className="p-1.5 rounded-lg bg-muted">
+              <Satellite className="w-4 h-4 text-primary" />
+            </span>
+            <h2 className="text-[13.5px] font-semibold text-foreground">Cumulative Rainfall Analysis</h2>
+          </div>
+          <p className="text-[10.5px] text-muted-foreground mb-3 font-mono">
+            Actual vs predicted · Red line = flood threshold (80mm)
+          </p>
+          <RainfallChart data={rainfallTrend} />
+        </section>
+      </div>
+
+      {/* Population + model metrics */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <section className="panel p-4">
+          <PopulationAffectedChart data={provinces} />
+        </section>
+        <section className="panel p-4">
+          <ModelMetrics data={modelMetricsData} />
+        </section>
+      </div>
+
+      <DataSourcesBar precision={modelMetricsData ? modelMetricsData.precision * (modelMetricsData.precision <= 1 ? 100 : 1) : undefined} lastSync={lastSync} />
     </div>
   );
 };
