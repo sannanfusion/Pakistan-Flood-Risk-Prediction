@@ -1,10 +1,11 @@
+import { useState } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
+import { TopBar } from "@/components/TopBar";
 import Index from "./pages/Index";
 import Historical from "./pages/Historical";
 import Reports from "./pages/Reports";
@@ -14,23 +15,21 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
-const AppLayout = ({ children }: { children: React.ReactNode }) => (
-  <SidebarProvider>
-    <div className="min-h-screen flex w-full bg-background">
-      <AppSidebar />
-      <main className="flex-1 flex flex-col min-h-screen">
-        <header className="h-12 flex items-center border-b border-border px-4 bg-card sticky top-0 z-10">
-          <SidebarTrigger className="text-muted-foreground hover:text-foreground transition-colors" />
-        </header>
-        <div className="flex-1 overflow-auto">
-          <div className="w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            {children}
-          </div>
+const AppLayout = ({ children }: { children: React.ReactNode }) => {
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+
+  return (
+    <div className="h-screen flex w-full bg-background overflow-hidden">
+      <AppSidebar open={sidebarOpen} />
+      <main className="flex-1 flex flex-col min-w-0">
+        <TopBar onToggleSidebar={() => setSidebarOpen((v) => !v)} alertCount={5} />
+        <div className="flex-1 overflow-y-auto scrollbar-thin">
+          <div className="w-full max-w-[1700px] mx-auto px-4 sm:px-6 py-6">{children}</div>
         </div>
       </main>
     </div>
-  </SidebarProvider>
-);
+  );
+};
 
 const App = () => (
   <QueryClientProvider client={queryClient}>

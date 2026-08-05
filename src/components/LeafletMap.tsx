@@ -119,17 +119,19 @@ function buildDynamicMarkers(provinces: ProvinceData[]): DynamicMarker[] {
   return markers;
 }
 
+// Tier thresholds are identical to the map legend: High 71-100, Medium 41-70, Low 11-40, No Risk 0-10
 function getRiskLevel(score: number) {
-  if (score >= 60) return 'high';
-  if (score >= 40) return 'medium';
-  return 'low';
+  if (score >= 71) return 'high';
+  if (score >= 41) return 'medium';
+  if (score >= 11) return 'low';
+  return 'no';
 }
 
 function getMarkerColor(score: number) {
-  if (score >= 80) return { bg: '#dc2626', border: '#991b1b', glow: 'rgba(220,38,38,0.4)' };
-  if (score >= 60) return { bg: '#ea580c', border: '#c2410c', glow: 'rgba(234,88,12,0.3)' };
-  if (score >= 40) return { bg: '#eab308', border: '#a16207', glow: 'rgba(234,179,8,0.3)' };
-  return { bg: '#16a34a', border: '#15803d', glow: 'rgba(22,163,74,0.3)' };
+  if (score >= 71) return { bg: '#ef4444', border: '#b91c1c', glow: 'rgba(239,68,68,0.22)' };
+  if (score >= 41) return { bg: '#f5b433', border: '#b45309', glow: 'rgba(245,180,51,0.22)' };
+  if (score >= 11) return { bg: '#27c07f', border: '#15803d', glow: 'rgba(39,192,127,0.22)' };
+  return { bg: '#6b7684', border: '#475569', glow: 'rgba(107,118,132,0.22)' };
 }
 
 const FLOOD_COLORS = {
@@ -150,14 +152,14 @@ function createCityMarkerHtml(district: DynamicMarker) {
   ">
     <svg width="28" height="40" viewBox="0 0 28 40" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M14 0C6.268 0 0 6.268 0 14c0 10.5 14 26 14 26s14-15.5 14-26C28 6.268 21.732 0 14 0z" fill="${colors.bg}"/>
-      <path d="M14 1C6.82 1 1 6.82 1 14c0 9.94 13 24.5 13 24.5S27 23.94 27 14C27 6.82 21.18 1 14 1z" fill="${colors.bg}" stroke="white" stroke-width="1.5"/>
-      <circle cx="14" cy="13" r="5.5" fill="white" opacity="0.95"/>
+      <path d="M14 1C6.82 1 1 6.82 1 14c0 9.94 13 24.5 13 24.5S27 23.94 27 14C27 6.82 21.18 1 14 1z" fill="${colors.bg}" stroke="#0b1116" stroke-width="1.5"/>
+      <circle cx="14" cy="13" r="5.5" fill="#f4fbff" opacity="0.96"/>
       ${isStation 
         ? `<rect x="10.5" y="9.5" width="7" height="7" rx="1.5" fill="${colors.bg}" transform="rotate(45 14 13)"/>`
         : `<circle cx="14" cy="13" r="3.5" fill="${colors.bg}"/>`
       }
     </svg>
-    ${district.riskScore >= 80 ? `<div style="
+    ${district.riskScore >= 71 ? `<div style="
       position:absolute;top:-4px;left:-4px;
       width:36px;height:36px;
       border-radius:50%;
@@ -176,18 +178,18 @@ function createTooltipHtml(district: DynamicMarker) {
   return `<div style="
     font-family:'Inter',system-ui,sans-serif;
     min-width:140px;padding:10px 12px;
-    background:white;border-radius:10px;
-    box-shadow:0 4px 20px rgba(0,0,0,0.12);
-    border:1px solid #e5e7eb;
+    background:#0f1a22;border-radius:12px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.55);
+    border:1px solid rgba(255,255,255,0.08);
     border-left:4px solid ${colors.bg};
   ">
     <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;">
       <span style="font-size:13px;">${icon}</span>
-      <span style="font-size:12px;font-weight:700;color:#1a1a2e;">${district.name}</span>
+      <span style="font-size:12px;font-weight:700;color:#f1f7fa;">${district.name}</span>
     </div>
     <div style="display:flex;align-items:baseline;gap:4px;margin-bottom:4px;">
       <span style="font-size:22px;font-weight:800;color:${colors.bg};line-height:1;">${district.riskScore}</span>
-      <span style="font-size:10px;color:#6b7280;font-weight:500;">/ 100</span>
+      <span style="font-size:10px;color:#93a4b1;font-weight:500;">/ 100</span>
     </div>
     <div style="
       display:inline-block;
@@ -223,6 +225,11 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect, laye
       maxZoom: 12,
     });
 
+    const darkMap = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      attribution: '© CartoDB',
+      subdomains: 'abcd',
+      maxZoom: 19,
+    });
     const osmMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© OpenStreetMap',
       maxZoom: 19,
@@ -236,10 +243,16 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect, laye
       attribution: '© Esri',
     });
 
-    osmMap.addTo(map);
+    const labelsOverlay = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.png', {
+      subdomains: 'abcd',
+      maxZoom: 19,
+    });
+
+    darkMap.addTo(map);
+    labelsOverlay.addTo(map);
     L.control.layers(
-      { 'Street': osmMap, 'Voyager': voyagerMap, 'Satellite': satelliteLayer },
-      {},
+      { 'Dark': darkMap, 'Street': osmMap, 'Voyager': voyagerMap, 'Satellite': satelliteLayer },
+      { 'Labels': labelsOverlay },
       { position: 'topright' }
     ).addTo(map);
     L.control.zoom({ position: 'bottomright' }).addTo(map);
@@ -263,9 +276,9 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect, laye
         color: colors.border, weight: 1.5, fillColor: colors.fill, fillOpacity: 0.5,
         dashArray: zone.severity === 'light' ? '6 4' : undefined,
       }).addTo(floodGroup).bindTooltip(
-        `<div style="font-family:'Inter',sans-serif;font-size:11px;padding:4px 8px;background:white;border-radius:6px;box-shadow:0 2px 8px rgba(0,0,0,0.1);border:1px solid #e5e7eb;">
+        `<div style="font-family:'Inter',sans-serif;font-size:11px;padding:6px 10px;background:#0f1a22;color:#e8f1f5;border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,0.5);border:1px solid rgba(255,255,255,0.08);">
           <strong>Flood Extent</strong><br/>
-          <span style="text-transform:capitalize;font-weight:600;color:#2563eb;">${zone.severity}</span> severity
+          <span style="text-transform:capitalize;font-weight:600;color:#38bdf8;">${zone.severity}</span> severity
         </div>`,
         { sticky: true }
       );
@@ -281,7 +294,7 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect, laye
         color: '#3b82f6', weight: river.width, opacity: 0.7,
         lineCap: 'round', lineJoin: 'round',
       }).addTo(riverGroup).bindTooltip(
-        `<div style="font-family:'Inter',sans-serif;font-size:11px;padding:4px 8px;background:white;border-radius:6px;box-shadow:0 2px 8px rgba(0,0,0,0.1);border:1px solid #e5e7eb;">
+        `<div style="font-family:'Inter',sans-serif;font-size:11px;padding:6px 10px;background:#0f1a22;color:#e8f1f5;border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,0.5);border:1px solid rgba(255,255,255,0.08);">
           💧 ${river.name}
         </div>`,
         { sticky: true, direction: 'top' }
@@ -327,17 +340,17 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect, laye
         `<div style="
           font-family:'Inter',sans-serif;
           text-align:center;padding:12px 16px;
-          background:white;border-radius:12px;
-          box-shadow:0 4px 20px rgba(0,0,0,0.12);
-          border:1px solid #e5e7eb;
+          background:#0f1a22;border-radius:14px;
+          box-shadow:0 12px 34px rgba(0,0,0,0.55);
+          border:1px solid rgba(255,255,255,0.08);
           min-width:150px;
         ">
-          <div style="font-size:14px;font-weight:800;color:#1a1a2e;margin-bottom:8px;">${province.name}</div>
+          <div style="font-size:14px;font-weight:800;color:#f1f7fa;margin-bottom:8px;">${province.name}</div>
           <div style="font-size:28px;font-weight:900;color:${color};line-height:1;margin-bottom:4px;">${province.riskScore}%</div>
-          <div style="font-size:10px;color:#6b7280;margin-bottom:8px;">Risk Score</div>
-          <div style="display:flex;justify-content:space-between;gap:12px;font-size:10px;color:#6b7280;">
-            <div><span style="font-weight:600;color:#1a1a2e;">${province.rainfall7Day}</span>mm rain</div>
-            <div><span style="font-weight:600;color:#1a1a2e;">${popStr}</span> pop</div>
+          <div style="font-size:10px;color:#93a4b1;margin-bottom:8px;">Risk Score</div>
+          <div style="display:flex;justify-content:space-between;gap:12px;font-size:10px;color:#93a4b1;">
+            <div><span style="font-weight:600;color:#f1f7fa;">${province.rainfall7Day}</span>mm rain</div>
+            <div><span style="font-weight:600;color:#f1f7fa;">${popStr}</span> pop</div>
           </div>
         </div>`,
         { sticky: true, direction: 'top' }
@@ -350,12 +363,12 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect, laye
         html: `<div style="
           font-family:'Inter',sans-serif;
           font-size:11px;font-weight:700;
-          color:#1a1a2e;
-          background:rgba(255,255,255,0.85);
+          color:#eaf3f7;
+          background:rgba(10,17,22,0.72);
           padding:2px 8px;border-radius:6px;
           white-space:nowrap;pointer-events:none;
-          box-shadow:0 1px 4px rgba(0,0,0,0.08);
-          border:1px solid rgba(0,0,0,0.06);
+          box-shadow:0 2px 10px rgba(0,0,0,0.45);
+          border:1px solid rgba(255,255,255,0.1);
         ">${province.name}</div>`,
         iconSize: [0, 0],
         iconAnchor: [0, 0],
