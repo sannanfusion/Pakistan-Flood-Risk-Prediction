@@ -437,83 +437,91 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect, laye
   }, [selectedProvince, provinces]);
 
   return (
-    <div className="relative w-full h-full min-h-[380px] rounded-xl overflow-hidden border border-border shadow-sm">
+    <div className="relative w-full h-full min-h-[380px] rounded-2xl overflow-hidden border border-border">
       <div ref={mapRef} className="w-full h-full min-h-[380px]" />
 
-      {/* Legend */}
-      <div className="absolute bottom-3 left-3 z-[1000] bg-white/95 backdrop-blur-sm rounded-lg border border-border px-3 py-2 shadow-sm">
-        <div className="text-[9px] font-semibold text-foreground uppercase tracking-wider mb-1.5">Risk Level</div>
-        <div className="flex flex-col gap-1">
+      {/* Flood Risk Level legend */}
+      <div className="absolute top-3 left-3 z-[1000] bg-card/92 backdrop-blur-md rounded-xl border border-border px-3.5 py-3 shadow-lg">
+        <div className="text-[11.5px] font-semibold text-foreground mb-2">Flood Risk Level</div>
+        <div className="flex flex-col gap-1.5">
           {[
-            { label: 'High', color: '#dc2626' },
-            { label: 'Medium', color: '#eab308' },
-            { label: 'Low', color: '#16a34a' },
-          ].map(item => (
-            <div key={item.label} className="flex items-center gap-1.5">
-              <div className="w-2.5 h-2.5 rounded-full" style={{ background: item.color }} />
-              <span className="text-[9px] text-muted-foreground">{item.label}</span>
+            { label: 'High Risk (71-100)', color: '#ef4444' },
+            { label: 'Medium Risk (41-70)', color: '#f5b433' },
+            { label: 'Low Risk (11-40)', color: '#27c07f' },
+            { label: 'No Risk (0-10)', color: '#6b7684' },
+            { label: 'No Data', color: '#3f4a55' },
+          ].map((item) => (
+            <div key={item.label} className="flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ background: item.color }} />
+              <span className="text-[11px] text-muted-foreground whitespace-nowrap">{item.label}</span>
             </div>
           ))}
         </div>
-        <div className="mt-1.5 pt-1.5 border-t border-border flex items-center gap-1.5">
-          <div className="w-2.5 h-2.5 rounded-sm border border-muted-foreground/30 bg-muted" style={{ transform: 'rotate(45deg)' }} />
-          <span className="text-[9px] text-muted-foreground">Station</span>
-          <div className="w-2.5 h-2.5 rounded-full border border-muted-foreground/30 bg-muted ml-1" />
-          <span className="text-[9px] text-muted-foreground">City</span>
+        <div className="mt-2 pt-2 border-t border-border flex items-center gap-1.5">
+          <span
+            className="w-2.5 h-2.5 rounded-sm border border-muted-foreground/40 bg-muted"
+            style={{ transform: 'rotate(45deg)' }}
+          />
+          <span className="text-[10px] text-muted-foreground">Station</span>
+          <span className="w-2.5 h-2.5 rounded-full border border-muted-foreground/40 bg-muted ml-1.5" />
+          <span className="text-[10px] text-muted-foreground">City</span>
         </div>
       </div>
 
-      {/* Coordinates */}
-      <div className="absolute bottom-3 right-16 z-[1000] bg-white/95 backdrop-blur-sm rounded-lg border border-border px-3 py-1.5 shadow-sm">
-        <div className="text-[9px] font-mono text-muted-foreground">
-          NASA GPM/IMERG · MODIS
-        </div>
+      {/* Source badge */}
+      <div className="absolute bottom-3 left-3 z-[1000] bg-card/92 backdrop-blur-md rounded-xl border border-border px-3 py-1.5">
+        <div className="text-[9.5px] font-mono text-muted-foreground">NASA GPM/IMERG · MODIS · Sentinel-2</div>
       </div>
 
       <style>{`
         .leaflet-control-zoom a {
-          background: white !important;
-          color: #1a1a2e !important;
-          border-color: #e5e7eb !important;
+          background: hsl(var(--card)) !important;
+          color: hsl(var(--foreground)) !important;
+          border-color: hsl(var(--border)) !important;
           border-radius: 8px !important;
-          width: 32px !important;
-          height: 32px !important;
-          line-height: 32px !important;
+          width: 34px !important;
+          height: 34px !important;
+          line-height: 34px !important;
           font-size: 16px !important;
           font-weight: 300 !important;
         }
         .leaflet-control-zoom a:hover {
-          background: #f9fafb !important;
+          background: hsl(var(--muted)) !important;
         }
         .leaflet-control-zoom {
-          border-radius: 10px !important;
+          border-radius: 12px !important;
           overflow: hidden;
-          box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
-          border: 1px solid #e5e7eb !important;
+          box-shadow: 0 8px 24px rgba(0,0,0,0.5) !important;
+          border: 1px solid hsl(var(--border)) !important;
         }
         .leaflet-control-layers {
-          border-radius: 10px !important;
-          box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
-          border: 1px solid #e5e7eb !important;
+          background: hsl(var(--card)) !important;
+          color: hsl(var(--foreground)) !important;
+          border-radius: 12px !important;
+          box-shadow: 0 8px 24px rgba(0,0,0,0.5) !important;
+          border: 1px solid hsl(var(--border)) !important;
           font-family: 'Inter', sans-serif !important;
           font-size: 11px !important;
         }
         .leaflet-control-layers-toggle {
-          width: 32px !important;
-          height: 32px !important;
+          width: 34px !important;
+          height: 34px !important;
+          filter: invert(1) hue-rotate(180deg);
         }
-        .clean-tooltip {
+        .leaflet-control-layers-separator {
+          border-color: hsl(var(--border)) !important;
+        }
+        .clean-tooltip, .dark-tooltip {
           background: transparent !important;
           border: none !important;
           box-shadow: none !important;
           padding: 0 !important;
         }
-        .clean-tooltip::before {
+        .clean-tooltip::before, .dark-tooltip::before {
           display: none !important;
         }
         .district-marker:hover > div > div:first-child {
           transform: scale(1.15);
-          box-shadow: 0 0 0 2px rgba(59,130,246,0.3), 0 4px 12px rgba(0,0,0,0.2);
         }
         @keyframes markerPulse {
           0% { opacity: 0.6; transform: scale(1); }
@@ -523,3 +531,4 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect, laye
     </div>
   );
 }
+
