@@ -79,6 +79,7 @@ export function LiveRainfallMap() {
       scrollWheelZoom: false,
       minZoom: 4,
       maxZoom: 9,
+      zoomSnap: 0.25,
     });
     L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png', {
       subdomains: 'abcd',
@@ -87,6 +88,7 @@ export function LiveRainfallMap() {
       subdomains: 'abcd',
       opacity: 0.7,
     }).addTo(map);
+    map.fitBounds([[23.5, 60.5], [37.3, 78.0]], { padding: [16, 16] });
     groupRef.current = L.layerGroup().addTo(map);
     mapInstance.current = map;
     return () => {

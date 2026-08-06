@@ -219,6 +219,7 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect, laye
     const map = L.map(mapRef.current, {
       center: [30.3, 69.5],
       zoom: 5,
+      zoomSnap: 0.25,
       zoomControl: false,
       attributionControl: false,
       minZoom: 4,
@@ -285,6 +286,9 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect, laye
         { sticky: true, direction: 'top' }
       );
     });
+
+    // Always frame the whole country
+    map.fitBounds([[23.5, 60.5], [37.3, 78.0]], { padding: [24, 24] });
 
     mapInstanceRef.current = map;
     return () => { map.remove(); mapInstanceRef.current = null; };
@@ -411,10 +415,7 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect, laye
       if (!province) return;
       const color = RISK_COLORS[province.riskLevel] || RISK_COLORS.low;
       if (id === selectedProvince) {
-        circle.setStyle({ weight: 3, fillOpacity: 0.18, opacity: 0.8, dashArray: undefined });
-        if (mapInstanceRef.current) {
-          mapInstanceRef.current.flyTo(circle.getLatLng(), 6, { duration: 0.8 });
-        }
+        circle.setStyle({ weight: 2.5, fillOpacity: 0.16, opacity: 0.75, dashArray: undefined });
       } else {
         circle.setStyle({ weight: 2, fillOpacity: 0.08, color, opacity: 0.5, dashArray: '8 4' });
       }
