@@ -28,17 +28,16 @@ interface NavItem {
 const NAV: NavItem[] = [
   { title: 'Dashboard', icon: LayoutDashboard, route: '/' },
   { title: 'Current Rainfall', icon: CloudRain, section: 'rainfall', badge: 'LIVE' },
-  { title: 'Flood Risk Map', icon: MapIcon, section: 'risk-map' },
   { title: 'Flood History', icon: History, route: '/historical' },
   { title: 'Reports', icon: FileText, route: '/reports' },
   { title: 'Gallery', icon: Images, section: 'imagery' },
-  { title: 'Province Wise', icon: LandPlot, section: 'province-wise' },
   { title: 'Alerts', icon: Bell, section: 'alerts' },
   { title: 'White Papers', icon: BookOpen, route: '/research' },
   { title: 'Settings', icon: Settings, route: '/settings' },
   { title: 'About', icon: Info, route: '/research' },
   { title: 'Contact', icon: Mail, route: '/settings' },
 ];
+
 
 interface AppSidebarProps {
   open: boolean;
