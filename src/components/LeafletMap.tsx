@@ -219,43 +219,29 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect, laye
     const map = L.map(mapRef.current, {
       center: [30.3, 69.5],
       zoom: 5,
+      zoomSnap: 0.25,
       zoomControl: false,
       attributionControl: false,
       minZoom: 4,
       maxZoom: 12,
     });
 
-    const darkMap = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    const darkMap = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png', {
       attribution: '© CartoDB',
       subdomains: 'abcd',
       maxZoom: 19,
-    });
-    const osmMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© OpenStreetMap',
-      maxZoom: 19,
-    });
-    const voyagerMap = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_labels_under/{z}/{x}/{y}{r}.png', {
-      attribution: '© CartoDB Voyager',
-      subdomains: 'abcd',
-      maxZoom: 19,
-    });
-    const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-      attribution: '© Esri',
     });
 
     const labelsOverlay = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.png', {
       subdomains: 'abcd',
       maxZoom: 19,
+      opacity: 0.75,
     });
 
     darkMap.addTo(map);
     labelsOverlay.addTo(map);
-    L.control.layers(
-      { 'Dark': darkMap, 'Street': osmMap, 'Voyager': voyagerMap, 'Satellite': satelliteLayer },
-      { 'Labels': labelsOverlay },
-      { position: 'topright' }
-    ).addTo(map);
     L.control.zoom({ position: 'bottomright' }).addTo(map);
+
 
     const provinceGroup = L.layerGroup().addTo(map);
     const floodGroup = L.layerGroup().addTo(map);
@@ -300,6 +286,9 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect, laye
         { sticky: true, direction: 'top' }
       );
     });
+
+    // Always frame the whole country
+    map.fitBounds([[23.5, 60.5], [37.3, 78.0]], { padding: [24, 24] });
 
     mapInstanceRef.current = map;
     return () => { map.remove(); mapInstanceRef.current = null; };
@@ -426,10 +415,7 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect, laye
       if (!province) return;
       const color = RISK_COLORS[province.riskLevel] || RISK_COLORS.low;
       if (id === selectedProvince) {
-        circle.setStyle({ weight: 3, fillOpacity: 0.18, opacity: 0.8, dashArray: undefined });
-        if (mapInstanceRef.current) {
-          mapInstanceRef.current.flyTo(circle.getLatLng(), 6, { duration: 0.8 });
-        }
+        circle.setStyle({ weight: 2.5, fillOpacity: 0.16, opacity: 0.75, dashArray: undefined });
       } else {
         circle.setStyle({ weight: 2, fillOpacity: 0.08, color, opacity: 0.5, dashArray: '8 4' });
       }
