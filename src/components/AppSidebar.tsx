@@ -3,11 +3,9 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard,
   CloudRain,
-  Map as MapIcon,
   History,
   FileText,
   Images,
-  LandPlot,
   Bell,
   BookOpen,
   Settings,
