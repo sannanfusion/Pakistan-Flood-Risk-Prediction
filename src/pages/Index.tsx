@@ -2,11 +2,12 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import { LeafletMap } from '@/components/LeafletMap';
 import { MapLayersPanel, LayerVisibility } from '@/components/MapLayersPanel';
 import { RiskTiles } from '@/components/RiskTiles';
-import { CurrentRainfallCard } from '@/components/CurrentRainfallCard';
-import { RecentAlertsCard } from '@/components/RecentAlertsCard';
+import { LiveRainfallMap } from '@/components/LiveRainfallMap';
+import { FloodGallery } from '@/components/FloodGallery';
+import { DistrictAlertsPanel } from '@/components/DistrictAlertsPanel';
 import { RiskDistributionChart } from '@/components/RiskDistributionChart';
-import { ProvinceWiseDonut } from '@/components/ProvinceWiseDonut';
 import { RecentReportsCard } from '@/components/RecentReportsCard';
+
 import { DataSourcesBar } from '@/components/DataSourcesBar';
 import { ProvinceDetail } from '@/components/ProvinceDetail';
 import { ModelMetrics } from '@/components/ModelMetrics';
