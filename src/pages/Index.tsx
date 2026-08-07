@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import { LeafletMap } from '@/components/LeafletMap';
 import { MapLayersPanel, LayerVisibility } from '@/components/MapLayersPanel';
 import { RiskTiles } from '@/components/RiskTiles';
-import { LiveRainfallMap } from '@/components/LiveRainfallMap';
 import { FloodGallery } from '@/components/FloodGallery';
 import { DistrictAlertsPanel } from '@/components/DistrictAlertsPanel';
 import { RiskDistributionChart } from '@/components/RiskDistributionChart';
@@ -14,9 +13,9 @@ import { ModelMetrics } from '@/components/ModelMetrics';
 import { RainfallChart } from '@/components/RainfallChart';
 import { PopulationAffectedChart } from '@/components/PopulationAffectedChart';
 import { fetchFloodData, FloodApiResponse } from '@/lib/floodData';
-import { ProvinceData, RainfallDataPoint, Alert, RISK_LABELS } from '@/lib/types';
+import { ProvinceData, RainfallDataPoint, Alert } from '@/lib/types';
 import { flattenDistricts } from '@/lib/riskTiers';
-import { AlertTriangle, Satellite, Activity, TrendingUp, Hand } from 'lucide-react';
+import { AlertTriangle, Satellite, Activity, Hand } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const Index = () => {
