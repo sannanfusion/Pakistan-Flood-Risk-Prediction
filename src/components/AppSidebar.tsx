@@ -9,7 +9,6 @@ import {
   Bell,
   BookOpen,
   Settings,
-  Info,
   Mail,
   Waves,
   ChevronRight,
