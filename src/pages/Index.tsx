@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import { LeafletMap } from '@/components/LeafletMap';
 import { MapLayersPanel, LayerVisibility } from '@/components/MapLayersPanel';
 import { RiskTiles } from '@/components/RiskTiles';
-import { LiveRainfallMap } from '@/components/LiveRainfallMap';
 import { FloodGallery } from '@/components/FloodGallery';
 import { DistrictAlertsPanel } from '@/components/DistrictAlertsPanel';
 import { RiskDistributionChart } from '@/components/RiskDistributionChart';
@@ -14,9 +13,9 @@ import { ModelMetrics } from '@/components/ModelMetrics';
 import { RainfallChart } from '@/components/RainfallChart';
 import { PopulationAffectedChart } from '@/components/PopulationAffectedChart';
 import { fetchFloodData, FloodApiResponse } from '@/lib/floodData';
-import { ProvinceData, RainfallDataPoint, Alert, RISK_LABELS } from '@/lib/types';
+import { ProvinceData, RainfallDataPoint, Alert } from '@/lib/types';
 import { flattenDistricts } from '@/lib/riskTiers';
-import { AlertTriangle, Satellite, Activity, TrendingUp, Hand } from 'lucide-react';
+import { AlertTriangle, Satellite, Activity, Hand } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const Index = () => {
@@ -195,72 +194,11 @@ const Index = () => {
           />
           <MapLayersPanel layers={layerVisibility} onToggle={toggleLayer} />
         </div>
-
-        {/* Selected region info card */}
-        {selected && (
-          <div className="absolute bottom-4 right-16 z-[1000] w-[210px] bg-card/95 backdrop-blur-md rounded-2xl border border-border shadow-xl p-4">
-            <div className="flex items-start justify-between gap-2 mb-2.5">
-              <div className="text-[15px] font-bold text-foreground truncate">{selected.name}</div>
-            </div>
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-[11px] text-muted-foreground">Province</span>
-              <span
-                className={`px-2 py-0.5 rounded-md text-[9.5px] font-mono font-bold ${
-                  selected.riskLevel === 'high'
-                    ? 'bg-risk-high/15 text-risk-high'
-                    : selected.riskLevel === 'medium'
-                    ? 'bg-risk-medium/15 text-risk-medium'
-                    : 'bg-risk-low/15 text-risk-low'
-                }`}
-              >
-                {RISK_LABELS[selected.riskLevel]}
-              </span>
-            </div>
-
-            <div className="pt-3 border-t border-border">
-              <div className="text-[10.5px] text-muted-foreground mb-1">Risk Score</div>
-              <div className="text-[26px] font-extrabold text-foreground font-mono leading-none">
-                {selected.riskScore}
-                <span className="text-[13px] text-muted-foreground font-semibold">/100</span>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-2 pt-3 mt-3 border-t border-border">
-              <div>
-                <div className="text-[10px] text-muted-foreground">7-Day Rain</div>
-                <div className="text-[12.5px] font-bold font-mono text-foreground">{selected.rainfall7Day}mm</div>
-              </div>
-              <div>
-                <div className="text-[10px] text-muted-foreground">Predicted</div>
-                <div className="text-[12.5px] font-bold font-mono text-foreground">{selected.prediction}mm</div>
-              </div>
-            </div>
-
-            <div className="pt-3 mt-3 border-t border-border">
-              <div className="text-[10.5px] text-muted-foreground mb-1">Trend</div>
-              <div className="flex items-center gap-1.5 text-[13px] font-bold text-foreground">
-                {selected.prediction >= selected.rainfall7Day ? 'Increasing' : 'Stable'}
-                <TrendingUp
-                  className={`w-3.5 h-3.5 ${
-                    selected.prediction >= selected.rainfall7Day ? 'text-risk-high' : 'text-risk-low'
-                  }`}
-                />
-              </div>
-            </div>
-
-            <div className="pt-3 mt-3 border-t border-border">
-              <div className="text-[10px] text-muted-foreground">Last Updated</div>
-              <div className="text-[10.5px] font-mono text-foreground">{lastSync}</div>
-            </div>
-          </div>
-        )}
       </motion.section>
-
-      {/* Current rainfall — live across Pakistan */}
-      <LiveRainfallMap />
 
       {/* Gallery — real flood photography */}
       <FloodGallery />
+
 
       {/* Flood risk alerts by district (high → medium → low) */}
       <DistrictAlertsPanel districts={districts} onSelectProvince={setSelectedProvince} />

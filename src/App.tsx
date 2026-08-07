@@ -10,6 +10,8 @@ import Index from "./pages/Index";
 import Historical from "./pages/Historical";
 import Reports from "./pages/Reports";
 import SettingsPage from "./pages/SettingsPage";
+import Rainfall from "./pages/Rainfall";
+import Contact from "./pages/Contact";
 import WhitePaper from "./pages/White Paper";
 import NotFound from "./pages/NotFound";
 
@@ -39,6 +41,8 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<AppLayout><Index /></AppLayout>} />
+          <Route path="/rainfall" element={<AppLayout><Rainfall /></AppLayout>} />
+          <Route path="/contact" element={<AppLayout><Contact /></AppLayout>} />
           <Route path="/historical" element={<AppLayout><Historical /></AppLayout>} />
           <Route path="/reports" element={<AppLayout><Reports /></AppLayout>} />
           <Route path="/settings" element={<AppLayout><SettingsPage /></AppLayout>} />
