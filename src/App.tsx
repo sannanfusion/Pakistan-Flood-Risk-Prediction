@@ -44,6 +44,7 @@ const App = () => (
           <Route path="/" element={<AppLayout><Index /></AppLayout>} />
           <Route path="/rainfall" element={<AppLayout><Rainfall /></AppLayout>} />
           <Route path="/contact" element={<AppLayout><Contact /></AppLayout>} />
+          <Route path="/gallery" element={<AppLayout><Gallery /></AppLayout>} />
           <Route path="/historical" element={<AppLayout><Historical /></AppLayout>} />
           <Route path="/reports" element={<AppLayout><Reports /></AppLayout>} />
           <Route path="/settings" element={<AppLayout><SettingsPage /></AppLayout>} />
