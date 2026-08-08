@@ -12,6 +12,7 @@ import Reports from "./pages/Reports";
 import SettingsPage from "./pages/SettingsPage";
 import Rainfall from "./pages/Rainfall";
 import Contact from "./pages/Contact";
+import Gallery from "./pages/Gallery";
 import WhitePaper from "./pages/White Paper";
 import NotFound from "./pages/NotFound";
 
