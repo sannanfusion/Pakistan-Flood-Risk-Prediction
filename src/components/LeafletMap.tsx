@@ -230,6 +230,12 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect, laye
       },
     });
 
+    // soft outer glow / country outline so the full national boundary always reads clearly
+    L.geoJSON(PK_GEO as GeoJSON.GeoJsonObject, {
+      style: { color: '#7dd3fc', weight: 6, opacity: 0.18, fill: false },
+      interactive: false,
+    }).addTo(provinceGroup);
+
     geo.addTo(provinceGroup);
 
     // Frame the whole country from the actual geometry so nothing is cropped
