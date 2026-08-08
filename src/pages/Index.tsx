@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import { LeafletMap } from '@/components/LeafletMap';
 import { MapLayersPanel, LayerVisibility } from '@/components/MapLayersPanel';
 import { RiskTiles } from '@/components/RiskTiles';
-import { FloodGallery } from '@/components/FloodGallery';
+
 import { DistrictAlertsPanel } from '@/components/DistrictAlertsPanel';
 import { RiskDistributionChart } from '@/components/RiskDistributionChart';
 import { RecentReportsCard } from '@/components/RecentReportsCard';
