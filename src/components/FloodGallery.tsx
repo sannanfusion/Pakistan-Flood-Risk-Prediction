@@ -66,9 +66,72 @@ const PHOTOS: Photo[] = [
     year: 'Jul 2022',
     credit: 'NASA MODIS',
   },
+  {
+    url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Pakistan_Flood_2010_%284923822384%29.jpg/960px-Pakistan_Flood_2010_%284923822384%29.jpg',
+    title: 'Villages submerged by the super flood',
+    place: 'Punjab',
+    year: '2010',
+    credit: 'DFID',
+  },
+  {
+    url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Pakistan_Floods_2010_-_Aerial_view.jpg/960px-Pakistan_Floods_2010_-_Aerial_view.jpg',
+    title: 'Aerial view of the flooded plains',
+    place: 'Indus Valley',
+    year: '2010',
+    credit: 'Public domain',
+  },
+  {
+    url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Flooding_in_Pakistan_%28MODIS_2010-08-11%29.jpg/960px-Flooding_in_Pakistan_%28MODIS_2010-08-11%29.jpg',
+    title: 'Indus overflow seen from space',
+    place: 'Sindh',
+    year: 'Aug 2010',
+    credit: 'NASA MODIS',
+  },
+  {
+    url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Pakistan_flood_relief_efforts_%284962411692%29.jpg/960px-Pakistan_flood_relief_efforts_%284962411692%29.jpg',
+    title: 'Helicopter relief operations',
+    place: 'Khyber Pakhtunkhwa',
+    year: '2010',
+    credit: 'Public domain',
+  },
+  {
+    url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Flood_affected_people_in_Pakistan_%284942014042%29.jpg/960px-Flood_affected_people_in_Pakistan_%284942014042%29.jpg',
+    title: 'Displaced families awaiting aid',
+    place: 'Punjab',
+    year: '2010',
+    credit: 'Public domain',
+  },
+  {
+    url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Flooding_in_Southern_Pakistan_%28MODIS_2011-09-13%29.jpg/960px-Flooding_in_Southern_Pakistan_%28MODIS_2011-09-13%29.jpg',
+    title: 'Southern Pakistan under water',
+    place: 'Lower Sindh',
+    year: 'Sep 2011',
+    credit: 'NASA MODIS',
+  },
+  {
+    url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Pakistan_floods_2010_-_temporary_camp.jpg/960px-Pakistan_floods_2010_-_temporary_camp.jpg',
+    title: 'Temporary relief camp',
+    place: 'Sindh',
+    year: '2010',
+    credit: 'Public domain',
+  },
+  {
+    url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Flooding_along_the_Indus_River%2C_Pakistan_%28MODIS_2022-09-01%29.jpg/960px-Flooding_along_the_Indus_River%2C_Pakistan_%28MODIS_2022-09-01%29.jpg',
+    title: 'A new lake formed along the Indus',
+    place: 'Sindh / Balochistan border',
+    year: 'Sep 2022',
+    credit: 'NASA MODIS',
+  },
 ];
 
-export function FloodGallery() {
+interface FloodGalleryProps {
+  /** show all photos in a taller grid (gallery page) */
+  expanded?: boolean;
+}
+
+export function FloodGallery({ expanded = false }: FloodGalleryProps) {
+  const photos = expanded ? PHOTOS : PHOTOS.slice(0, 8);
+
   return (
     <section id="imagery" className="panel p-4">
       <div className="flex items-center justify-between gap-3 mb-3">
@@ -78,13 +141,15 @@ export function FloodGallery() {
           </span>
           <div>
             <h2 className="text-[13.5px] font-semibold text-foreground">Gallery — Floods in Pakistan</h2>
-            <p className="text-[10.5px] text-muted-foreground font-mono">Documented photography &amp; satellite imagery</p>
+            <p className="text-[10.5px] text-muted-foreground font-mono">
+              {photos.length} documented photographs &amp; satellite images
+            </p>
           </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        {PHOTOS.map((p) => (
+      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3">
+        {photos.map((p) => (
           <figure
             key={p.url}
             className="group relative rounded-2xl overflow-hidden border border-border bg-muted/40 aspect-[4/3]"
