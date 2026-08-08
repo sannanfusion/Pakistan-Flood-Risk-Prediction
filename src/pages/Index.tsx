@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import { LeafletMap } from '@/components/LeafletMap';
 import { MapLayersPanel, LayerVisibility } from '@/components/MapLayersPanel';
 import { RiskTiles } from '@/components/RiskTiles';
-import { FloodGallery } from '@/components/FloodGallery';
+
 import { DistrictAlertsPanel } from '@/components/DistrictAlertsPanel';
 import { RiskDistributionChart } from '@/components/RiskDistributionChart';
 import { RecentReportsCard } from '@/components/RecentReportsCard';
@@ -14,7 +14,7 @@ import { RainfallChart } from '@/components/RainfallChart';
 import { PopulationAffectedChart } from '@/components/PopulationAffectedChart';
 import { fetchFloodData, FloodApiResponse } from '@/lib/floodData';
 import { ProvinceData, RainfallDataPoint, Alert } from '@/lib/types';
-import { flattenDistricts } from '@/lib/riskTiers';
+import { markerDistrictRows } from '@/lib/mapMarkers';
 import { AlertTriangle, Satellite, Activity, Hand } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -37,7 +37,7 @@ const Index = () => {
   });
 
   const selected = provinces.find((p) => p.id === selectedProvince) || null;
-  const districts = useMemo(() => flattenDistricts(provinces), [provinces]);
+  const districts = useMemo(() => markerDistrictRows(provinces), [provinces]);
 
   const toggleLayer = useCallback((layer: keyof LayerVisibility) => {
     setLayerVisibility((prev) => ({ ...prev, [layer]: !prev[layer] }));
@@ -195,9 +195,6 @@ const Index = () => {
           <MapLayersPanel layers={layerVisibility} onToggle={toggleLayer} />
         </div>
       </motion.section>
-
-      {/* Gallery — real flood photography */}
-      <FloodGallery />
 
 
       {/* Flood risk alerts by district (high → medium → low) */}

@@ -65,7 +65,7 @@ export function LiveRainfallMap() {
 
   useEffect(() => {
     load();
-    const t = setInterval(load, 15 * 60 * 1000);
+    const t = setInterval(load, 5 * 60 * 1000);
     return () => clearInterval(t);
   }, []);
 

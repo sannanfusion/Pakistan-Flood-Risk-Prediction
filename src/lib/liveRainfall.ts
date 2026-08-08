@@ -36,6 +36,18 @@ export const PK_CITIES: { name: string; province: string; lat: number; lng: numb
   { name: 'Gilgit', province: 'Gilgit-Baltistan', lat: 35.92, lng: 74.31 },
   { name: 'Skardu', province: 'Gilgit-Baltistan', lat: 35.30, lng: 75.63 },
   { name: 'Muzaffarabad', province: 'Azad Kashmir', lat: 34.37, lng: 73.47 },
+  { name: 'Mirpur', province: 'Azad Kashmir', lat: 33.15, lng: 73.75 },
+  { name: 'Larkana', province: 'Sindh', lat: 27.56, lng: 68.21 },
+  { name: 'Mirpur Khas', province: 'Sindh', lat: 25.53, lng: 69.01 },
+  { name: 'Bahawalpur', province: 'Punjab', lat: 29.40, lng: 71.68 },
+  { name: 'Sialkot', province: 'Punjab', lat: 32.49, lng: 74.53 },
+  { name: 'Sargodha', province: 'Punjab', lat: 32.08, lng: 72.67 },
+  { name: 'D.G. Khan', province: 'Punjab', lat: 30.05, lng: 70.64 },
+  { name: 'Abbottabad', province: 'KPK', lat: 34.15, lng: 73.22 },
+  { name: 'Mardan', province: 'KPK', lat: 34.20, lng: 72.05 },
+  { name: 'Chitral', province: 'KPK', lat: 35.85, lng: 71.79 },
+  { name: 'Sibi', province: 'Balochistan', lat: 29.55, lng: 67.88 },
+  { name: 'Turbat', province: 'Balochistan', lat: 26.00, lng: 63.04 },
 ];
 
 export async function fetchLiveRainfall(): Promise<CityRain[]> {

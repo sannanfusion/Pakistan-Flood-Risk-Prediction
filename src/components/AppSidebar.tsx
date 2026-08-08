@@ -27,7 +27,7 @@ const NAV: NavItem[] = [
   { title: 'Current Rainfall', icon: CloudRain, route: '/rainfall', badge: 'LIVE' },
   { title: 'Flood History', icon: History, route: '/historical' },
   { title: 'Reports', icon: FileText, route: '/reports' },
-  { title: 'Gallery', icon: Images, section: 'imagery' },
+  { title: 'Gallery', icon: Images, route: '/gallery' },
   { title: 'Alerts', icon: Bell, section: 'alerts' },
   { title: 'White Papers', icon: BookOpen, route: '/research' },
   { title: 'Settings', icon: Settings, route: '/settings' },

@@ -66,9 +66,100 @@ const PHOTOS: Photo[] = [
     year: 'Jul 2022',
     credit: 'NASA MODIS',
   },
+  {
+    url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Indus_River_under_flood_2010.jpg/960px-Indus_River_under_flood_2010.jpg',
+    title: 'Indus River in full flood',
+    place: 'Indus River',
+    year: '2010',
+    credit: 'Wikimedia Commons',
+  },
+  {
+    url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Damages_in_the_flood-affected_areas_in_Sindh_province_after_a_monsoon_season_in_Pakistan.jpg/960px-Damages_in_the_flood-affected_areas_in_Sindh_province_after_a_monsoon_season_in_Pakistan.jpg',
+    title: 'Damage in flood-affected areas after the monsoon',
+    place: 'Sindh',
+    year: '2022',
+    credit: 'Wikimedia Commons',
+  },
+  {
+    url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Flood_water_in_Punjab%2C_Pakistan_-_panoramio.jpg/960px-Flood_water_in_Punjab%2C_Pakistan_-_panoramio.jpg',
+    title: 'Flood water spreading over farmland',
+    place: 'Punjab',
+    year: '2010',
+    credit: 'Panoramio / CC',
+  },
+  {
+    url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Flood_water_in_Punjab%2C_Pakistan_1_-_panoramio.jpg/960px-Flood_water_in_Punjab%2C_Pakistan_1_-_panoramio.jpg',
+    title: 'Submerged fields and roads',
+    place: 'Punjab',
+    year: '2010',
+    credit: 'Panoramio / CC',
+  },
+  {
+    url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Flood_Relief_Operations%2C_Pakistan_DVIDS318529.jpg/960px-Flood_Relief_Operations%2C_Pakistan_DVIDS318529.jpg',
+    title: 'Helicopter flood relief operations',
+    place: 'Khyber Pakhtunkhwa',
+    year: '2010',
+    credit: 'DVIDS / Public domain',
+  },
+  {
+    url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Pakistan_Humanitarian_Aid_Flood_Relief_DVIDS319337.jpg/960px-Pakistan_Humanitarian_Aid_Flood_Relief_DVIDS319337.jpg',
+    title: 'Humanitarian aid delivery to cut-off villages',
+    place: 'Northern Pakistan',
+    year: '2010',
+    credit: 'DVIDS / Public domain',
+  },
+  {
+    url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Pakistan_Floods_2020.jpg/960px-Pakistan_Floods_2020.jpg',
+    title: 'Urban flooding after record rainfall',
+    place: 'Karachi, Sindh',
+    year: '2020',
+    credit: 'Wikimedia Commons',
+  },
+  {
+    url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Pakistani_Victims_of_the_Flooding_Are_Seated_on_the_Floor_%284863482308%29.jpg/960px-Pakistani_Victims_of_the_Flooding_Are_Seated_on_the_Floor_%284863482308%29.jpg',
+    title: 'Displaced families sheltering together',
+    place: 'Punjab',
+    year: '2010',
+    credit: 'US Gov / Public domain',
+  },
+  {
+    url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/ISS-36_Indus_Valley_in_Pakistan_%282%29.jpg/960px-ISS-36_Indus_Valley_in_Pakistan_%282%29.jpg',
+    title: 'Indus Valley seen from the ISS',
+    place: 'Indus Valley',
+    year: '2013',
+    credit: 'NASA',
+  },
+  {
+    url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Gahkuch.._Minor_flooding_at_Ghizar_river.jpg/960px-Gahkuch.._Minor_flooding_at_Ghizar_river.jpg',
+    title: 'Flooding on the Ghizar river',
+    place: 'Gilgit-Baltistan',
+    year: '2015',
+    credit: 'Wikimedia Commons',
+  },
+  {
+    url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Indus_River_under_flood.jpg/960px-Indus_River_under_flood.jpg',
+    title: 'Swollen Indus breaching its banks',
+    place: 'Punjab',
+    year: '2010',
+    credit: 'Wikimedia Commons',
+  },
+  {
+    url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Long_Khan_and_his_family%2C_Sindh_province%2C_December_2010_%285367447214%29.jpg/960px-Long_Khan_and_his_family%2C_Sindh_province%2C_December_2010_%285367447214%29.jpg',
+    title: 'A family beside their damaged home',
+    place: 'Sindh',
+    year: 'Dec 2010',
+    credit: 'DFID',
+  },
 ];
 
-export function FloodGallery() {
+interface FloodGalleryProps {
+  /** show all photos in a taller grid (gallery page) */
+  expanded?: boolean;
+}
+
+export function FloodGallery({ expanded = false }: FloodGalleryProps) {
+  const photos = expanded ? PHOTOS : PHOTOS.slice(0, 8);
+
   return (
     <section id="imagery" className="panel p-4">
       <div className="flex items-center justify-between gap-3 mb-3">
@@ -78,13 +169,15 @@ export function FloodGallery() {
           </span>
           <div>
             <h2 className="text-[13.5px] font-semibold text-foreground">Gallery — Floods in Pakistan</h2>
-            <p className="text-[10.5px] text-muted-foreground font-mono">Documented photography &amp; satellite imagery</p>
+            <p className="text-[10.5px] text-muted-foreground font-mono">
+              {photos.length} documented photographs &amp; satellite images
+            </p>
           </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        {PHOTOS.map((p) => (
+      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3">
+        {photos.map((p) => (
           <figure
             key={p.url}
             className="group relative rounded-2xl overflow-hidden border border-border bg-muted/40 aspect-[4/3]"
