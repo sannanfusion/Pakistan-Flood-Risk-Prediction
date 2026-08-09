@@ -328,18 +328,36 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect, laye
       paths.forEach((path) => {
         path.setStyle(
           id === selectedProvince
-            ? { weight: 2.6, opacity: 1, fillOpacity: 1 }
-            : { weight: 1.4, opacity: 0.9, fillOpacity: 0.9 },
+            ? { weight: 2.4, opacity: 1, fillOpacity: 1 }
+            : { weight: 1.1, opacity: 0.85, fillOpacity: 0.95 },
         );
       });
     });
   }, [selectedProvince, provinces]);
 
+  // Keep the country framed on any container resize (sidebar toggle, mobile rotate)
+  useEffect(() => {
+    const el = mapRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver(() => {
+      const map = mapInstanceRef.current;
+      const bounds = geoBoundsRef.current;
+      if (!map) return;
+      map.invalidateSize();
+      if (bounds?.isValid()) {
+        const isSmall = map.getSize().x < 640;
+        map.fitBounds(bounds, { padding: isSmall ? [8, 8] : [26, 26], animate: false });
+      }
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
   return (
-    <div className="relative w-full h-full min-h-[380px] rounded-2xl overflow-hidden border border-border">
+    <div className="relative w-full h-full min-h-[300px] rounded-2xl overflow-hidden border border-border">
       <div
         ref={mapRef}
-        className="w-full h-full min-h-[380px]"
+        className="w-full h-full min-h-[300px]"
         style={{
           background:
             'radial-gradient(120% 90% at 50% 40%, #0d1c26 0%, #08131b 45%, #050c12 100%)',
@@ -347,22 +365,23 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect, laye
       />
 
       {/* Flood Risk Level legend */}
-      <div className="absolute top-3 left-3 z-[1000] bg-card/92 backdrop-blur-md rounded-xl border border-border px-3.5 py-3 shadow-lg">
-        <div className="text-[11.5px] font-semibold text-foreground mb-2">Flood Risk Level</div>
-        <div className="flex flex-col gap-1.5">
+      <div className="absolute top-2 left-2 sm:top-3 sm:left-3 z-[1000] bg-card/92 backdrop-blur-md rounded-xl border border-border px-2.5 py-2 sm:px-3.5 sm:py-3 shadow-lg">
+        <div className="text-[10.5px] sm:text-[11.5px] font-semibold text-foreground mb-1.5 sm:mb-2">Flood Risk Level</div>
+        <div className="flex flex-col gap-1 sm:gap-1.5">
           {[
             { label: 'High Risk (71-100)', color: '#ef4444' },
             { label: 'Medium Risk (41-70)', color: '#f0a323' },
             { label: 'Low Risk (11-40)', color: '#22c55e' },
             { label: 'No Risk (0-10)', color: '#7c8794' },
           ].map((item) => (
-            <div key={item.label} className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full shrink-0 border border-white/70" style={{ background: item.color }} />
-              <span className="text-[11px] text-muted-foreground whitespace-nowrap">{item.label}</span>
+            <div key={item.label} className="flex items-center gap-1.5 sm:gap-2">
+              <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full shrink-0 border border-white/70" style={{ background: item.color }} />
+              <span className="text-[10px] sm:text-[11px] text-muted-foreground whitespace-nowrap">{item.label}</span>
             </div>
           ))}
         </div>
       </div>
+
 
       {/* Source badge */}
       <div className="absolute bottom-3 left-3 z-[1000] bg-card/92 backdrop-blur-md rounded-xl border border-border px-3 py-1.5">
