@@ -183,7 +183,7 @@ const Index = () => {
         id="risk-map"
         initial={{ opacity: 0, scale: 0.995 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="relative panel p-0 overflow-hidden h-[560px]"
+        className="relative panel p-0 overflow-hidden h-[340px] sm:h-[440px] lg:h-[560px]"
       >
         <div className="absolute inset-0">
           <LeafletMap
