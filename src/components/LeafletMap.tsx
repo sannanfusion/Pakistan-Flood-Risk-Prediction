@@ -267,7 +267,7 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect, laye
       map.setMaxBounds(bounds.pad(0.55));
       map.invalidateSize();
       const isSmall = map.getSize().x < 640;
-      map.fitBounds(bounds, { padding: isSmall ? [8, 8] : [26, 26] });
+      map.fitBounds(bounds, { padding: isSmall ? [16, 22] : [26, 26] });
       map.setMinZoom(map.getZoom() - 0.5);
     }
 
@@ -346,7 +346,7 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect, laye
       map.invalidateSize();
       if (bounds?.isValid()) {
         const isSmall = map.getSize().x < 640;
-        map.fitBounds(bounds, { padding: isSmall ? [8, 8] : [26, 26], animate: false });
+        map.fitBounds(bounds, { padding: isSmall ? [16, 22] : [26, 26], animate: false });
       }
     });
     ro.observe(el);
