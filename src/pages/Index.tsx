@@ -5,6 +5,7 @@ import { RiskTiles } from '@/components/RiskTiles';
 
 import { DistrictAlertsPanel } from '@/components/DistrictAlertsPanel';
 import { RiskDistributionChart } from '@/components/RiskDistributionChart';
+import { ProvinceRiskBreakdown } from '@/components/ProvinceRiskBreakdown';
 import { RecentReportsCard } from '@/components/RecentReportsCard';
 
 import { DataSourcesBar } from '@/components/DataSourcesBar';
