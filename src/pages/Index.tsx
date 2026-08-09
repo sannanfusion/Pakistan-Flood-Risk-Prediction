@@ -151,28 +151,29 @@ const Index = () => {
       {/* Welcome row */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
         <div>
-          <h1 className="text-[22px] font-extrabold text-foreground tracking-tight flex items-center gap-2">
+          <h1 className="text-[18px] sm:text-[22px] font-extrabold text-foreground tracking-tight flex items-center gap-2">
             Welcome back, Admin
-            <Hand className="w-5 h-5 text-risk-medium" />
+            <Hand className="w-4 h-4 sm:w-5 sm:h-5 text-risk-medium" />
           </h1>
-          <p className="text-[12.5px] text-muted-foreground mt-0.5">
+          <p className="text-[11.5px] sm:text-[12.5px] text-muted-foreground mt-0.5">
             Here&apos;s the overview of Pakistan Flood Risk
           </p>
         </div>
-        <div className="flex items-center gap-6">
-          <div className="text-right">
-            <div className="text-[12px] text-muted-foreground">
+        <div className="flex flex-wrap items-center gap-3 sm:gap-6">
+          <div className="lg:text-right">
+            <div className="text-[11.5px] sm:text-[12px] text-muted-foreground">
               {now.toLocaleDateString([], { month: 'long', day: 'numeric', year: 'numeric' })}
             </div>
-            <div className="text-[18px] font-bold text-foreground font-mono tabular-nums">
+            <div className="text-[16px] sm:text-[18px] font-bold text-foreground font-mono tabular-nums">
               {now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
             </div>
           </div>
-          <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-primary/10 border border-primary/25">
+          <div className="flex items-center gap-2 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-xl bg-primary/10 border border-primary/25">
             <Activity className="w-4 h-4 text-primary animate-pulse" />
-            <span className="text-[12px] font-semibold text-primary">Live Updates</span>
+            <span className="text-[11.5px] sm:text-[12px] font-semibold text-primary">Live Updates</span>
           </div>
         </div>
+
       </div>
 
       {/* Risk tiles */}
