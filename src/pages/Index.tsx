@@ -202,10 +202,14 @@ const Index = () => {
       <DistrictAlertsPanel districts={districts} onSelectProvince={setSelectedProvince} />
 
       {/* Charts row */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
         <RiskDistributionChart districts={districts} />
-        <RecentReportsCard provinces={provinces} />
+        <ProvinceRiskBreakdown districts={districts} onSelectProvince={setSelectedProvince} />
       </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
+        <RecentReportsCard provinces={provinces} />
+
 
       {/* Province detail + rainfall analysis */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
