@@ -206,10 +206,11 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect, laye
         const score = province?.riskScore ?? 0;
         return {
           color: '#ffffff',
-          weight: 1.4,
-          opacity: 0.9,
+          weight: 1.1,
+          opacity: 0.85,
           fillColor: provinceFill(score),
-          fillOpacity: 0.9,
+          fillOpacity: 0.95,
+          className: 'pk-province',
         };
       },
       onEachFeature: (feature, layer) => {
@@ -228,12 +229,26 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect, laye
           { sticky: true, className: 'clean-tooltip' },
         );
         layer.on('click', () => onProvinceSelect(province.id));
+        layer.on('mouseover', () => path.setStyle({ fillOpacity: 1, weight: 2, opacity: 1 }));
+        layer.on('mouseout', () =>
+          path.setStyle(
+            id === selectedProvinceRef.current
+              ? { weight: 2.4, opacity: 1, fillOpacity: 1 }
+              : { weight: 1.1, opacity: 0.85, fillOpacity: 0.95 },
+          ),
+        );
       },
     });
 
-    // soft outer glow / country outline so the full national boundary always reads clearly
+    // drop-shadow "casing" beneath the country so the landmass lifts off the backdrop
     L.geoJSON(PK_GEO as GeoJSON.GeoJsonObject, {
-      style: { color: '#7dd3fc', weight: 6, opacity: 0.18, fill: false },
+      style: { color: '#000000', weight: 12, opacity: 0.35, fill: false, lineJoin: 'round' },
+      interactive: false,
+    }).addTo(provinceGroup);
+
+    // soft outer glow so the full national boundary always reads clearly
+    L.geoJSON(PK_GEO as GeoJSON.GeoJsonObject, {
+      style: { color: '#7dd3fc', weight: 5, opacity: 0.22, fill: false, lineJoin: 'round' },
       interactive: false,
     }).addTo(provinceGroup);
 
@@ -243,10 +258,13 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect, laye
     const map = mapInstanceRef.current;
     const bounds = geo.getBounds();
     if (map && bounds.isValid()) {
-      map.setMaxBounds(bounds.pad(0.8));
+      map.setMaxBounds(bounds.pad(0.55));
       map.invalidateSize();
-      map.fitBounds(bounds, { padding: [12, 12] });
+      const isSmall = map.getSize().x < 640;
+      map.fitBounds(bounds, { padding: isSmall ? [8, 8] : [26, 26] });
+      map.setMinZoom(map.getZoom() - 0.5);
     }
+
 
     // Province name labels
     PROVINCE_LABELS.forEach((label) => {
