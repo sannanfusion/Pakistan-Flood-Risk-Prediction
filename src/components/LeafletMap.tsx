@@ -130,6 +130,11 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect, laye
   const cityLayersRef = useRef<L.LayerGroup | null>(null);
   const stationLayersRef = useRef<L.LayerGroup | null>(null);
   const provinceShapesRef = useRef<Record<string, L.Path[]>>({});
+  const selectedProvinceRef = useRef<string | null>(selectedProvince);
+  const geoBoundsRef = useRef<L.LatLngBounds | null>(null);
+  selectedProvinceRef.current = selectedProvince;
+
+
 
   // Base map — Pakistan only, no basemap tiles so no other country is drawn
   useEffect(() => {
