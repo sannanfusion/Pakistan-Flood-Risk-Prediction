@@ -66,10 +66,13 @@ export function AppSidebar({ open, onNavigate }: AppSidebarProps) {
 
   return (
     <aside
-      className={`${
-        open ? 'w-[248px]' : 'w-0 lg:w-[76px]'
-      } shrink-0 transition-[width] duration-300 overflow-hidden bg-sidebar border-r border-sidebar-border flex flex-col`}
+      className={`fixed lg:static inset-y-0 left-0 z-50 h-full w-[248px] ${
+        open ? 'translate-x-0' : '-translate-x-full'
+      } lg:translate-x-0 ${
+        open ? 'lg:w-[248px]' : 'lg:w-[76px]'
+      } shrink-0 transition-all duration-300 overflow-hidden bg-sidebar border-r border-sidebar-border flex flex-col`}
     >
+
       {/* Brand */}
       <div className="h-[76px] flex items-center gap-3 px-4 border-b border-sidebar-border">
         <div className="w-10 h-10 shrink-0 rounded-xl bg-primary/15 border border-primary/25 flex items-center justify-center">
