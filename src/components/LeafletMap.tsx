@@ -70,12 +70,13 @@ function getMarkerColor(score: number) {
 
 /** Province fill: risk score drives the green → amber → red ramp seen in the reference. */
 function provinceFill(score: number) {
-  if (score >= 71) return '#b91c1c';
-  if (score >= 55) return '#a16207';
-  if (score >= 41) return '#78901f';
-  if (score >= 11) return '#1f7a44';
-  return '#25603f';
+  if (score >= 71) return '#c02626';
+  if (score >= 55) return '#c9821f';
+  if (score >= 41) return '#8f9c26';
+  if (score >= 11) return '#2b8f55';
+  return '#2f7a4f';
 }
+
 
 /** Glossy circular pin, matching the reference markers. */
 function createCityMarkerHtml(d: DynamicMarker) {
