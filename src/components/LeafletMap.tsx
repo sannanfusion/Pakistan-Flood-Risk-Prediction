@@ -263,12 +263,14 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect, laye
     const map = mapInstanceRef.current;
     const bounds = geo.getBounds();
     if (map && bounds.isValid()) {
+      geoBoundsRef.current = bounds;
       map.setMaxBounds(bounds.pad(0.55));
       map.invalidateSize();
       const isSmall = map.getSize().x < 640;
       map.fitBounds(bounds, { padding: isSmall ? [8, 8] : [26, 26] });
       map.setMinZoom(map.getZoom() - 0.5);
     }
+
 
 
     // Province name labels
