@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -19,20 +21,32 @@ import NotFound from "./pages/NotFound";
 const queryClient = new QueryClient();
 
 const AppLayout = ({ children }: { children: React.ReactNode }) => {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const isMobile = useIsMobile();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  useEffect(() => {
+    setSidebarOpen(!isMobile);
+  }, [isMobile]);
 
   return (
     <div className="h-screen flex w-full bg-background overflow-hidden">
-      <AppSidebar open={sidebarOpen} />
+      <AppSidebar open={sidebarOpen} onNavigate={() => isMobile && setSidebarOpen(false)} />
+      {isMobile && sidebarOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-background/70 backdrop-blur-sm lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
       <main className="flex-1 flex flex-col min-w-0">
         <TopBar onToggleSidebar={() => setSidebarOpen((v) => !v)} alertCount={5} />
         <div className="flex-1 overflow-y-auto scrollbar-thin">
-          <div className="w-full max-w-[1700px] mx-auto px-4 sm:px-6 py-6">{children}</div>
+          <div className="w-full max-w-[1700px] mx-auto px-3 sm:px-6 py-4 sm:py-6">{children}</div>
         </div>
       </main>
     </div>
   );
 };
+
 
 const App = () => (
   <QueryClientProvider client={queryClient}>

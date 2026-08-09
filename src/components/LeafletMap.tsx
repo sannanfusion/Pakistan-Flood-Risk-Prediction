@@ -70,12 +70,13 @@ function getMarkerColor(score: number) {
 
 /** Province fill: risk score drives the green → amber → red ramp seen in the reference. */
 function provinceFill(score: number) {
-  if (score >= 71) return '#b91c1c';
-  if (score >= 55) return '#a16207';
-  if (score >= 41) return '#78901f';
-  if (score >= 11) return '#1f7a44';
-  return '#25603f';
+  if (score >= 71) return '#c02626';
+  if (score >= 55) return '#c9821f';
+  if (score >= 41) return '#8f9c26';
+  if (score >= 11) return '#2b8f55';
+  return '#2f7a4f';
 }
+
 
 /** Glossy circular pin, matching the reference markers. */
 function createCityMarkerHtml(d: DynamicMarker) {
@@ -129,6 +130,11 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect, laye
   const cityLayersRef = useRef<L.LayerGroup | null>(null);
   const stationLayersRef = useRef<L.LayerGroup | null>(null);
   const provinceShapesRef = useRef<Record<string, L.Path[]>>({});
+  const selectedProvinceRef = useRef<string | null>(selectedProvince);
+  const geoBoundsRef = useRef<L.LatLngBounds | null>(null);
+  selectedProvinceRef.current = selectedProvince;
+
+
 
   // Base map — Pakistan only, no basemap tiles so no other country is drawn
   useEffect(() => {
@@ -205,10 +211,11 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect, laye
         const score = province?.riskScore ?? 0;
         return {
           color: '#ffffff',
-          weight: 1.4,
-          opacity: 0.9,
+          weight: 1.1,
+          opacity: 0.85,
           fillColor: provinceFill(score),
-          fillOpacity: 0.9,
+          fillOpacity: 0.95,
+          className: 'pk-province',
         };
       },
       onEachFeature: (feature, layer) => {
@@ -227,12 +234,26 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect, laye
           { sticky: true, className: 'clean-tooltip' },
         );
         layer.on('click', () => onProvinceSelect(province.id));
+        layer.on('mouseover', () => path.setStyle({ fillOpacity: 1, weight: 2, opacity: 1 }));
+        layer.on('mouseout', () =>
+          path.setStyle(
+            id === selectedProvinceRef.current
+              ? { weight: 2.4, opacity: 1, fillOpacity: 1 }
+              : { weight: 1.1, opacity: 0.85, fillOpacity: 0.95 },
+          ),
+        );
       },
     });
 
-    // soft outer glow / country outline so the full national boundary always reads clearly
+    // drop-shadow "casing" beneath the country so the landmass lifts off the backdrop
     L.geoJSON(PK_GEO as GeoJSON.GeoJsonObject, {
-      style: { color: '#7dd3fc', weight: 6, opacity: 0.18, fill: false },
+      style: { color: '#000000', weight: 12, opacity: 0.35, fill: false, lineJoin: 'round' },
+      interactive: false,
+    }).addTo(provinceGroup);
+
+    // soft outer glow so the full national boundary always reads clearly
+    L.geoJSON(PK_GEO as GeoJSON.GeoJsonObject, {
+      style: { color: '#7dd3fc', weight: 5, opacity: 0.22, fill: false, lineJoin: 'round' },
       interactive: false,
     }).addTo(provinceGroup);
 
@@ -242,10 +263,15 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect, laye
     const map = mapInstanceRef.current;
     const bounds = geo.getBounds();
     if (map && bounds.isValid()) {
-      map.setMaxBounds(bounds.pad(0.8));
+      geoBoundsRef.current = bounds;
+      map.setMaxBounds(bounds.pad(0.55));
       map.invalidateSize();
-      map.fitBounds(bounds, { padding: [12, 12] });
+      const isSmall = map.getSize().x < 640;
+      map.fitBounds(bounds, { padding: isSmall ? [16, 22] : [26, 26] });
+      map.setMinZoom(map.getZoom() - 0.5);
     }
+
+
 
     // Province name labels
     PROVINCE_LABELS.forEach((label) => {
@@ -302,18 +328,36 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect, laye
       paths.forEach((path) => {
         path.setStyle(
           id === selectedProvince
-            ? { weight: 2.6, opacity: 1, fillOpacity: 1 }
-            : { weight: 1.4, opacity: 0.9, fillOpacity: 0.9 },
+            ? { weight: 2.4, opacity: 1, fillOpacity: 1 }
+            : { weight: 1.1, opacity: 0.85, fillOpacity: 0.95 },
         );
       });
     });
   }, [selectedProvince, provinces]);
 
+  // Keep the country framed on any container resize (sidebar toggle, mobile rotate)
+  useEffect(() => {
+    const el = mapRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver(() => {
+      const map = mapInstanceRef.current;
+      const bounds = geoBoundsRef.current;
+      if (!map) return;
+      map.invalidateSize();
+      if (bounds?.isValid()) {
+        const isSmall = map.getSize().x < 640;
+        map.fitBounds(bounds, { padding: isSmall ? [16, 22] : [26, 26], animate: false });
+      }
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
   return (
-    <div className="relative w-full h-full min-h-[380px] rounded-2xl overflow-hidden border border-border">
+    <div className="relative w-full h-full min-h-[300px] rounded-2xl overflow-hidden border border-border">
       <div
         ref={mapRef}
-        className="w-full h-full min-h-[380px]"
+        className="w-full h-full min-h-[300px]"
         style={{
           background:
             'radial-gradient(120% 90% at 50% 40%, #0d1c26 0%, #08131b 45%, #050c12 100%)',
@@ -321,22 +365,23 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect, laye
       />
 
       {/* Flood Risk Level legend */}
-      <div className="absolute top-3 left-3 z-[1000] bg-card/92 backdrop-blur-md rounded-xl border border-border px-3.5 py-3 shadow-lg">
-        <div className="text-[11.5px] font-semibold text-foreground mb-2">Flood Risk Level</div>
-        <div className="flex flex-col gap-1.5">
+      <div className="absolute top-2 left-2 sm:top-3 sm:left-3 z-[1000] bg-card/92 backdrop-blur-md rounded-xl border border-border px-2.5 py-2 sm:px-3.5 sm:py-3 shadow-lg">
+        <div className="text-[10.5px] sm:text-[11.5px] font-semibold text-foreground mb-1.5 sm:mb-2">Flood Risk Level</div>
+        <div className="flex flex-col gap-1 sm:gap-1.5">
           {[
             { label: 'High Risk (71-100)', color: '#ef4444' },
             { label: 'Medium Risk (41-70)', color: '#f0a323' },
             { label: 'Low Risk (11-40)', color: '#22c55e' },
             { label: 'No Risk (0-10)', color: '#7c8794' },
           ].map((item) => (
-            <div key={item.label} className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full shrink-0 border border-white/70" style={{ background: item.color }} />
-              <span className="text-[11px] text-muted-foreground whitespace-nowrap">{item.label}</span>
+            <div key={item.label} className="flex items-center gap-1.5 sm:gap-2">
+              <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full shrink-0 border border-white/70" style={{ background: item.color }} />
+              <span className="text-[10px] sm:text-[11px] text-muted-foreground whitespace-nowrap">{item.label}</span>
             </div>
           ))}
         </div>
       </div>
+
 
       {/* Source badge */}
       <div className="absolute bottom-3 left-3 z-[1000] bg-card/92 backdrop-blur-md rounded-xl border border-border px-3 py-1.5">
