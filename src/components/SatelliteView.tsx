@@ -79,7 +79,8 @@ export function SatelliteView({ provinces, onClose }: SatelliteViewProps) {
     floodGroupRef.current = floodGroup;
     markerGroupRef.current = markerGroup;
 
-    map.fitBounds([[23.6, 60.8], [37.1, 77.9]], { padding: [20, 20] });
+    const small = map.getSize().x < 640;
+    map.fitBounds([[23.6, 60.8], [37.1, 77.9]], { padding: small ? [4, 4] : [20, 20] });
     map.whenReady(() => setReady(true));
     mapRef.current = map;
 
