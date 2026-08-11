@@ -1,5 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { LeafletMap } from '@/components/LeafletMap';
+import { SatelliteView } from '@/components/SatelliteView';
+
 import { MapLayersPanel, LayerVisibility } from '@/components/MapLayersPanel';
 import { RiskTiles } from '@/components/RiskTiles';
 
