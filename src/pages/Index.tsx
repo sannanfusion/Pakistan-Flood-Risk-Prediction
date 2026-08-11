@@ -1,5 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { LeafletMap } from '@/components/LeafletMap';
+import { SatelliteView } from '@/components/SatelliteView';
+
 import { MapLayersPanel, LayerVisibility } from '@/components/MapLayersPanel';
 import { RiskTiles } from '@/components/RiskTiles';
 
@@ -28,6 +30,8 @@ const Index = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [now, setNow] = useState(new Date());
+  const [satelliteOpen, setSatelliteOpen] = useState(false);
+
 
   const [layerVisibility, setLayerVisibility] = useState<LayerVisibility>({
     provinces: true,
@@ -195,8 +199,20 @@ const Index = () => {
             layerVisibility={layerVisibility}
           />
           <MapLayersPanel layers={layerVisibility} onToggle={toggleLayer} />
+          <button
+            onClick={() => setSatelliteOpen(true)}
+            className="absolute top-2 right-2 sm:top-3 sm:right-3 z-[1001] flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-card/92 backdrop-blur-md border border-border shadow-lg text-[10px] sm:text-[11px] font-bold text-foreground hover:bg-muted transition-colors"
+          >
+            <Satellite className="w-3.5 h-3.5 text-primary" />
+            <span className="whitespace-nowrap">Satellite View</span>
+          </button>
         </div>
       </motion.section>
+
+      {satelliteOpen && (
+        <SatelliteView provinces={provinces} onClose={() => setSatelliteOpen(false)} />
+      )}
+
 
 
       {/* Flood risk alerts by district (high → medium → low) */}
