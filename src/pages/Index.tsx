@@ -30,6 +30,8 @@ const Index = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [now, setNow] = useState(new Date());
+  const [satelliteOpen, setSatelliteOpen] = useState(false);
+
 
   const [layerVisibility, setLayerVisibility] = useState<LayerVisibility>({
     provinces: true,
