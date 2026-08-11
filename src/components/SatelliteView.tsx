@@ -170,7 +170,7 @@ export function SatelliteView({ provinces, onClose }: SatelliteViewProps) {
 
       {/* Header controls */}
       <div className="absolute top-2 left-2 right-2 sm:top-3 sm:left-3 sm:right-3 z-[1000] flex flex-wrap items-center gap-2">
-        <div className="flex items-center gap-2 px-2.5 py-1.5 rounded-xl bg-card/92 backdrop-blur-md border border-border shadow-lg">
+        <div className="flex items-center gap-2 px-2.5 py-1.5 rounded-xl bg-card/95 backdrop-blur-md border border-border shadow-lg">
           <Satellite className="w-4 h-4 text-primary shrink-0" />
           <span className="text-[11px] sm:text-[12px] font-bold text-foreground whitespace-nowrap">Satellite View</span>
         </div>
@@ -180,7 +180,7 @@ export function SatelliteView({ provinces, onClose }: SatelliteViewProps) {
           className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border text-[11px] sm:text-[12px] font-semibold shadow-lg transition-colors ${
             floodFlow
               ? 'bg-primary text-primary-foreground border-primary'
-              : 'bg-card/92 backdrop-blur-md text-foreground border-border'
+              : 'bg-card/95 backdrop-blur-md text-foreground border-border'
           }`}
         >
           <Waves className="w-4 h-4" />
@@ -192,7 +192,7 @@ export function SatelliteView({ provinces, onClose }: SatelliteViewProps) {
           className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border text-[11px] sm:text-[12px] font-semibold shadow-lg transition-colors ${
             labels
               ? 'bg-primary/15 text-primary border-primary/40'
-              : 'bg-card/92 backdrop-blur-md text-muted-foreground border-border'
+              : 'bg-card/95 backdrop-blur-md text-muted-foreground border-border'
           }`}
         >
           <MapIcon className="w-4 h-4" />
@@ -201,7 +201,7 @@ export function SatelliteView({ provinces, onClose }: SatelliteViewProps) {
 
         <button
           onClick={onClose}
-          className="ml-auto flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-card/92 backdrop-blur-md border border-border text-[11px] sm:text-[12px] font-semibold text-foreground shadow-lg"
+          className="ml-auto flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-card/95 backdrop-blur-md border border-border text-[11px] sm:text-[12px] font-semibold text-foreground shadow-lg"
         >
           <X className="w-4 h-4" />
           <span className="hidden sm:inline">Exit</span>
@@ -209,7 +209,7 @@ export function SatelliteView({ provinces, onClose }: SatelliteViewProps) {
       </div>
 
       {/* Legend */}
-      <div className="absolute bottom-16 left-2 sm:bottom-20 sm:left-3 z-[1000] bg-card/92 backdrop-blur-md rounded-xl border border-border px-2.5 py-2 shadow-lg max-w-[46vw]">
+      <div className="absolute bottom-16 left-2 sm:bottom-20 sm:left-3 z-[1000] bg-card/95 backdrop-blur-md rounded-xl border border-border px-2.5 py-2 shadow-lg max-w-[46vw]">
         <div className="text-[10px] sm:text-[11px] font-semibold text-foreground mb-1.5">
           {floodFlow ? 'Flood Flow & Risk' : 'Risk Markers'}
         </div>
