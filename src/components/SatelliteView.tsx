@@ -32,8 +32,13 @@ export function SatelliteView({ provinces, onClose }: SatelliteViewProps) {
   const markerGroupRef = useRef<L.LayerGroup | null>(null);
   const [floodFlow, setFloodFlow] = useState(true);
   const [labels, setLabels] = useState(true);
+  const [roads, setRoads] = useState(false);
+  const [buildings, setBuildings] = useState(false);
   const labelLayerRef = useRef<L.TileLayer | null>(null);
+  const roadLayerRef = useRef<L.TileLayer | null>(null);
+  const buildingLayerRef = useRef<L.TileLayer | null>(null);
   const [ready, setReady] = useState(false);
+  const [zoom, setZoom] = useState(6);
 
   useEffect(() => {
     const prev = document.body.style.overflow;
