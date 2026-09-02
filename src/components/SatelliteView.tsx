@@ -3,7 +3,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { ProvinceData } from '@/lib/types';
 import { buildDynamicMarkers } from '@/lib/mapMarkers';
-import { X, Waves, Satellite, Map as MapIcon, Loader2 } from 'lucide-react';
+import { X, Waves, Satellite, Map as MapIcon, Loader2, Route, Home } from 'lucide-react';
 
 interface SatelliteViewProps {
   provinces: ProvinceData[];
