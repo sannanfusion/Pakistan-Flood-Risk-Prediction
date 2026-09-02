@@ -231,6 +231,37 @@ export function SatelliteView({ provinces, onClose }: SatelliteViewProps) {
         </button>
 
         <button
+          onClick={() => setRoads((v) => !v)}
+          className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border text-[11px] sm:text-[12px] font-semibold shadow-lg transition-colors ${
+            roads
+              ? 'bg-primary/15 text-primary border-primary/40'
+              : 'bg-card/95 backdrop-blur-md text-muted-foreground border-border'
+          }`}
+        >
+          <Route className="w-4 h-4" />
+          <span className="whitespace-nowrap">Roads</span>
+        </button>
+
+        <button
+          onClick={() => setBuildings((v) => !v)}
+          className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border text-[11px] sm:text-[12px] font-semibold shadow-lg transition-colors ${
+            buildings
+              ? 'bg-primary/15 text-primary border-primary/40'
+              : 'bg-card/95 backdrop-blur-md text-muted-foreground border-border'
+          }`}
+        >
+          <Home className="w-4 h-4" />
+          <span className="whitespace-nowrap">Houses</span>
+        </button>
+
+        <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-card/95 backdrop-blur-md border border-border shadow-lg">
+          <span className="text-[10.5px] font-mono font-bold text-primary">z{zoom.toFixed(1)}</span>
+          <span className="text-[10px] text-muted-foreground whitespace-nowrap">
+            {zoom >= 17 ? 'house level' : zoom >= 13 ? 'village / town' : 'regional'}
+          </span>
+        </div>
+
+        <button
           onClick={onClose}
           className="ml-auto flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-card/95 backdrop-blur-md border border-border text-[11px] sm:text-[12px] font-semibold text-foreground shadow-lg"
         >
