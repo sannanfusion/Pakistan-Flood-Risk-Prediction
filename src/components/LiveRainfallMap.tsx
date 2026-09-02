@@ -81,13 +81,14 @@ export function LiveRainfallMap() {
       maxZoom: 9,
       zoomSnap: 0.25,
     });
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png', {
-      subdomains: 'abcd',
-    }).addTo(map);
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.png', {
-      subdomains: 'abcd',
-      opacity: 0.7,
-    }).addTo(map);
+    L.tileLayer(
+      'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}',
+      { maxZoom: 16, maxNativeZoom: 12, attribution: '&copy; Esri' },
+    ).addTo(map);
+    L.tileLayer(
+      'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}',
+      { maxZoom: 16, maxNativeZoom: 12, opacity: 0.85 },
+    ).addTo(map);
     map.fitBounds([[23.5, 60.5], [37.3, 78.0]], { padding: [16, 16] });
     groupRef.current = L.layerGroup().addTo(map);
     mapInstance.current = map;
