@@ -58,26 +58,42 @@ export function SatelliteView({ provinces, onClose }: SatelliteViewProps) {
       center: [30.3, 69.5],
       zoom: 6,
       minZoom: 4,
-      maxZoom: 19,
+      maxZoom: 22,
+      zoomSnap: 0.5,
+      wheelPxPerZoomLevel: 90,
       zoomControl: false,
       attributionControl: true,
     });
 
-    // High-resolution satellite imagery — resolves cities, villages and individual rooftops
+    // High-resolution satellite imagery — resolves cities, villages and individual rooftops.
+    // maxNativeZoom 19 with maxZoom 22 lets Leaflet upscale tiles for street/house-level inspection.
     L.tileLayer(
       'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-      { maxZoom: 19, maxNativeZoom: 19, attribution: 'Imagery &copy; Esri, Maxar, Earthstar Geographics' },
+      { maxZoom: 22, maxNativeZoom: 19, detectRetina: true, attribution: 'Imagery &copy; Esri, Maxar, Earthstar Geographics' },
     ).addTo(map);
 
     // Place / road labels on top of imagery for clarity
     const labelLayer = L.tileLayer(
       'https://{s}.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{z}/{x}/{y}{r}.png',
-      { maxZoom: 19, opacity: 0.95, attribution: '&copy; OpenStreetMap, &copy; CARTO' },
+      { maxZoom: 22, maxNativeZoom: 20, opacity: 0.95, attribution: '&copy; OpenStreetMap, &copy; CARTO' },
     ).addTo(map);
     labelLayerRef.current = labelLayer;
 
+    // Road & track network (village tracks, lanes, highways) from Esri reference layer
+    roadLayerRef.current = L.tileLayer(
+      'https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}',
+      { maxZoom: 22, maxNativeZoom: 19, opacity: 0.9, attribution: 'Transportation &copy; Esri' },
+    );
+
+    // Building footprints / house outlines from OSM raster
+    buildingLayerRef.current = L.tileLayer(
+      'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+      { maxZoom: 22, maxNativeZoom: 19, opacity: 0.45, className: 'osm-buildings', attribution: '&copy; OpenStreetMap contributors' },
+    );
+
     L.control.zoom({ position: 'bottomright' }).addTo(map);
     L.control.scale({ position: 'bottomleft', imperial: false }).addTo(map);
+    map.on('zoomend', () => setZoom(map.getZoom()));
 
     const floodGroup = L.layerGroup().addTo(map);
     const markerGroup = L.layerGroup().addTo(map);
