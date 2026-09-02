@@ -29,7 +29,7 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
   }, [isMobile]);
 
   return (
-    <div className="h-screen flex w-full bg-background overflow-hidden">
+    <div className="min-h-[100dvh] lg:h-screen flex w-full bg-background lg:overflow-hidden">
       <AppSidebar open={sidebarOpen} onNavigate={() => isMobile && setSidebarOpen(false)} />
       {isMobile && sidebarOpen && (
         <div
@@ -37,9 +37,9 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
           onClick={() => setSidebarOpen(false)}
         />
       )}
-      <main className="flex-1 flex flex-col min-w-0">
+      <main className="flex-1 flex flex-col min-w-0 w-full">
         <TopBar onToggleSidebar={() => setSidebarOpen((v) => !v)} alertCount={5} />
-        <div className="flex-1 overflow-y-auto scrollbar-thin">
+        <div className="flex-1 lg:overflow-y-auto scrollbar-thin">
           <div className="w-full max-w-[1700px] mx-auto px-3 sm:px-6 py-4 sm:py-6">{children}</div>
         </div>
       </main>
