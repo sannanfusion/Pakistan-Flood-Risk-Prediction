@@ -157,7 +157,7 @@ const Index = () => {
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
         <div>
           <h1 className="text-[18px] sm:text-[22px] font-extrabold text-foreground tracking-tight flex items-center gap-2">
-            Welcome back, Admin
+            Welcome to the dashboard
             <Hand className="w-4 h-4 sm:w-5 sm:h-5 text-risk-medium" />
           </h1>
           <p className="text-[11.5px] sm:text-[12.5px] text-muted-foreground mt-0.5">
