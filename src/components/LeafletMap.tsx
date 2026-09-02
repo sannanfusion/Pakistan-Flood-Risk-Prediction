@@ -365,18 +365,20 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect, laye
       />
 
       {/* Flood Risk Level legend */}
-      <div className="absolute top-2 left-2 sm:top-3 sm:left-3 z-[1000] bg-card/92 backdrop-blur-md rounded-xl border border-border px-2.5 py-2 sm:px-3.5 sm:py-3 shadow-lg">
-        <div className="text-[10.5px] sm:text-[11.5px] font-semibold text-foreground mb-1.5 sm:mb-2">Flood Risk Level</div>
-        <div className="flex flex-col gap-1 sm:gap-1.5">
+      <div className="absolute bottom-2 left-2 right-2 sm:right-auto sm:bottom-auto sm:top-3 sm:left-3 z-[1000] bg-card/92 backdrop-blur-md rounded-xl border border-border px-2.5 py-2 sm:px-3.5 sm:py-3 shadow-lg">
+        <div className="text-[10px] sm:text-[11.5px] font-semibold text-foreground mb-1 sm:mb-2">Flood Risk Level</div>
+        <div className="grid grid-cols-2 gap-x-2 gap-y-1 sm:flex sm:flex-col sm:gap-1.5">
           {[
-            { label: 'High Risk (71-100)', color: '#ef4444' },
-            { label: 'Medium Risk (41-70)', color: '#f0a323' },
-            { label: 'Low Risk (11-40)', color: '#22c55e' },
-            { label: 'No Risk (0-10)', color: '#7c8794' },
+            { label: 'High Risk', range: '(71-100)', color: '#ef4444' },
+            { label: 'Medium Risk', range: '(41-70)', color: '#f0a323' },
+            { label: 'Low Risk', range: '(11-40)', color: '#22c55e' },
+            { label: 'No Risk', range: '(0-10)', color: '#7c8794' },
           ].map((item) => (
-            <div key={item.label} className="flex items-center gap-1.5 sm:gap-2">
+            <div key={item.label} className="flex items-center gap-1.5 sm:gap-2 min-w-0">
               <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full shrink-0 border border-white/70" style={{ background: item.color }} />
-              <span className="text-[10px] sm:text-[11px] text-muted-foreground whitespace-nowrap">{item.label}</span>
+              <span className="text-[9.5px] sm:text-[11px] text-muted-foreground truncate">
+                {item.label} <span className="hidden sm:inline">{item.range}</span>
+              </span>
             </div>
           ))}
         </div>
@@ -384,7 +386,7 @@ export function LeafletMap({ provinces, selectedProvince, onProvinceSelect, laye
 
 
       {/* Source badge */}
-      <div className="absolute bottom-3 left-3 z-[1000] bg-card/92 backdrop-blur-md rounded-xl border border-border px-3 py-1.5">
+      <div className="hidden sm:block absolute bottom-3 left-3 z-[1000] bg-card/92 backdrop-blur-md rounded-xl border border-border px-3 py-1.5">
         <div className="text-[9.5px] font-mono text-muted-foreground">NASA GPM/IMERG · NDMA · WAPDA</div>
       </div>
 

@@ -44,11 +44,21 @@ export function PopulationAffectedChart({ data }: Props) {
             <YAxis
               type="category"
               dataKey="name"
-              tick={{ fontSize: 11 }}
+              tick={{ fontSize: 10 }}
               tickLine={false}
-              width={80}
+              width={72}
             />
             <Tooltip
+              cursor={{ fill: 'hsl(var(--muted) / 0.4)' }}
+              contentStyle={{
+                background: 'hsl(var(--card))',
+                border: '1px solid hsl(var(--border))',
+                borderRadius: 12,
+                fontSize: 11,
+                color: 'hsl(var(--foreground))',
+              }}
+              labelStyle={{ color: 'hsl(var(--foreground))' }}
+              itemStyle={{ color: 'hsl(var(--foreground))' }}
               formatter={(value: number) => [`${value.toLocaleString()}k`, 'At Risk']}
             />
             <Bar dataKey="affected" radius={[0, 4, 4, 0]}>

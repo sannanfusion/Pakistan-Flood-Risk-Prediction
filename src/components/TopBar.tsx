@@ -23,7 +23,7 @@ export function TopBar({ onToggleSidebar, alertCount = 0 }: TopBarProps) {
   }, []);
 
   return (
-    <header className="h-[76px] shrink-0 flex items-center gap-3 px-4 sm:px-6 bg-card border-b border-border">
+    <header className="h-[60px] sm:h-[76px] shrink-0 flex items-center gap-2 sm:gap-3 px-3 sm:px-6 bg-card border-b border-border sticky top-0 z-30 lg:static">
       <button
         onClick={onToggleSidebar}
         aria-label="Toggle navigation"

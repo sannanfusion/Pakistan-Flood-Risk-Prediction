@@ -74,8 +74,8 @@ export function SatelliteView({ provinces, onClose }: SatelliteViewProps) {
 
     // Place / road labels on top of imagery for clarity
     const labelLayer = L.tileLayer(
-      'https://{s}.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{z}/{x}/{y}{r}.png',
-      { maxZoom: 22, maxNativeZoom: 20, opacity: 0.95, attribution: '&copy; OpenStreetMap, &copy; CARTO' },
+      'https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}',
+      { maxZoom: 22, maxNativeZoom: 19, opacity: 0.95, attribution: '&copy; Esri' },
     ).addTo(map);
     labelLayerRef.current = labelLayer;
 
