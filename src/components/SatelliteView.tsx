@@ -3,7 +3,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { ProvinceData } from '@/lib/types';
 import { buildDynamicMarkers } from '@/lib/mapMarkers';
-import { X, Waves, Satellite, Map as MapIcon, Loader2 } from 'lucide-react';
+import { X, Waves, Satellite, Map as MapIcon, Loader2, Route, Home } from 'lucide-react';
 
 interface SatelliteViewProps {
   provinces: ProvinceData[];
@@ -32,8 +32,13 @@ export function SatelliteView({ provinces, onClose }: SatelliteViewProps) {
   const markerGroupRef = useRef<L.LayerGroup | null>(null);
   const [floodFlow, setFloodFlow] = useState(true);
   const [labels, setLabels] = useState(true);
+  const [roads, setRoads] = useState(false);
+  const [buildings, setBuildings] = useState(false);
   const labelLayerRef = useRef<L.TileLayer | null>(null);
+  const roadLayerRef = useRef<L.TileLayer | null>(null);
+  const buildingLayerRef = useRef<L.TileLayer | null>(null);
   const [ready, setReady] = useState(false);
+  const [zoom, setZoom] = useState(6);
 
   useEffect(() => {
     const prev = document.body.style.overflow;
@@ -53,26 +58,42 @@ export function SatelliteView({ provinces, onClose }: SatelliteViewProps) {
       center: [30.3, 69.5],
       zoom: 6,
       minZoom: 4,
-      maxZoom: 19,
+      maxZoom: 22,
+      zoomSnap: 0.5,
+      wheelPxPerZoomLevel: 90,
       zoomControl: false,
       attributionControl: true,
     });
 
-    // High-resolution satellite imagery — resolves cities, villages and individual rooftops
+    // High-resolution satellite imagery — resolves cities, villages and individual rooftops.
+    // maxNativeZoom 19 with maxZoom 22 lets Leaflet upscale tiles for street/house-level inspection.
     L.tileLayer(
       'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-      { maxZoom: 19, maxNativeZoom: 19, attribution: 'Imagery &copy; Esri, Maxar, Earthstar Geographics' },
+      { maxZoom: 22, maxNativeZoom: 19, detectRetina: true, attribution: 'Imagery &copy; Esri, Maxar, Earthstar Geographics' },
     ).addTo(map);
 
     // Place / road labels on top of imagery for clarity
     const labelLayer = L.tileLayer(
       'https://{s}.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{z}/{x}/{y}{r}.png',
-      { maxZoom: 19, opacity: 0.95, attribution: '&copy; OpenStreetMap, &copy; CARTO' },
+      { maxZoom: 22, maxNativeZoom: 20, opacity: 0.95, attribution: '&copy; OpenStreetMap, &copy; CARTO' },
     ).addTo(map);
     labelLayerRef.current = labelLayer;
 
+    // Road & track network (village tracks, lanes, highways) from Esri reference layer
+    roadLayerRef.current = L.tileLayer(
+      'https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}',
+      { maxZoom: 22, maxNativeZoom: 19, opacity: 0.9, attribution: 'Transportation &copy; Esri' },
+    );
+
+    // Building footprints / house outlines from OSM raster
+    buildingLayerRef.current = L.tileLayer(
+      'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+      { maxZoom: 22, maxNativeZoom: 19, opacity: 0.45, className: 'osm-buildings', attribution: '&copy; OpenStreetMap contributors' },
+    );
+
     L.control.zoom({ position: 'bottomright' }).addTo(map);
     L.control.scale({ position: 'bottomleft', imperial: false }).addTo(map);
+    map.on('zoomend', () => setZoom(map.getZoom()));
 
     const floodGroup = L.layerGroup().addTo(map);
     const markerGroup = L.layerGroup().addTo(map);
@@ -150,14 +171,23 @@ export function SatelliteView({ provinces, onClose }: SatelliteViewProps) {
       });
   }, [floodFlow, provinces]);
 
-  // Toggle label tiles
+  // Toggle overlay tile layers
   useEffect(() => {
     const map = mapRef.current;
-    const layer = labelLayerRef.current;
-    if (!map || !layer) return;
-    if (labels && !map.hasLayer(layer)) map.addLayer(layer);
-    if (!labels && map.hasLayer(layer)) map.removeLayer(layer);
-  }, [labels]);
+    const pairs: [boolean, L.TileLayer | null][] = [
+      [labels, labelLayerRef.current],
+      [roads, roadLayerRef.current],
+      [buildings, buildingLayerRef.current],
+    ];
+    if (!map) return;
+    pairs.forEach(([on, layer]) => {
+      if (!layer) return;
+      if (on && !map.hasLayer(layer)) map.addLayer(layer);
+      if (!on && map.hasLayer(layer)) map.removeLayer(layer);
+    });
+    // keep labels drawn above the other overlays
+    if (labels && labelLayerRef.current) labelLayerRef.current.bringToFront();
+  }, [labels, roads, buildings]);
 
   return (
     <div className="fixed inset-0 z-[3000] bg-background">
@@ -199,6 +229,37 @@ export function SatelliteView({ provinces, onClose }: SatelliteViewProps) {
           <MapIcon className="w-4 h-4" />
           <span className="whitespace-nowrap">Labels</span>
         </button>
+
+        <button
+          onClick={() => setRoads((v) => !v)}
+          className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border text-[11px] sm:text-[12px] font-semibold shadow-lg transition-colors ${
+            roads
+              ? 'bg-primary/15 text-primary border-primary/40'
+              : 'bg-card/95 backdrop-blur-md text-muted-foreground border-border'
+          }`}
+        >
+          <Route className="w-4 h-4" />
+          <span className="whitespace-nowrap">Roads</span>
+        </button>
+
+        <button
+          onClick={() => setBuildings((v) => !v)}
+          className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border text-[11px] sm:text-[12px] font-semibold shadow-lg transition-colors ${
+            buildings
+              ? 'bg-primary/15 text-primary border-primary/40'
+              : 'bg-card/95 backdrop-blur-md text-muted-foreground border-border'
+          }`}
+        >
+          <Home className="w-4 h-4" />
+          <span className="whitespace-nowrap">Houses</span>
+        </button>
+
+        <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-card/95 backdrop-blur-md border border-border shadow-lg">
+          <span className="text-[10.5px] font-mono font-bold text-primary">z{zoom.toFixed(1)}</span>
+          <span className="text-[10px] text-muted-foreground whitespace-nowrap">
+            {zoom >= 17 ? 'house level' : zoom >= 13 ? 'village / town' : 'regional'}
+          </span>
+        </div>
 
         <button
           onClick={onClose}
@@ -243,6 +304,7 @@ export function SatelliteView({ provinces, onClose }: SatelliteViewProps) {
       <style>{`
         .flood-flow-line { stroke-dasharray: 14 10; animation: floodDash 1.6s linear infinite; }
         @keyframes floodDash { to { stroke-dashoffset: -24; } }
+        .osm-buildings { mix-blend-mode: luminosity; filter: contrast(1.15) saturate(0.2); }
         .sat-marker { transition: transform .15s ease; }
         .sat-marker:hover { transform: scale(1.25); z-index: 900 !important; }
         .clean-tooltip { background: transparent !important; border: none !important; box-shadow: none !important; padding: 0 !important; }
