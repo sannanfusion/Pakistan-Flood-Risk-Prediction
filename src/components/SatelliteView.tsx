@@ -304,6 +304,7 @@ export function SatelliteView({ provinces, onClose }: SatelliteViewProps) {
       <style>{`
         .flood-flow-line { stroke-dasharray: 14 10; animation: floodDash 1.6s linear infinite; }
         @keyframes floodDash { to { stroke-dashoffset: -24; } }
+        .osm-buildings { mix-blend-mode: luminosity; filter: contrast(1.15) saturate(0.2); }
         .sat-marker { transition: transform .15s ease; }
         .sat-marker:hover { transform: scale(1.25); z-index: 900 !important; }
         .clean-tooltip { background: transparent !important; border: none !important; box-shadow: none !important; padding: 0 !important; }
