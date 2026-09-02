@@ -171,14 +171,23 @@ export function SatelliteView({ provinces, onClose }: SatelliteViewProps) {
       });
   }, [floodFlow, provinces]);
 
-  // Toggle label tiles
+  // Toggle overlay tile layers
   useEffect(() => {
     const map = mapRef.current;
-    const layer = labelLayerRef.current;
-    if (!map || !layer) return;
-    if (labels && !map.hasLayer(layer)) map.addLayer(layer);
-    if (!labels && map.hasLayer(layer)) map.removeLayer(layer);
-  }, [labels]);
+    const pairs: [boolean, L.TileLayer | null][] = [
+      [labels, labelLayerRef.current],
+      [roads, roadLayerRef.current],
+      [buildings, buildingLayerRef.current],
+    ];
+    if (!map) return;
+    pairs.forEach(([on, layer]) => {
+      if (!layer) return;
+      if (on && !map.hasLayer(layer)) map.addLayer(layer);
+      if (!on && map.hasLayer(layer)) map.removeLayer(layer);
+    });
+    // keep labels drawn above the other overlays
+    if (labels && labelLayerRef.current) labelLayerRef.current.bringToFront();
+  }, [labels, roads, buildings]);
 
   return (
     <div className="fixed inset-0 z-[3000] bg-background">
