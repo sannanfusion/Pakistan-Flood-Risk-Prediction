@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Menu, Search, FileDown, Bell, Moon, ChevronDown, User } from 'lucide-react';
+import { Menu, Search, FileDown, Bell, Moon, Sun, ChevronDown, User } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useTheme } from '@/lib/theme';
 
 interface TopBarProps {
   onToggleSidebar: () => void;
@@ -10,6 +11,7 @@ interface TopBarProps {
 export function TopBar({ onToggleSidebar, alertCount = 0 }: TopBarProps) {
   const navigate = useNavigate();
   const [query, setQuery] = useState('');
+  const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -70,12 +72,14 @@ export function TopBar({ onToggleSidebar, alertCount = 0 }: TopBarProps) {
         )}
       </button>
 
-      <div
-        aria-hidden
-        className="hidden sm:flex w-11 h-11 rounded-xl bg-muted/70 border border-border items-center justify-center text-muted-foreground"
+      <button
+        onClick={toggleTheme}
+        aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+        title={theme === 'dark' ? 'Light mode' : 'Dark mode'}
+        className="flex w-11 h-11 rounded-xl bg-muted/70 border border-border items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
       >
-        <Moon className="w-[18px] h-[18px]" />
-      </div>
+        {theme === 'dark' ? <Sun className="w-[18px] h-[18px]" /> : <Moon className="w-[18px] h-[18px]" />}
+      </button>
 
       <button
         onClick={() => navigate('/settings')}
