@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Menu, Search, FileDown, Bell, Moon, ChevronDown, User } from 'lucide-react';
+import { Menu, Search, FileDown, Bell, Moon, Sun, ChevronDown, User } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useTheme } from '@/lib/theme';
 
 interface TopBarProps {
   onToggleSidebar: () => void;
