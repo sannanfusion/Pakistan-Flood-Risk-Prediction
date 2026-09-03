@@ -140,3 +140,48 @@
   0% { transform: scale(0.7); opacity: 0.8; }
   100% { transform: scale(1.6); opacity: 0; }
 }
+
+/* ---------- Light mode palette (dark sidebar retained) ---------- */
+@layer base {
+  .light {
+    --background: 205 35% 97%;
+    --foreground: 202 40% 12%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 202 40% 12%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 202 40% 12%;
+
+    --primary: 165 72% 34%;
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 160 70% 42%;
+
+    --secondary: 205 30% 93%;
+    --secondary-foreground: 202 40% 14%;
+
+    --muted: 205 28% 94%;
+    --muted-foreground: 205 12% 40%;
+
+    --accent: 205 30% 92%;
+    --accent-foreground: 202 40% 14%;
+
+    --border: 205 20% 87%;
+    --input: 205 20% 87%;
+    --ring: 165 72% 34%;
+
+    --risk-low: 152 62% 38%;
+    --risk-medium: 36 92% 44%;
+    --risk-high: 0 72% 48%;
+    --risk-none: 210 10% 56%;
+
+    --water: 196 80% 42%;
+    --rain: 205 85% 46%;
+    --river: 195 70% 38%;
+
+    --surface-elevated: 205 30% 99%;
+
+    --shadow-panel: 0 10px 30px -20px hsl(202 40% 20% / 0.35);
+    --shadow-glow: 0 0 24px -8px hsl(var(--primary) / 0.3);
+  }
+}
