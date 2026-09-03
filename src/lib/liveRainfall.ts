@@ -57,7 +57,7 @@ export async function fetchLiveRainfall(): Promise<CityRain[]> {
   const url =
     `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}` +
     `&current=precipitation,rain,cloud_cover,temperature_2m` +
-    `&daily=precipitation_sum&hourly=precipitation&forecast_days=1&timezone=Asia%2FKarachi`;
+    `&hourly=precipitation&past_days=1&forecast_days=1&timezone=Asia%2FKarachi`;
 
   const res = await fetch(url);
   if (!res.ok) throw new Error(`Rainfall API error: ${res.status}`);
@@ -67,9 +67,22 @@ export async function fetchLiveRainfall(): Promise<CityRain[]> {
   return PK_CITIES.map((city, i) => {
     const d = list[i] ?? {};
     const rainNow = Math.max(0, d.current?.precipitation ?? 0);
-    const rainToday = Math.max(0, d.daily?.precipitation_sum?.[0] ?? 0);
+
+    // Observed-only accumulation: sum hourly values up to the current local hour.
+    const times: string[] = d.hourly?.time ?? [];
     const hourly: number[] = d.hourly?.precipitation ?? [];
-    const rain24h = Math.max(0, hourly.reduce((a: number, b: number) => a + (b || 0), 0));
+    const currentTime: string = d.current?.time ?? '';
+    const nowIdx = currentTime ? times.indexOf(currentTime.slice(0, 13) + ':00') : -1;
+    const endIdx = nowIdx >= 0 ? nowIdx : times.length - 1;
+    const today = currentTime.slice(0, 10);
+
+    let rainToday = 0;
+    let rain24h = 0;
+    for (let h = 0; h <= endIdx; h++) {
+      const v = Math.max(0, hourly[h] ?? 0);
+      if (times[h]?.slice(0, 10) === today) rainToday += v;
+      if (endIdx - h < 24) rain24h += v;
+    }
 
     return {
       ...city,
