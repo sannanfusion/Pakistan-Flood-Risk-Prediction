@@ -11,6 +11,7 @@ interface TopBarProps {
 export function TopBar({ onToggleSidebar, alertCount = 0 }: TopBarProps) {
   const navigate = useNavigate();
   const [query, setQuery] = useState('');
+  const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
