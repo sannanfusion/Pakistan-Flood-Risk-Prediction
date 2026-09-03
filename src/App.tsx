@@ -49,6 +49,7 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
 
 
 const App = () => (
+  <ThemeProvider>
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
