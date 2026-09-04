@@ -15,7 +15,6 @@ const STORAGE_KEY = 'pfrp-theme';
 function initialTheme(): Theme {
   const stored = typeof localStorage !== 'undefined' ? localStorage.getItem(STORAGE_KEY) : null;
   if (stored === 'light' || stored === 'dark') return stored;
-  if (typeof window !== 'undefined' && window.matchMedia('(prefers-color-scheme: light)').matches) return 'light';
   return 'dark';
 }
 

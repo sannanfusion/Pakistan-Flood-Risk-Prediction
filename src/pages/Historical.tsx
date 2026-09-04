@@ -17,10 +17,15 @@ const Historical = () => {
     let cancelled = false;
     (async () => {
       try {
-        const [hist, flood] = await Promise.all([fetchMonsoonHistory(8), fetchFloodData()]);
+        const [hist, flood] = await Promise.allSettled([fetchMonsoonHistory(8), fetchFloodData()]);
         if (cancelled) return;
-        setHistory(hist);
-        setProvinces(flood.provinces);
+        if (hist.status === 'fulfilled') setHistory(hist.value);
+        if (flood.status === 'fulfilled') setProvinces(flood.value.provinces);
+        if (hist.status === 'rejected' && flood.status === 'rejected') {
+          setError('Failed to load historical data — please retry in a moment');
+        } else if (hist.status === 'rejected') {
+          setError(null);
+        }
       } catch (e: unknown) {
         if (!cancelled) setError(e instanceof Error ? e.message : 'Failed to load historical data');
       } finally {
@@ -68,6 +73,7 @@ const Historical = () => {
       </div>
 
       {/* Real observed monsoon rainfall */}
+      {history.length > 0 && (
       <section className="panel p-4">
         <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
           <div className="flex items-center gap-2">
@@ -146,6 +152,8 @@ const Historical = () => {
           Source: Open-Meteo ERA5 archive (observed daily precipitation), aggregated Jun 1 – Sep 30
         </p>
       </section>
+      )}
+
 
       {/* Live NDMA impact totals */}
       <section className="grid grid-cols-2 sm:grid-cols-4 gap-3">
