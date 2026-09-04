@@ -152,6 +152,8 @@ const Historical = () => {
           Source: Open-Meteo ERA5 archive (observed daily precipitation), aggregated Jun 1 – Sep 30
         </p>
       </section>
+      )}
+
 
       {/* Live NDMA impact totals */}
       <section className="grid grid-cols-2 sm:grid-cols-4 gap-3">
