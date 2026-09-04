@@ -263,6 +263,52 @@ export function SatelliteView({ provinces, onClose }: SatelliteViewProps) {
           <span className="text-[11px] sm:text-[12px] font-bold text-foreground whitespace-nowrap">Satellite View</span>
         </div>
 
+        {/* Search cities / villages / districts */}
+        <div className="relative order-last w-full sm:order-none sm:w-auto">
+          <form
+            onSubmit={runSearch}
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-card/95 backdrop-blur-md border border-border shadow-lg"
+          >
+            {searching ? (
+              <Loader2 className="w-4 h-4 text-primary animate-spin shrink-0" />
+            ) : (
+              <Search className="w-4 h-4 text-primary shrink-0" />
+            )}
+            <input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search city, village, district…"
+              aria-label="Search a place"
+              className="bg-transparent outline-none text-[11px] sm:text-[12px] text-foreground placeholder:text-muted-foreground w-full sm:w-[190px]"
+            />
+            {query && (
+              <button
+                type="button"
+                onClick={() => { setQuery(''); setHits([]); setSearchErr(null); }}
+                className="text-muted-foreground hover:text-foreground shrink-0"
+                aria-label="Clear search"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            )}
+          </form>
+
+          {(hits.length > 0 || searchErr) && (
+            <div className="absolute top-full left-0 mt-1.5 w-full sm:w-[280px] max-h-[42vh] overflow-y-auto rounded-xl bg-card/98 backdrop-blur-md border border-border shadow-xl">
+              {searchErr && <div className="px-3 py-2 text-[11px] text-muted-foreground">{searchErr}</div>}
+              {hits.map((h) => (
+                <button
+                  key={`${h.lat},${h.lng},${h.name}`}
+                  onClick={() => goTo(h)}
+                  className="w-full text-left px-3 py-2 text-[11px] text-foreground hover:bg-primary/10 border-b border-border/60 last:border-0"
+                >
+                  {h.name}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
         <button
           onClick={() => setFloodFlow((v) => !v)}
           className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border text-[11px] sm:text-[12px] font-semibold shadow-lg transition-colors ${
