@@ -41,6 +41,61 @@ export function SatelliteView({ provinces, onClose }: SatelliteViewProps) {
   const buildingLayerRef = useRef<L.TileLayer | null>(null);
   const [ready, setReady] = useState(false);
   const [zoom, setZoom] = useState(6);
+  const [query, setQuery] = useState('');
+  const [hits, setHits] = useState<PlaceHit[]>([]);
+  const [searching, setSearching] = useState(false);
+  const [searchErr, setSearchErr] = useState<string | null>(null);
+  const searchMarkerRef = useRef<L.Marker | null>(null);
+
+  const runSearch = async (e?: React.FormEvent) => {
+    e?.preventDefault();
+    const q = query.trim();
+    if (!q) return;
+    setSearching(true);
+    setSearchErr(null);
+    setHits([]);
+    try {
+      const url =
+        'https://nominatim.openstreetmap.org/search?format=jsonv2&limit=8&countrycodes=pk&q=' +
+        encodeURIComponent(q);
+      const res = await fetch(url, { headers: { Accept: 'application/json' } });
+      const json = (await res.json()) as { display_name: string; lat: string; lon: string }[];
+      const list: PlaceHit[] = (json || []).map((r) => ({
+        name: r.display_name,
+        lat: parseFloat(r.lat),
+        lng: parseFloat(r.lon),
+      }));
+      if (list.length === 0) setSearchErr('No place found in Pakistan');
+      setHits(list);
+      if (list.length === 1) goTo(list[0]);
+    } catch {
+      setSearchErr('Search failed, try again');
+    } finally {
+      setSearching(false);
+    }
+  };
+
+  const goTo = (hit: PlaceHit) => {
+    const map = mapRef.current;
+    if (!map) return;
+    map.flyTo([hit.lat, hit.lng], 15, { duration: 1.1 });
+    if (searchMarkerRef.current) searchMarkerRef.current.remove();
+    searchMarkerRef.current = L.marker([hit.lat, hit.lng], {
+      icon: L.divIcon({
+        className: 'sat-search-pin',
+        html: `<div style="width:16px;height:16px;border-radius:50%;background:#38bdf8;border:2px solid #fff;box-shadow:0 0 0 6px rgba(56,189,248,.28),0 2px 6px rgba(0,0,0,.6);"></div>`,
+        iconSize: [16, 16],
+        iconAnchor: [8, 8],
+      }),
+    })
+      .addTo(map)
+      .bindTooltip(
+        `<div style="font-family:Inter,sans-serif;font-size:11px;padding:6px 10px;background:#0f1a22;color:#e8f1f5;border-radius:8px;max-width:220px;">${hit.name}</div>`,
+        { direction: 'top', offset: [0, -10], className: 'clean-tooltip' },
+      );
+    setHits([]);
+  };
+
 
   useEffect(() => {
     const prev = document.body.style.overflow;
