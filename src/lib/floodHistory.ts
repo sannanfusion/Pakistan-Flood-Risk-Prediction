@@ -42,43 +42,59 @@ export async function fetchMonsoonHistory(years = 8): Promise<ProvinceRainHistor
   const lastYear = monsoonEnded ? thisYear : thisYear - 1;
   const firstYear = lastYear - (years - 1);
 
-  const results = await Promise.all(
-    PROVINCE_POINTS.map(async (p) => {
-      const url =
-        `https://archive-api.open-meteo.com/v1/archive?latitude=${p.lat}&longitude=${p.lng}` +
-        `&start_date=${firstYear}-01-01&end_date=${lastYear}-12-31` +
-        `&daily=precipitation_sum&timezone=Asia%2FKarachi`;
+  const cacheKey = `pfrp-monsoon-${firstYear}-${lastYear}`;
+  const cached = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem(cacheKey) : null;
+  if (cached) {
+    try {
+      return JSON.parse(cached) as ProvinceRainHistory[];
+    } catch {
+      /* ignore corrupt cache */
+    }
+  }
 
-      const res = await fetch(url);
-      if (!res.ok) throw new Error(`Archive API error: ${res.status}`);
-      const json = await res.json();
-      const dates: string[] = json.daily?.time ?? [];
-      const values: number[] = json.daily?.precipitation_sum ?? [];
+  // One batched request for all province points (avoids API rate limits).
+  const lat = PROVINCE_POINTS.map((p) => p.lat).join(',');
+  const lng = PROVINCE_POINTS.map((p) => p.lng).join(',');
+  const url =
+    `https://archive-api.open-meteo.com/v1/archive?latitude=${lat}&longitude=${lng}` +
+    `&start_date=${firstYear}-06-01&end_date=${lastYear}-09-30` +
+    `&daily=precipitation_sum&timezone=Asia%2FKarachi`;
 
-      const totals = new Map<number, number>();
-      dates.forEach((d, i) => {
-        const [y, m] = d.split('-').map(Number);
-        if (m >= 6 && m <= 9) {
-          totals.set(y, (totals.get(y) ?? 0) + (values[i] ?? 0));
-        }
-      });
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`Archive API error: ${res.status}`);
+  const json = await res.json();
+  const list = Array.isArray(json) ? json : [json];
 
-      const yearRows: MonsoonYear[] = [...totals.entries()]
-        .map(([year, mm]) => ({ year, rainfallMm: Number(mm.toFixed(1)) }))
-        .sort((a, b) => a.year - b.year);
+  const results = PROVINCE_POINTS.map((p, idx) => {
+    const d = list[idx] ?? {};
+    const dates: string[] = d.daily?.time ?? [];
+    const values: number[] = d.daily?.precipitation_sum ?? [];
 
-      const avg = yearRows.length
-        ? yearRows.reduce((s, r) => s + r.rainfallMm, 0) / yearRows.length
-        : 0;
+    const totals = new Map<number, number>();
+    dates.forEach((date, i) => {
+      const [y, m] = date.split('-').map(Number);
+      if (m >= 6 && m <= 9) totals.set(y, (totals.get(y) ?? 0) + Math.max(0, values[i] ?? 0));
+    });
 
-      return {
-        ...p,
-        years: yearRows,
-        averageMm: Number(avg.toFixed(1)),
-        latestMm: yearRows.length ? yearRows[yearRows.length - 1].rainfallMm : 0,
-      };
-    }),
-  );
+    const yearRows: MonsoonYear[] = [...totals.entries()]
+      .map(([year, mm]) => ({ year, rainfallMm: Number(mm.toFixed(1)) }))
+      .sort((a, b) => a.year - b.year);
+
+    const avg = yearRows.length ? yearRows.reduce((s, r) => s + r.rainfallMm, 0) / yearRows.length : 0;
+
+    return {
+      ...p,
+      years: yearRows,
+      averageMm: Number(avg.toFixed(1)),
+      latestMm: yearRows.length ? yearRows[yearRows.length - 1].rainfallMm : 0,
+    };
+  });
+
+  try {
+    sessionStorage.setItem(cacheKey, JSON.stringify(results));
+  } catch {
+    /* storage full / unavailable */
+  }
 
   return results;
 }
