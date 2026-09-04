@@ -17,10 +17,15 @@ const Historical = () => {
     let cancelled = false;
     (async () => {
       try {
-        const [hist, flood] = await Promise.all([fetchMonsoonHistory(8), fetchFloodData()]);
+        const [hist, flood] = await Promise.allSettled([fetchMonsoonHistory(8), fetchFloodData()]);
         if (cancelled) return;
-        setHistory(hist);
-        setProvinces(flood.provinces);
+        if (hist.status === 'fulfilled') setHistory(hist.value);
+        if (flood.status === 'fulfilled') setProvinces(flood.value.provinces);
+        if (hist.status === 'rejected' && flood.status === 'rejected') {
+          setError('Failed to load historical data — please retry in a moment');
+        } else if (hist.status === 'rejected') {
+          setError(null);
+        }
       } catch (e: unknown) {
         if (!cancelled) setError(e instanceof Error ? e.message : 'Failed to load historical data');
       } finally {
