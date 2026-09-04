@@ -3,7 +3,9 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { ProvinceData } from '@/lib/types';
 import { buildDynamicMarkers } from '@/lib/mapMarkers';
-import { X, Waves, Satellite, Map as MapIcon, Loader2, Route, Home } from 'lucide-react';
+import { X, Waves, Satellite, Map as MapIcon, Loader2, Route, Home, Search } from 'lucide-react';
+
+interface PlaceHit { name: string; lat: number; lng: number; }
 
 interface SatelliteViewProps {
   provinces: ProvinceData[];
@@ -39,6 +41,61 @@ export function SatelliteView({ provinces, onClose }: SatelliteViewProps) {
   const buildingLayerRef = useRef<L.TileLayer | null>(null);
   const [ready, setReady] = useState(false);
   const [zoom, setZoom] = useState(6);
+  const [query, setQuery] = useState('');
+  const [hits, setHits] = useState<PlaceHit[]>([]);
+  const [searching, setSearching] = useState(false);
+  const [searchErr, setSearchErr] = useState<string | null>(null);
+  const searchMarkerRef = useRef<L.Marker | null>(null);
+
+  const runSearch = async (e?: React.FormEvent) => {
+    e?.preventDefault();
+    const q = query.trim();
+    if (!q) return;
+    setSearching(true);
+    setSearchErr(null);
+    setHits([]);
+    try {
+      const url =
+        'https://nominatim.openstreetmap.org/search?format=jsonv2&limit=8&countrycodes=pk&q=' +
+        encodeURIComponent(q);
+      const res = await fetch(url, { headers: { Accept: 'application/json' } });
+      const json = (await res.json()) as { display_name: string; lat: string; lon: string }[];
+      const list: PlaceHit[] = (json || []).map((r) => ({
+        name: r.display_name,
+        lat: parseFloat(r.lat),
+        lng: parseFloat(r.lon),
+      }));
+      if (list.length === 0) setSearchErr('No place found in Pakistan');
+      setHits(list);
+      if (list.length === 1) goTo(list[0]);
+    } catch {
+      setSearchErr('Search failed, try again');
+    } finally {
+      setSearching(false);
+    }
+  };
+
+  const goTo = (hit: PlaceHit) => {
+    const map = mapRef.current;
+    if (!map) return;
+    map.flyTo([hit.lat, hit.lng], 15, { duration: 1.1 });
+    if (searchMarkerRef.current) searchMarkerRef.current.remove();
+    searchMarkerRef.current = L.marker([hit.lat, hit.lng], {
+      icon: L.divIcon({
+        className: 'sat-search-pin',
+        html: `<div style="width:16px;height:16px;border-radius:50%;background:#38bdf8;border:2px solid #fff;box-shadow:0 0 0 6px rgba(56,189,248,.28),0 2px 6px rgba(0,0,0,.6);"></div>`,
+        iconSize: [16, 16],
+        iconAnchor: [8, 8],
+      }),
+    })
+      .addTo(map)
+      .bindTooltip(
+        `<div style="font-family:Inter,sans-serif;font-size:11px;padding:6px 10px;background:#0f1a22;color:#e8f1f5;border-radius:8px;max-width:220px;">${hit.name}</div>`,
+        { direction: 'top', offset: [0, -10], className: 'clean-tooltip' },
+      );
+    setHits([]);
+  };
+
 
   useEffect(() => {
     const prev = document.body.style.overflow;
@@ -204,6 +261,52 @@ export function SatelliteView({ provinces, onClose }: SatelliteViewProps) {
         <div className="flex items-center gap-2 px-2.5 py-1.5 rounded-xl bg-card/95 backdrop-blur-md border border-border shadow-lg">
           <Satellite className="w-4 h-4 text-primary shrink-0" />
           <span className="text-[11px] sm:text-[12px] font-bold text-foreground whitespace-nowrap">Satellite View</span>
+        </div>
+
+        {/* Search cities / villages / districts */}
+        <div className="relative order-last w-full sm:order-none sm:w-auto">
+          <form
+            onSubmit={runSearch}
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-card/95 backdrop-blur-md border border-border shadow-lg"
+          >
+            {searching ? (
+              <Loader2 className="w-4 h-4 text-primary animate-spin shrink-0" />
+            ) : (
+              <Search className="w-4 h-4 text-primary shrink-0" />
+            )}
+            <input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search city, village, district…"
+              aria-label="Search a place"
+              className="bg-transparent outline-none text-[11px] sm:text-[12px] text-foreground placeholder:text-muted-foreground w-full sm:w-[190px]"
+            />
+            {query && (
+              <button
+                type="button"
+                onClick={() => { setQuery(''); setHits([]); setSearchErr(null); }}
+                className="text-muted-foreground hover:text-foreground shrink-0"
+                aria-label="Clear search"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            )}
+          </form>
+
+          {(hits.length > 0 || searchErr) && (
+            <div className="absolute top-full left-0 mt-1.5 w-full sm:w-[280px] max-h-[42vh] overflow-y-auto rounded-xl bg-card/98 backdrop-blur-md border border-border shadow-xl">
+              {searchErr && <div className="px-3 py-2 text-[11px] text-muted-foreground">{searchErr}</div>}
+              {hits.map((h) => (
+                <button
+                  key={`${h.lat},${h.lng},${h.name}`}
+                  onClick={() => goTo(h)}
+                  className="w-full text-left px-3 py-2 text-[11px] text-foreground hover:bg-primary/10 border-b border-border/60 last:border-0"
+                >
+                  {h.name}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
         <button
