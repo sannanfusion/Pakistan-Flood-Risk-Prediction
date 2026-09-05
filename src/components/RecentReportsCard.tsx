@@ -22,7 +22,7 @@ export function RecentReportsCard({ provinces }: RecentReportsCardProps) {
     .map((p) => ({
       id: p.id,
       title: `${p.name} Flood Risk Report`,
-      date: formatDate(p.lastFloodDate),
+      date: `Last flood ${formatDate(p.lastFloodDate)}`,
       size: `${p.rainfall7Day.toFixed(1)}mm / 7d`,
       color: RISK_COLORS[p.riskLevel],
     }));
