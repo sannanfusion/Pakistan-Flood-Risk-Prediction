@@ -9,6 +9,8 @@ import { DistrictAlertsPanel } from '@/components/DistrictAlertsPanel';
 import { RiskDistributionChart } from '@/components/RiskDistributionChart';
 import { ProvinceRiskBreakdown } from '@/components/ProvinceRiskBreakdown';
 import { RecentReportsCard } from '@/components/RecentReportsCard';
+import { NdmaImpactPanel } from '@/components/NdmaImpactPanel';
+import { NasaImageryPanel } from '@/components/NasaImageryPanel';
 
 import { DataSourcesBar } from '@/components/DataSourcesBar';
 import { ProvinceDetail } from '@/components/ProvinceDetail';
