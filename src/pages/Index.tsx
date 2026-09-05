@@ -9,6 +9,8 @@ import { DistrictAlertsPanel } from '@/components/DistrictAlertsPanel';
 import { RiskDistributionChart } from '@/components/RiskDistributionChart';
 import { ProvinceRiskBreakdown } from '@/components/ProvinceRiskBreakdown';
 import { RecentReportsCard } from '@/components/RecentReportsCard';
+import { NdmaImpactPanel } from '@/components/NdmaImpactPanel';
+import { NasaImageryPanel } from '@/components/NasaImageryPanel';
 
 import { DataSourcesBar } from '@/components/DataSourcesBar';
 import { ProvinceDetail } from '@/components/ProvinceDetail';
@@ -223,6 +225,12 @@ const Index = () => {
         <RiskDistributionChart districts={districts} />
         <ProvinceRiskBreakdown districts={districts} onSelectProvince={setSelectedProvince} />
       </div>
+
+      {/* Official NDMA reported impact */}
+      <NdmaImpactPanel provinces={provinces} />
+
+      {/* Real NASA satellite imagery per province */}
+      <NasaImageryPanel provinces={provinces} />
 
       <RecentReportsCard provinces={provinces} />
 
