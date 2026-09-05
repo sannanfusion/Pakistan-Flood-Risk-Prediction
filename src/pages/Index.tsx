@@ -224,6 +224,12 @@ const Index = () => {
         <ProvinceRiskBreakdown districts={districts} onSelectProvince={setSelectedProvince} />
       </div>
 
+      {/* Official NDMA reported impact */}
+      <NdmaImpactPanel provinces={provinces} />
+
+      {/* Real NASA satellite imagery per province */}
+      <NasaImageryPanel provinces={provinces} />
+
       <RecentReportsCard provinces={provinces} />
 
 
