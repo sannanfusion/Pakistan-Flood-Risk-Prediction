@@ -23,7 +23,7 @@ export function RecentReportsCard({ provinces }: RecentReportsCardProps) {
       id: p.id,
       title: `${p.name} Flood Risk Report`,
       date: formatDate(p.lastFloodDate),
-      size: `${(1.2 + p.historicalFloods * 0.35).toFixed(1)} MB`,
+      size: `${p.rainfall7Day.toFixed(1)}mm / 7d`,
       color: RISK_COLORS[p.riskLevel],
     }));
 
