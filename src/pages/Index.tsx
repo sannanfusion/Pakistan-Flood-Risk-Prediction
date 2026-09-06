@@ -219,27 +219,29 @@ const Index = () => {
       </motion.section>
 
       {satelliteOpen && (
-        <SatelliteView provinces={provinces} onClose={() => setSatelliteOpen(false)} />
+        <Suspense fallback={null}>
+          <SatelliteView provinces={provinces} onClose={() => setSatelliteOpen(false)} />
+        </Suspense>
       )}
-
-
 
       {/* Flood risk alerts by district (high → medium → low) */}
       <DistrictAlertsPanel districts={districts} onSelectProvince={setSelectedProvince} />
 
-      {/* Charts row */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
-        <RiskDistributionChart districts={districts} />
-        <ProvinceRiskBreakdown districts={districts} onSelectProvince={setSelectedProvince} />
-      </div>
+      <Suspense fallback={<Skeleton className="h-72" />}>
+        {/* Charts row */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
+          <RiskDistributionChart districts={districts} />
+          <ProvinceRiskBreakdown districts={districts} onSelectProvince={setSelectedProvince} />
+        </div>
 
-      {/* Official NDMA reported impact */}
-      <NdmaImpactPanel provinces={provinces} />
+        {/* Official NDMA reported impact */}
+        <NdmaImpactPanel provinces={provinces} />
 
-      {/* Real NASA satellite imagery per province */}
-      <NasaImageryPanel provinces={provinces} />
+        {/* Real NASA satellite imagery per province */}
+        <NasaImageryPanel provinces={provinces} />
 
-      <RecentReportsCard provinces={provinces} />
+        <RecentReportsCard provinces={provinces} />
+      </Suspense>
 
 
 
