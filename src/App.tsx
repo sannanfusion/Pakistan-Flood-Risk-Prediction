@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { ThemeProvider } from "@/lib/theme";
 
@@ -10,14 +10,24 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AppSidebar } from "@/components/AppSidebar";
 import { TopBar } from "@/components/TopBar";
 import Index from "./pages/Index";
-import Historical from "./pages/Historical";
-import Reports from "./pages/Reports";
-import SettingsPage from "./pages/SettingsPage";
-import Rainfall from "./pages/Rainfall";
-import Contact from "./pages/Contact";
-import Gallery from "./pages/Gallery";
-import WhitePaper from "./pages/White Paper";
-import NotFound from "./pages/NotFound";
+
+// Secondary pages load on demand so the dashboard starts faster
+const Historical = lazy(() => import("./pages/Historical"));
+const Reports = lazy(() => import("./pages/Reports"));
+const SettingsPage = lazy(() => import("./pages/SettingsPage"));
+const Rainfall = lazy(() => import("./pages/Rainfall"));
+const Contact = lazy(() => import("./pages/Contact"));
+const Gallery = lazy(() => import("./pages/Gallery"));
+const WhitePaper = lazy(() => import("./pages/White Paper"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+
+const PageFallback = () => (
+  <div className="space-y-4">
+    <div className="h-8 w-52 rounded-xl bg-muted animate-pulse" />
+    <div className="h-40 rounded-2xl bg-muted animate-pulse" />
+    <div className="h-64 rounded-2xl bg-muted animate-pulse" />
+  </div>
+);
 
 const queryClient = new QueryClient();
 
