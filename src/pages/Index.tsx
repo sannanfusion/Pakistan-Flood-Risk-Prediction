@@ -1,23 +1,26 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
-import { LeafletMap } from '@/components/LeafletMap';
-import { SatelliteView } from '@/components/SatelliteView';
-
+import { useState, useEffect, useCallback, useMemo, lazy, Suspense } from 'react';
 import { MapLayersPanel, LayerVisibility } from '@/components/MapLayersPanel';
 import { RiskTiles } from '@/components/RiskTiles';
-
 import { DistrictAlertsPanel } from '@/components/DistrictAlertsPanel';
-import { RiskDistributionChart } from '@/components/RiskDistributionChart';
-import { ProvinceRiskBreakdown } from '@/components/ProvinceRiskBreakdown';
-import { RecentReportsCard } from '@/components/RecentReportsCard';
-import { NdmaImpactPanel } from '@/components/NdmaImpactPanel';
-import { NasaImageryPanel } from '@/components/NasaImageryPanel';
-
 import { DataSourcesBar } from '@/components/DataSourcesBar';
 import { ProvinceDetail } from '@/components/ProvinceDetail';
 import { ModelMetrics } from '@/components/ModelMetrics';
-import { RainfallChart } from '@/components/RainfallChart';
-import { PopulationAffectedChart } from '@/components/PopulationAffectedChart';
-import { fetchFloodData, FloodApiResponse } from '@/lib/floodData';
+
+// Heavy pieces (map library, charts, satellite imagery) load after first paint
+const LeafletMap = lazy(() => import('@/components/LeafletMap').then((m) => ({ default: m.LeafletMap })));
+const SatelliteView = lazy(() => import('@/components/SatelliteView').then((m) => ({ default: m.SatelliteView })));
+const RiskDistributionChart = lazy(() => import('@/components/RiskDistributionChart').then((m) => ({ default: m.RiskDistributionChart })));
+const ProvinceRiskBreakdown = lazy(() => import('@/components/ProvinceRiskBreakdown').then((m) => ({ default: m.ProvinceRiskBreakdown })));
+const RecentReportsCard = lazy(() => import('@/components/RecentReportsCard').then((m) => ({ default: m.RecentReportsCard })));
+const NdmaImpactPanel = lazy(() => import('@/components/NdmaImpactPanel').then((m) => ({ default: m.NdmaImpactPanel })));
+const NasaImageryPanel = lazy(() => import('@/components/NasaImageryPanel').then((m) => ({ default: m.NasaImageryPanel })));
+const RainfallChart = lazy(() => import('@/components/RainfallChart').then((m) => ({ default: m.RainfallChart })));
+const PopulationAffectedChart = lazy(() => import('@/components/PopulationAffectedChart').then((m) => ({ default: m.PopulationAffectedChart })));
+
+const Skeleton = ({ className = 'h-56' }: { className?: string }) => (
+  <div className={`rounded-2xl bg-muted animate-pulse ${className}`} />
+);
+import { fetchFloodData, getCachedFloodData, FloodApiResponse } from '@/lib/floodData';
 import { ProvinceData, RainfallDataPoint, Alert } from '@/lib/types';
 import { markerDistrictRows } from '@/lib/mapMarkers';
 import { AlertTriangle, Satellite, Activity, Hand } from 'lucide-react';
