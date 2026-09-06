@@ -199,12 +199,14 @@ const Index = () => {
         className="relative panel p-0 overflow-hidden h-[340px] sm:h-[440px] lg:h-[560px]"
       >
         <div className="absolute inset-0">
-          <LeafletMap
-            provinces={provinces}
-            selectedProvince={selectedProvince}
-            onProvinceSelect={setSelectedProvince}
-            layerVisibility={layerVisibility}
-          />
+          <Suspense fallback={<div className="absolute inset-0 bg-muted animate-pulse" />}>
+            <LeafletMap
+              provinces={provinces}
+              selectedProvince={selectedProvince}
+              onProvinceSelect={setSelectedProvince}
+              layerVisibility={layerVisibility}
+            />
+          </Suspense>
           <MapLayersPanel layers={layerVisibility} onToggle={toggleLayer} />
           <button
             onClick={() => setSatelliteOpen(true)}
