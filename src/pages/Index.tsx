@@ -26,13 +26,15 @@ import { markerDistrictRows } from '@/lib/mapMarkers';
 import { AlertTriangle, Satellite, Activity, Hand } from 'lucide-react';
 import { motion } from 'framer-motion';
 
+const cached = getCachedFloodData();
+
 const Index = () => {
   const [selectedProvince, setSelectedProvince] = useState<string | null>('sindh');
-  const [provinces, setProvinces] = useState<ProvinceData[]>([]);
-  const [rainfallTrend, setRainfallTrend] = useState<RainfallDataPoint[]>([]);
-  const [alerts, setAlerts] = useState<Alert[]>([]);
-  const [modelMetricsData, setModelMetricsData] = useState<FloodApiResponse['modelMetrics'] | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [provinces, setProvinces] = useState<ProvinceData[]>(cached?.provinces ?? []);
+  const [rainfallTrend, setRainfallTrend] = useState<RainfallDataPoint[]>(cached?.rainfallTrend ?? []);
+  const [alerts, setAlerts] = useState<Alert[]>(cached?.alerts ?? []);
+  const [modelMetricsData, setModelMetricsData] = useState<FloodApiResponse['modelMetrics'] | null>(cached?.modelMetrics ?? null);
+  const [loading, setLoading] = useState(!cached);
   const [error, setError] = useState<string | null>(null);
   const [now, setNow] = useState(new Date());
   const [satelliteOpen, setSatelliteOpen] = useState(false);
