@@ -66,17 +66,19 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<AppLayout><Index /></AppLayout>} />
-          <Route path="/rainfall" element={<AppLayout><Rainfall /></AppLayout>} />
-          <Route path="/contact" element={<AppLayout><Contact /></AppLayout>} />
-          <Route path="/gallery" element={<AppLayout><Gallery /></AppLayout>} />
-          <Route path="/historical" element={<AppLayout><Historical /></AppLayout>} />
-          <Route path="/reports" element={<AppLayout><Reports /></AppLayout>} />
-          <Route path="/settings" element={<AppLayout><SettingsPage /></AppLayout>} />
-          <Route path="/research" element={<AppLayout><WhitePaper /></AppLayout>} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <Suspense fallback={null}>
+          <Routes>
+            <Route path="/" element={<AppLayout><Index /></AppLayout>} />
+            <Route path="/rainfall" element={<AppLayout><Suspense fallback={<PageFallback />}><Rainfall /></Suspense></AppLayout>} />
+            <Route path="/contact" element={<AppLayout><Suspense fallback={<PageFallback />}><Contact /></Suspense></AppLayout>} />
+            <Route path="/gallery" element={<AppLayout><Suspense fallback={<PageFallback />}><Gallery /></Suspense></AppLayout>} />
+            <Route path="/historical" element={<AppLayout><Suspense fallback={<PageFallback />}><Historical /></Suspense></AppLayout>} />
+            <Route path="/reports" element={<AppLayout><Suspense fallback={<PageFallback />}><Reports /></Suspense></AppLayout>} />
+            <Route path="/settings" element={<AppLayout><Suspense fallback={<PageFallback />}><SettingsPage /></Suspense></AppLayout>} />
+            <Route path="/research" element={<AppLayout><Suspense fallback={<PageFallback />}><WhitePaper /></Suspense></AppLayout>} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Suspense>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
