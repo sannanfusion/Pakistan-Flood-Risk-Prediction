@@ -268,7 +268,9 @@ const Index = () => {
           <p className="text-[10.5px] text-muted-foreground mb-3 font-mono">
             Actual vs predicted · Red line = flood threshold (80mm)
           </p>
-          <RainfallChart data={rainfallTrend} />
+          <Suspense fallback={<Skeleton className="h-56" />}>
+            <RainfallChart data={rainfallTrend} />
+          </Suspense>
         </section>
       </div>
 
@@ -276,7 +278,9 @@ const Index = () => {
       {/* Population + model metrics */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <section className="panel p-4">
-          <PopulationAffectedChart data={provinces} />
+          <Suspense fallback={<Skeleton className="h-56" />}>
+            <PopulationAffectedChart data={provinces} />
+          </Suspense>
         </section>
         <section className="panel p-4">
           <ModelMetrics data={modelMetricsData} />
