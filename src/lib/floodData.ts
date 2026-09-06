@@ -113,5 +113,11 @@ async function loadFloodData(): Promise<FloodApiResponse> {
     features:    data.modelMetrics?.features    ?? 0,
   };
 
-  return { provinces, alerts, rainfallTrend, modelMetrics };
+  const result = { provinces, alerts, rainfallTrend, modelMetrics };
+  try {
+    sessionStorage.setItem(CACHE_KEY, JSON.stringify(result));
+  } catch {
+    /* storage full or unavailable — caching is best-effort */
+  }
+  return result;
 }
