@@ -25,11 +25,35 @@ export interface FloodApiResponse {
   };
 }
 
+const CACHE_KEY = 'pfrp-flood-data-v1';
+
+/** Instantly available data from the previous visit (used while fresh data loads). */
+export function getCachedFloodData(): FloodApiResponse | null {
+  try {
+    const raw = sessionStorage.getItem(CACHE_KEY);
+    return raw ? (JSON.parse(raw) as FloodApiResponse) : null;
+  } catch {
+    return null;
+  }
+}
+
+/** Shared in-flight request so multiple pages never fetch twice. */
+let inFlight: Promise<FloodApiResponse> | null = null;
+
 /**
  * Fetch all flood data from the backend — single call, no duplicates.
  * Every component should use data from this response.
  */
-export async function fetchFloodData(): Promise<FloodApiResponse> {
+export function fetchFloodData(): Promise<FloodApiResponse> {
+  if (!inFlight) {
+    inFlight = loadFloodData().finally(() => {
+      inFlight = null;
+    });
+  }
+  return inFlight;
+}
+
+async function loadFloodData(): Promise<FloodApiResponse> {
   const res = await fetch(`${API_BASE}/api/all`);
   if (!res.ok) throw new Error(`API error: ${res.status}`);
   const data = await res.json();
@@ -89,5 +113,11 @@ export async function fetchFloodData(): Promise<FloodApiResponse> {
     features:    data.modelMetrics?.features    ?? 0,
   };
 
-  return { provinces, alerts, rainfallTrend, modelMetrics };
+  const result = { provinces, alerts, rainfallTrend, modelMetrics };
+  try {
+    sessionStorage.setItem(CACHE_KEY, JSON.stringify(result));
+  } catch {
+    /* storage full or unavailable — caching is best-effort */
+  }
+  return result;
 }

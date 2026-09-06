@@ -3,10 +3,31 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pakistan Flood Risk Prediction </title>
-    <link rel="icon" href="/public/favicon.ico" />
-    <meta name="description" />
-    <meta name="author"/>
+    <title>Pakistan Flood Risk Prediction Dashboard</title>
+    <meta
+      name="description"
+      content="Live flood risk monitoring for Pakistan: district risk levels, real-time rainfall, NDMA impact data and NASA satellite imagery."
+    />
+    <link rel="canonical" href="/" />
+    <link rel="icon" href="/favicon.ico" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Pakistan Flood Risk Prediction Dashboard" />
+    <meta
+      property="og:description"
+      content="Live flood risk monitoring for Pakistan: district risk levels, real-time rainfall, NDMA impact data and NASA satellite imagery."
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Speed up first data + tile requests -->
+    <link rel="preconnect" href="https://pakistan-flood-risk-prediction.onrender.com" crossorigin />
+    <link rel="dns-prefetch" href="https://pakistan-flood-risk-prediction.onrender.com" />
+    <link rel="preconnect" href="https://api.open-meteo.com" crossorigin />
+    <link rel="dns-prefetch" href="https://api.open-meteo.com" />
+    <link rel="dns-prefetch" href="https://basemaps.cartocdn.com" />
+    <link rel="dns-prefetch" href="https://server.arcgisonline.com" />
+    <link rel="dns-prefetch" href="https://gibs.earthdata.nasa.gov" />
+  </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>

@@ -1,35 +1,40 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
-import { LeafletMap } from '@/components/LeafletMap';
-import { SatelliteView } from '@/components/SatelliteView';
-
+import { useState, useEffect, useCallback, useMemo, lazy, Suspense } from 'react';
 import { MapLayersPanel, LayerVisibility } from '@/components/MapLayersPanel';
 import { RiskTiles } from '@/components/RiskTiles';
-
 import { DistrictAlertsPanel } from '@/components/DistrictAlertsPanel';
-import { RiskDistributionChart } from '@/components/RiskDistributionChart';
-import { ProvinceRiskBreakdown } from '@/components/ProvinceRiskBreakdown';
-import { RecentReportsCard } from '@/components/RecentReportsCard';
-import { NdmaImpactPanel } from '@/components/NdmaImpactPanel';
-import { NasaImageryPanel } from '@/components/NasaImageryPanel';
-
 import { DataSourcesBar } from '@/components/DataSourcesBar';
 import { ProvinceDetail } from '@/components/ProvinceDetail';
 import { ModelMetrics } from '@/components/ModelMetrics';
-import { RainfallChart } from '@/components/RainfallChart';
-import { PopulationAffectedChart } from '@/components/PopulationAffectedChart';
-import { fetchFloodData, FloodApiResponse } from '@/lib/floodData';
+
+// Heavy pieces (map library, charts, satellite imagery) load after first paint
+const LeafletMap = lazy(() => import('@/components/LeafletMap').then((m) => ({ default: m.LeafletMap })));
+const SatelliteView = lazy(() => import('@/components/SatelliteView').then((m) => ({ default: m.SatelliteView })));
+const RiskDistributionChart = lazy(() => import('@/components/RiskDistributionChart').then((m) => ({ default: m.RiskDistributionChart })));
+const ProvinceRiskBreakdown = lazy(() => import('@/components/ProvinceRiskBreakdown').then((m) => ({ default: m.ProvinceRiskBreakdown })));
+const RecentReportsCard = lazy(() => import('@/components/RecentReportsCard').then((m) => ({ default: m.RecentReportsCard })));
+const NdmaImpactPanel = lazy(() => import('@/components/NdmaImpactPanel').then((m) => ({ default: m.NdmaImpactPanel })));
+const NasaImageryPanel = lazy(() => import('@/components/NasaImageryPanel').then((m) => ({ default: m.NasaImageryPanel })));
+const RainfallChart = lazy(() => import('@/components/RainfallChart').then((m) => ({ default: m.RainfallChart })));
+const PopulationAffectedChart = lazy(() => import('@/components/PopulationAffectedChart').then((m) => ({ default: m.PopulationAffectedChart })));
+
+const Skeleton = ({ className = 'h-56' }: { className?: string }) => (
+  <div className={`rounded-2xl bg-muted animate-pulse ${className}`} />
+);
+import { fetchFloodData, getCachedFloodData, FloodApiResponse } from '@/lib/floodData';
 import { ProvinceData, RainfallDataPoint, Alert } from '@/lib/types';
 import { markerDistrictRows } from '@/lib/mapMarkers';
 import { AlertTriangle, Satellite, Activity, Hand } from 'lucide-react';
 import { motion } from 'framer-motion';
 
+const cached = getCachedFloodData();
+
 const Index = () => {
   const [selectedProvince, setSelectedProvince] = useState<string | null>('sindh');
-  const [provinces, setProvinces] = useState<ProvinceData[]>([]);
-  const [rainfallTrend, setRainfallTrend] = useState<RainfallDataPoint[]>([]);
-  const [alerts, setAlerts] = useState<Alert[]>([]);
-  const [modelMetricsData, setModelMetricsData] = useState<FloodApiResponse['modelMetrics'] | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [provinces, setProvinces] = useState<ProvinceData[]>(cached?.provinces ?? []);
+  const [rainfallTrend, setRainfallTrend] = useState<RainfallDataPoint[]>(cached?.rainfallTrend ?? []);
+  const [alerts, setAlerts] = useState<Alert[]>(cached?.alerts ?? []);
+  const [modelMetricsData, setModelMetricsData] = useState<FloodApiResponse['modelMetrics'] | null>(cached?.modelMetrics ?? null);
+  const [loading, setLoading] = useState(!cached);
   const [error, setError] = useState<string | null>(null);
   const [now, setNow] = useState(new Date());
   const [satelliteOpen, setSatelliteOpen] = useState(false);
@@ -194,12 +199,14 @@ const Index = () => {
         className="relative panel p-0 overflow-hidden h-[340px] sm:h-[440px] lg:h-[560px]"
       >
         <div className="absolute inset-0">
-          <LeafletMap
-            provinces={provinces}
-            selectedProvince={selectedProvince}
-            onProvinceSelect={setSelectedProvince}
-            layerVisibility={layerVisibility}
-          />
+          <Suspense fallback={<div className="absolute inset-0 bg-muted animate-pulse" />}>
+            <LeafletMap
+              provinces={provinces}
+              selectedProvince={selectedProvince}
+              onProvinceSelect={setSelectedProvince}
+              layerVisibility={layerVisibility}
+            />
+          </Suspense>
           <MapLayersPanel layers={layerVisibility} onToggle={toggleLayer} />
           <button
             onClick={() => setSatelliteOpen(true)}
@@ -212,27 +219,29 @@ const Index = () => {
       </motion.section>
 
       {satelliteOpen && (
-        <SatelliteView provinces={provinces} onClose={() => setSatelliteOpen(false)} />
+        <Suspense fallback={null}>
+          <SatelliteView provinces={provinces} onClose={() => setSatelliteOpen(false)} />
+        </Suspense>
       )}
-
-
 
       {/* Flood risk alerts by district (high → medium → low) */}
       <DistrictAlertsPanel districts={districts} onSelectProvince={setSelectedProvince} />
 
-      {/* Charts row */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
-        <RiskDistributionChart districts={districts} />
-        <ProvinceRiskBreakdown districts={districts} onSelectProvince={setSelectedProvince} />
-      </div>
+      <Suspense fallback={<Skeleton className="h-72" />}>
+        {/* Charts row */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
+          <RiskDistributionChart districts={districts} />
+          <ProvinceRiskBreakdown districts={districts} onSelectProvince={setSelectedProvince} />
+        </div>
 
-      {/* Official NDMA reported impact */}
-      <NdmaImpactPanel provinces={provinces} />
+        {/* Official NDMA reported impact */}
+        <NdmaImpactPanel provinces={provinces} />
 
-      {/* Real NASA satellite imagery per province */}
-      <NasaImageryPanel provinces={provinces} />
+        {/* Real NASA satellite imagery per province */}
+        <NasaImageryPanel provinces={provinces} />
 
-      <RecentReportsCard provinces={provinces} />
+        <RecentReportsCard provinces={provinces} />
+      </Suspense>
 
 
 
@@ -259,7 +268,9 @@ const Index = () => {
           <p className="text-[10.5px] text-muted-foreground mb-3 font-mono">
             Actual vs predicted · Red line = flood threshold (80mm)
           </p>
-          <RainfallChart data={rainfallTrend} />
+          <Suspense fallback={<Skeleton className="h-56" />}>
+            <RainfallChart data={rainfallTrend} />
+          </Suspense>
         </section>
       </div>
 
@@ -267,7 +278,9 @@ const Index = () => {
       {/* Population + model metrics */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <section className="panel p-4">
-          <PopulationAffectedChart data={provinces} />
+          <Suspense fallback={<Skeleton className="h-56" />}>
+            <PopulationAffectedChart data={provinces} />
+          </Suspense>
         </section>
         <section className="panel p-4">
           <ModelMetrics data={modelMetricsData} />
