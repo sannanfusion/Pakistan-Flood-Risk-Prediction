@@ -25,13 +25,17 @@ export interface FloodApiResponse {
   };
 }
 
-const CACHE_KEY = 'pfrp-flood-data-v1';
+const CACHE_KEY = 'pfrp-flood-data-v2';
+const CACHE_TTL = 30 * 60 * 1000; // 30 minutes
 
 /** Instantly available data from the previous visit (used while fresh data loads). */
 export function getCachedFloodData(): FloodApiResponse | null {
   try {
-    const raw = sessionStorage.getItem(CACHE_KEY);
-    return raw ? (JSON.parse(raw) as FloodApiResponse) : null;
+    const raw = localStorage.getItem(CACHE_KEY) ?? sessionStorage.getItem(CACHE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (parsed && parsed.__t && Date.now() - parsed.__t > CACHE_TTL * 24) return null;
+    return (parsed.data ?? parsed) as FloodApiResponse;
   } catch {
     return null;
   }
