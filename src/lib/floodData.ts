@@ -119,7 +119,7 @@ async function loadFloodData(): Promise<FloodApiResponse> {
 
   const result = { provinces, alerts, rainfallTrend, modelMetrics };
   try {
-    sessionStorage.setItem(CACHE_KEY, JSON.stringify(result));
+    localStorage.setItem(CACHE_KEY, JSON.stringify({ __t: Date.now(), data: result }));
   } catch {
     /* storage full or unavailable — caching is best-effort */
   }
