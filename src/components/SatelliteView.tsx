@@ -115,37 +115,48 @@ export function SatelliteView({ provinces, onClose }: SatelliteViewProps) {
       center: [30.3, 69.5],
       zoom: 6,
       minZoom: 4,
-      maxZoom: 22,
-      zoomSnap: 0.5,
-      wheelPxPerZoomLevel: 90,
+      maxZoom: 19,
+      zoomSnap: 1,
+      wheelPxPerZoomLevel: 120,
       zoomControl: false,
       attributionControl: true,
+      preferCanvas: true,
     });
 
+    // Shared tile options — capped at native zoom 19 (no upscaling) and tuned to
+    // keep tile count/memory low so deep zooms stay stable.
+    const tileOpts = {
+      maxZoom: 19,
+      maxNativeZoom: 19,
+      keepBuffer: 1,
+      updateWhenZooming: false,
+      updateWhenIdle: true,
+      crossOrigin: true as const,
+    };
+
     // High-resolution satellite imagery — resolves cities, villages and individual rooftops.
-    // maxNativeZoom 19 with maxZoom 22 lets Leaflet upscale tiles for street/house-level inspection.
     L.tileLayer(
       'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-      { maxZoom: 22, maxNativeZoom: 19, detectRetina: true, attribution: 'Imagery &copy; Esri, Maxar, Earthstar Geographics' },
+      { ...tileOpts, attribution: 'Imagery &copy; Esri, Maxar, Earthstar Geographics' },
     ).addTo(map);
 
     // Place / road labels on top of imagery for clarity
     const labelLayer = L.tileLayer(
       'https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}',
-      { maxZoom: 22, maxNativeZoom: 19, opacity: 0.95, attribution: '&copy; Esri' },
+      { ...tileOpts, opacity: 0.95, attribution: '&copy; Esri' },
     ).addTo(map);
     labelLayerRef.current = labelLayer;
 
     // Road & track network (village tracks, lanes, highways) from Esri reference layer
     roadLayerRef.current = L.tileLayer(
       'https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}',
-      { maxZoom: 22, maxNativeZoom: 19, opacity: 0.9, attribution: 'Transportation &copy; Esri' },
+      { ...tileOpts, opacity: 0.9, attribution: 'Transportation &copy; Esri' },
     );
 
     // Building footprints / house outlines from OSM raster
     buildingLayerRef.current = L.tileLayer(
       'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-      { maxZoom: 22, maxNativeZoom: 19, opacity: 0.45, className: 'osm-buildings', attribution: '&copy; OpenStreetMap contributors' },
+      { ...tileOpts, opacity: 0.45, className: 'osm-buildings', attribution: '&copy; OpenStreetMap contributors' },
     );
 
     L.control.zoom({ position: 'bottomright' }).addTo(map);
