@@ -45,7 +45,7 @@ const PageFallback = () => (
 const queryClient = new QueryClient();
 
 const AppLayout = ({ children }: { children: React.ReactNode }) => {
-  const isMobile = useIsMobile();
+  const isMobile = useIsOverlaySidebar();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
