@@ -12,8 +12,6 @@ const SatelliteView = lazy(() => import('@/components/SatelliteView').then((m) =
 const RiskDistributionChart = lazy(() => import('@/components/RiskDistributionChart').then((m) => ({ default: m.RiskDistributionChart })));
 const ProvinceRiskBreakdown = lazy(() => import('@/components/ProvinceRiskBreakdown').then((m) => ({ default: m.ProvinceRiskBreakdown })));
 const RecentReportsCard = lazy(() => import('@/components/RecentReportsCard').then((m) => ({ default: m.RecentReportsCard })));
-const NdmaImpactPanel = lazy(() => import('@/components/NdmaImpactPanel').then((m) => ({ default: m.NdmaImpactPanel })));
-const NasaImageryPanel = lazy(() => import('@/components/NasaImageryPanel').then((m) => ({ default: m.NasaImageryPanel })));
 const RainfallChart = lazy(() => import('@/components/RainfallChart').then((m) => ({ default: m.RainfallChart })));
 const PopulationAffectedChart = lazy(() => import('@/components/PopulationAffectedChart').then((m) => ({ default: m.PopulationAffectedChart })));
 
@@ -233,12 +231,6 @@ const Index = () => {
           <RiskDistributionChart districts={districts} />
           <ProvinceRiskBreakdown districts={districts} onSelectProvince={setSelectedProvince} />
         </div>
-
-        {/* Official NDMA reported impact */}
-        <NdmaImpactPanel provinces={provinces} />
-
-        {/* Real NASA satellite imagery per province */}
-        <NasaImageryPanel provinces={provinces} />
 
         <RecentReportsCard provinces={provinces} />
       </Suspense>

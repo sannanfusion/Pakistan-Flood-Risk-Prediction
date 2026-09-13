@@ -1,5 +1,18 @@
 import { useState, useEffect, lazy, Suspense } from "react";
-import { useIsMobile } from "@/hooks/use-mobile";
+
+// Below lg (1024px) the sidebar is an overlay drawer that must close on navigate
+function useIsOverlaySidebar() {
+  const [overlay, setOverlay] = useState(
+    () => typeof window !== "undefined" && window.innerWidth < 1024,
+  );
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 1023px)");
+    const onChange = () => setOverlay(mq.matches);
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
+  return overlay;
+}
 import { ThemeProvider } from "@/lib/theme";
 
 import { Toaster } from "@/components/ui/toaster";
@@ -32,7 +45,7 @@ const PageFallback = () => (
 const queryClient = new QueryClient();
 
 const AppLayout = ({ children }: { children: React.ReactNode }) => {
-  const isMobile = useIsMobile();
+  const isMobile = useIsOverlaySidebar();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
