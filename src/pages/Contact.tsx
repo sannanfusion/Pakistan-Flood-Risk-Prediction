@@ -11,7 +11,7 @@ const Contact = () => (
 
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
       <a
-        href="https://github.com/pakistan-flood-risk-prediction"
+        href="https://github.com/sannanfusion"
         target="_blank"
         rel="noopener noreferrer"
         className="panel p-5 flex items-center gap-3 hover:border-primary/40 transition-colors"
@@ -28,7 +28,7 @@ const Contact = () => (
       </a>
 
       <a
-        href="mailto:contact@floodrisk.pk"
+         href="mailto:maliksannanali12345@gmail.com"
         className="panel p-5 flex items-center gap-3 hover:border-primary/40 transition-colors"
       >
         <span className="p-2.5 rounded-xl bg-primary/12 border border-primary/25">
@@ -36,7 +36,7 @@ const Contact = () => (
         </span>
         <span className="min-w-0">
           <span className="block text-[13.5px] font-semibold text-foreground">Email</span>
-          <span className="block text-[11.5px] font-mono text-muted-foreground truncate">contact@floodrisk.pk</span>
+          <span className="block text-[11.5px] font-mono text-muted-foreground truncate">maliksannanali12345@gmail.com</span>
         </span>
       </a>
     </div>
