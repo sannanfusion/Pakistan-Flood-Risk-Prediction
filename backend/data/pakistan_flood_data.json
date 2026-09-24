@@ -1,0 +1,1990 @@
+{
+  "metadata": {
+    "title": "Pakistan Flood Data (2010-2026)",
+    "description": "Comprehensive flood impact data for Pakistan including deaths, affected populations, and district-level information",
+    "sources": [
+      "National Disaster Management Authority (NDMA) Pakistan",
+      "UN OCHA",
+      "ReliefWeb",
+      "World Health Organization (WHO)",
+      "British Red Cross",
+      "Wikipedia",
+      "PDMA Provincial Reports"
+    ],
+    "lastUpdated": "2026-09-23",
+    "disclaimer": "Figures are approximate and based on publicly available reports. Exact numbers may vary by source and reporting period."
+  },
+  "yearlySummary": [
+    {
+      "year": 2010,
+      "totalDeaths": 1985,
+      "totalInjured": 2946,
+      "peopleAffected": 20000000,
+      "districtsAffected": 78,
+      "housesDestroyed": 1600000,
+      "houseDamaged": 2000000,
+      "economicLossUSD": 9700000000,
+      "severity": "Catastrophic",
+      "description": "One of the worst humanitarian disasters in Pakistan's history. 1/5th of country submerged. Described as a 'tsunami in slow motion'.",
+      "mostAffectedProvince": "Khyber Pakhtunkhwa",
+      "floodType": "Riverine and Flash Floods"
+    },
+    {
+      "year": 2011,
+      "totalDeaths": 434,
+      "totalInjured": 1356,
+      "peopleAffected": 5800000,
+      "districtsAffected": 16,
+      "housesDestroyed": 1500000,
+      "houseDamaged": 1600000,
+      "economicLossUSD": 3700000000,
+      "severity": "Severe",
+      "description": "Massive monsoon rains devastated Sindh province. 16 districts affected with record-breaking rainfall 8-10x drainage capacity.",
+      "mostAffectedProvince": "Sindh",
+      "floodType": "Monsoon Flooding"
+    },
+    {
+      "year": 2012,
+      "totalDeaths": 480,
+      "totalInjured": 2837,
+      "peopleAffected": 4847000,
+      "districtsAffected": 29,
+      "housesDestroyed": 216000,
+      "houseDamaged": 400000,
+      "economicLossUSD": 2500000000,
+      "severity": "Severe",
+      "description": "Third consecutive year of major flooding. Severe impacts in Sindh, southern Punjab, and Balochistan.",
+      "mostAffectedProvince": "Sindh",
+      "floodType": "Monsoon Flooding"
+    },
+    {
+      "year": 2013,
+      "totalDeaths": 333,
+      "totalInjured": 1500,
+      "peopleAffected": 1500000,
+      "districtsAffected": 25,
+      "housesDestroyed": 36000,
+      "houseDamaged": 97000,
+      "economicLossUSD": 2000000000,
+      "severity": "Moderate",
+      "description": "Flash floods affected parts of Punjab, KP, Sindh, and Balochistan. Multiple provinces hit simultaneously.",
+      "mostAffectedProvince": "Multiple (Punjab, KP, Balochistan)",
+      "floodType": "Flash Floods"
+    },
+    {
+      "year": 2014,
+      "totalDeaths": 367,
+      "totalInjured": 1860,
+      "peopleAffected": 2500000,
+      "districtsAffected": 32,
+      "housesDestroyed": 129000,
+      "houseDamaged": 250000,
+      "economicLossUSD": 2100000000,
+      "severity": "Severe",
+      "description": "Severe riverine and flash flooding, especially along the Chenab and Jhelum rivers. Punjab and AJK worst affected.",
+      "mostAffectedProvince": "Punjab",
+      "floodType": "Riverine Flooding"
+    },
+    {
+      "year": 2015,
+      "totalDeaths": 238,
+      "totalInjured": 945,
+      "peopleAffected": 1500000,
+      "districtsAffected": 22,
+      "housesDestroyed": 28000,
+      "houseDamaged": 67000,
+      "economicLossUSD": 1000000000,
+      "severity": "Moderate",
+      "description": "Monsoon rains combined with GLOF (Glacial Lake Outburst Flood) events. KP and Chitral regions severely hit.",
+      "mostAffectedProvince": "Khyber Pakhtunkhwa",
+      "floodType": "Monsoon and GLOF"
+    },
+    {
+      "year": 2016,
+      "totalDeaths": 262,
+      "totalInjured": 780,
+      "peopleAffected": 1200000,
+      "districtsAffected": 18,
+      "housesDestroyed": 21000,
+      "houseDamaged": 55000,
+      "economicLossUSD": 800000000,
+      "severity": "Moderate",
+      "description": "Pre-monsoon and monsoon rains caused flash floods. 56% of fatalities occurred in KP. Karakoram Highway blocked.",
+      "mostAffectedProvince": "Khyber Pakhtunkhwa",
+      "floodType": "Flash Floods"
+    },
+    {
+      "year": 2017,
+      "totalDeaths": 164,
+      "totalInjured": 450,
+      "peopleAffected": 600000,
+      "districtsAffected": 15,
+      "housesDestroyed": 12000,
+      "houseDamaged": 38000,
+      "economicLossUSD": 500000000,
+      "severity": "Low-Moderate",
+      "description": "Localized monsoon impacts. Riverine and low-lying districts primarily affected.",
+      "mostAffectedProvince": "KP and Punjab",
+      "floodType": "Monsoon Flooding"
+    },
+    {
+      "year": 2018,
+      "totalDeaths": 186,
+      "totalInjured": 520,
+      "peopleAffected": 800000,
+      "districtsAffected": 17,
+      "housesDestroyed": 15000,
+      "houseDamaged": 42000,
+      "economicLossUSD": 600000000,
+      "severity": "Low-Moderate",
+      "description": "Typical seasonal flooding with manageable impacts compared to mega-flood years.",
+      "mostAffectedProvince": "Sindh and Balochistan",
+      "floodType": "Monsoon Flooding"
+    },
+    {
+      "year": 2019,
+      "totalDeaths": 225,
+      "totalInjured": 680,
+      "peopleAffected": 950000,
+      "districtsAffected": 20,
+      "housesDestroyed": 18000,
+      "houseDamaged": 48000,
+      "economicLossUSD": 700000000,
+      "severity": "Moderate",
+      "description": "Widespread flooding and landslides, particularly in KP, Balochistan, and AJK. Mardan and Dir Lower worst hit.",
+      "mostAffectedProvince": "Khyber Pakhtunkhwa",
+      "floodType": "Flash Floods and Landslides"
+    },
+    {
+      "year": 2020,
+      "totalDeaths": 410,
+      "totalInjured": 890,
+      "peopleAffected": 2000000,
+      "districtsAffected": 24,
+      "housesDestroyed": 200000,
+      "houseDamaged": 350000,
+      "economicLossUSD": 1500000000,
+      "severity": "Severe",
+      "description": "Record-breaking monsoon rainfall. Sindh declared calamity-affected. Karachi received heaviest rainfall in 89 years (490mm in August).",
+      "mostAffectedProvince": "Sindh",
+      "floodType": "Urban and Monsoon Flooding"
+    },
+    {
+      "year": 2021,
+      "totalDeaths": 160,
+      "totalInjured": 400,
+      "peopleAffected": 500000,
+      "districtsAffected": 14,
+      "housesDestroyed": 10000,
+      "houseDamaged": 30000,
+      "economicLossUSD": 400000000,
+      "severity": "Low-Moderate",
+      "description": "Less catastrophic than surrounding years but still resulted in significant rain-related fatalities across multiple provinces.",
+      "mostAffectedProvince": "Khyber Pakhtunkhwa",
+      "floodType": "Monsoon Flooding"
+    },
+    {
+      "year": 2022,
+      "totalDeaths": 1739,
+      "totalInjured": 12867,
+      "peopleAffected": 33000000,
+      "districtsAffected": 90,
+      "housesDestroyed": 2100000,
+      "houseDamaged": 2800000,
+      "economicLossUSD": 40000000000,
+      "severity": "Catastrophic",
+      "description": "The 'Monsoon on Steroids'. Nearly 1/3 of country submerged. 84 districts declared calamity-hit. Worst disaster since 2010.",
+      "mostAffectedProvince": "Sindh and Balochistan",
+      "floodType": "Mega Monsoon Flooding"
+    },
+    {
+      "year": 2023,
+      "totalDeaths": 226,
+      "totalInjured": 349,
+      "peopleAffected": 1000000,
+      "districtsAffected": 18,
+      "housesDestroyed": 5800,
+      "houseDamaged": 28000,
+      "economicLossUSD": 500000000,
+      "severity": "Moderate",
+      "description": "Recovery year post-2022. Localized flash floods. Sutlej River belt badly hit, causing displacement of nearly 1 million.",
+      "mostAffectedProvince": "Punjab",
+      "floodType": "Flash Floods and Riverine"
+    },
+    {
+      "year": 2024,
+      "totalDeaths": 354,
+      "totalInjured": 666,
+      "peopleAffected": 1500000,
+      "districtsAffected": 22,
+      "housesDestroyed": 20653,
+      "houseDamaged": 55000,
+      "economicLossUSD": 800000000,
+      "severity": "Moderate-Severe",
+      "description": "Significantly above-average monsoon rainfall. 13 districts in Balochistan declared calamity-hit. Heavy impact in Sindh and Punjab.",
+      "mostAffectedProvince": "Balochistan and Sindh",
+      "floodType": "Monsoon and Flash Floods"
+    },
+    {
+      "year": 2025,
+      "totalDeaths": 1037,
+      "totalInjured": 1067,
+      "peopleAffected": 6900000,
+      "districtsAffected": 70,
+      "housesDestroyed": 229760,
+      "houseDamaged": 450000,
+      "economicLossUSD": 5000000000,
+      "severity": "Catastrophic",
+      "description": "Devastating monsoon floods from June-September. Worst riverine flooding in decades in Punjab. 2.5M acres farmland damaged.",
+      "mostAffectedProvince": "Punjab and Khyber Pakhtunkhwa",
+      "floodType": "Flash and Riverine Flooding"
+    },
+    {
+      "year": 2026,
+      "totalDeaths": 180,
+      "totalInjured": 350,
+      "peopleAffected": 600000,
+      "districtsAffected": 15,
+      "housesDestroyed": 8000,
+      "houseDamaged": 25000,
+      "economicLossUSD": 300000000,
+      "severity": "Moderate (Ongoing)",
+      "description": "Ongoing monsoon season as of September 2026. Urban flooding in Rawalpindi/Islamabad. Flash floods and landslide risks in northern regions.",
+      "mostAffectedProvince": "KP and Gilgit-Baltistan",
+      "floodType": "Urban and Flash Floods"
+    }
+  ],
+  "provincialDeaths": {
+    "2010": {
+      "Khyber Pakhtunkhwa": 1156,
+      "Sindh": 411,
+      "Balochistan": 183,
+      "Punjab": 110,
+      "Gilgit-Baltistan": 75,
+      "AJK": 50
+    },
+    "2011": {
+      "Sindh": 390,
+      "Balochistan": 25,
+      "Punjab": 12,
+      "Khyber Pakhtunkhwa": 7
+    },
+    "2012": {
+      "Sindh": 220,
+      "Balochistan": 110,
+      "Punjab": 85,
+      "Khyber Pakhtunkhwa": 65
+    },
+    "2013": {
+      "Punjab": 95,
+      "Khyber Pakhtunkhwa": 90,
+      "Balochistan": 80,
+      "Sindh": 45,
+      "AJK": 23
+    },
+    "2014": {
+      "Punjab": 158,
+      "AJK": 85,
+      "Khyber Pakhtunkhwa": 60,
+      "Sindh": 35,
+      "Gilgit-Baltistan": 29
+    },
+    "2015": {
+      "Khyber Pakhtunkhwa": 105,
+      "Punjab": 68,
+      "Balochistan": 35,
+      "Sindh": 20,
+      "Gilgit-Baltistan": 10
+    },
+    "2016": {
+      "Khyber Pakhtunkhwa": 147,
+      "Punjab": 55,
+      "Balochistan": 38,
+      "Sindh": 15,
+      "Gilgit-Baltistan": 7
+    },
+    "2017": {
+      "Khyber Pakhtunkhwa": 65,
+      "Punjab": 45,
+      "Balochistan": 30,
+      "Sindh": 18,
+      "Gilgit-Baltistan": 6
+    },
+    "2018": {
+      "Sindh": 55,
+      "Balochistan": 50,
+      "Punjab": 40,
+      "Khyber Pakhtunkhwa": 35,
+      "AJK": 6
+    },
+    "2019": {
+      "Khyber Pakhtunkhwa": 95,
+      "Balochistan": 52,
+      "Punjab": 40,
+      "AJK": 25,
+      "Sindh": 13
+    },
+    "2020": {
+      "Sindh": 180,
+      "Khyber Pakhtunkhwa": 85,
+      "Balochistan": 72,
+      "Punjab": 55,
+      "AJK": 18
+    },
+    "2021": {
+      "Khyber Pakhtunkhwa": 60,
+      "Punjab": 47,
+      "Balochistan": 24,
+      "AJK": 21,
+      "Sindh": 8
+    },
+    "2022": {
+      "Sindh": 870,
+      "Balochistan": 330,
+      "Khyber Pakhtunkhwa": 330,
+      "Punjab": 165,
+      "AJK": 25,
+      "Gilgit-Baltistan": 19
+    },
+    "2023": {
+      "Punjab": 72,
+      "Khyber Pakhtunkhwa": 65,
+      "Balochistan": 48,
+      "Sindh": 28,
+      "Gilgit-Baltistan": 13
+    },
+    "2024": {
+      "Balochistan": 118,
+      "Sindh": 95,
+      "Punjab": 72,
+      "Khyber Pakhtunkhwa": 55,
+      "AJK": 14
+    },
+    "2025": {
+      "Khyber Pakhtunkhwa": 509,
+      "Punjab": 322,
+      "Sindh": 90,
+      "Balochistan": 65,
+      "Gilgit-Baltistan": 35,
+      "AJK": 16
+    },
+    "2026": {
+      "Khyber Pakhtunkhwa": 60,
+      "Punjab": 45,
+      "Sindh": 30,
+      "Balochistan": 25,
+      "Gilgit-Baltistan": 15,
+      "AJK": 5
+    }
+  },
+  "districtData": [
+    {
+      "year": 2010,
+      "province": "Khyber Pakhtunkhwa",
+      "district": "Nowshera",
+      "deaths": 280,
+      "peopleAffected": 1200000,
+      "severityLevel": "Critical",
+      "floodType": "Riverine"
+    },
+    {
+      "year": 2010,
+      "province": "Khyber Pakhtunkhwa",
+      "district": "Charsadda",
+      "deaths": 250,
+      "peopleAffected": 900000,
+      "severityLevel": "Critical",
+      "floodType": "Riverine"
+    },
+    {
+      "year": 2010,
+      "province": "Khyber Pakhtunkhwa",
+      "district": "Swat",
+      "deaths": 210,
+      "peopleAffected": 750000,
+      "severityLevel": "Critical",
+      "floodType": "Flash Flood"
+    },
+    {
+      "year": 2010,
+      "province": "Khyber Pakhtunkhwa",
+      "district": "Kohistan",
+      "deaths": 130,
+      "peopleAffected": 200000,
+      "severityLevel": "Severe",
+      "floodType": "Flash Flood"
+    },
+    {
+      "year": 2010,
+      "province": "Khyber Pakhtunkhwa",
+      "district": "Shangla",
+      "deaths": 85,
+      "peopleAffected": 180000,
+      "severityLevel": "Severe",
+      "floodType": "Flash Flood"
+    },
+    {
+      "year": 2010,
+      "province": "Khyber Pakhtunkhwa",
+      "district": "D.I. Khan",
+      "deaths": 75,
+      "peopleAffected": 500000,
+      "severityLevel": "Severe",
+      "floodType": "Riverine"
+    },
+    {
+      "year": 2010,
+      "province": "Khyber Pakhtunkhwa",
+      "district": "Tank",
+      "deaths": 45,
+      "peopleAffected": 200000,
+      "severityLevel": "Severe",
+      "floodType": "Riverine"
+    },
+    {
+      "year": 2010,
+      "province": "Khyber Pakhtunkhwa",
+      "district": "Upper Dir",
+      "deaths": 40,
+      "peopleAffected": 150000,
+      "severityLevel": "Moderate",
+      "floodType": "Flash Flood"
+    },
+    {
+      "year": 2010,
+      "province": "Khyber Pakhtunkhwa",
+      "district": "Lower Dir",
+      "deaths": 35,
+      "peopleAffected": 140000,
+      "severityLevel": "Moderate",
+      "floodType": "Flash Flood"
+    },
+    {
+      "year": 2010,
+      "province": "Sindh",
+      "district": "Jacobabad",
+      "deaths": 80,
+      "peopleAffected": 900000,
+      "severityLevel": "Critical",
+      "floodType": "Riverine"
+    },
+    {
+      "year": 2010,
+      "province": "Sindh",
+      "district": "Kashmore",
+      "deaths": 65,
+      "peopleAffected": 700000,
+      "severityLevel": "Critical",
+      "floodType": "Riverine"
+    },
+    {
+      "year": 2010,
+      "province": "Sindh",
+      "district": "Shikarpur",
+      "deaths": 55,
+      "peopleAffected": 600000,
+      "severityLevel": "Severe",
+      "floodType": "Riverine"
+    },
+    {
+      "year": 2010,
+      "province": "Sindh",
+      "district": "Ghotki",
+      "deaths": 45,
+      "peopleAffected": 500000,
+      "severityLevel": "Severe",
+      "floodType": "Riverine"
+    },
+    {
+      "year": 2010,
+      "province": "Sindh",
+      "district": "Qambar Shahdad Kot",
+      "deaths": 40,
+      "peopleAffected": 600000,
+      "severityLevel": "Severe",
+      "floodType": "Riverine"
+    },
+    {
+      "year": 2010,
+      "province": "Sindh",
+      "district": "Dadu",
+      "deaths": 40,
+      "peopleAffected": 800000,
+      "severityLevel": "Severe",
+      "floodType": "Riverine"
+    },
+    {
+      "year": 2010,
+      "province": "Sindh",
+      "district": "Jamshoro",
+      "deaths": 35,
+      "peopleAffected": 400000,
+      "severityLevel": "Severe",
+      "floodType": "Riverine"
+    },
+    {
+      "year": 2010,
+      "province": "Sindh",
+      "district": "Thatta",
+      "deaths": 30,
+      "peopleAffected": 500000,
+      "severityLevel": "Severe",
+      "floodType": "Riverine"
+    },
+    {
+      "year": 2010,
+      "province": "Punjab",
+      "district": "D.G. Khan",
+      "deaths": 30,
+      "peopleAffected": 600000,
+      "severityLevel": "Severe",
+      "floodType": "Riverine"
+    },
+    {
+      "year": 2010,
+      "province": "Punjab",
+      "district": "Rajanpur",
+      "deaths": 25,
+      "peopleAffected": 500000,
+      "severityLevel": "Severe",
+      "floodType": "Riverine"
+    },
+    {
+      "year": 2010,
+      "province": "Punjab",
+      "district": "Rahim Yar Khan",
+      "deaths": 20,
+      "peopleAffected": 400000,
+      "severityLevel": "Severe",
+      "floodType": "Riverine"
+    },
+    {
+      "year": 2010,
+      "province": "Punjab",
+      "district": "Layyah",
+      "deaths": 15,
+      "peopleAffected": 350000,
+      "severityLevel": "Moderate",
+      "floodType": "Riverine"
+    },
+    {
+      "year": 2010,
+      "province": "Punjab",
+      "district": "Bhakkar",
+      "deaths": 10,
+      "peopleAffected": 300000,
+      "severityLevel": "Moderate",
+      "floodType": "Riverine"
+    },
+    {
+      "year": 2010,
+      "province": "Punjab",
+      "district": "Mianwali",
+      "deaths": 10,
+      "peopleAffected": 250000,
+      "severityLevel": "Moderate",
+      "floodType": "Riverine"
+    },
+    {
+      "year": 2010,
+      "province": "Balochistan",
+      "district": "Jaffarabad",
+      "deaths": 65,
+      "peopleAffected": 400000,
+      "severityLevel": "Critical",
+      "floodType": "Riverine"
+    },
+    {
+      "year": 2010,
+      "province": "Balochistan",
+      "district": "Nasirabad",
+      "deaths": 55,
+      "peopleAffected": 350000,
+      "severityLevel": "Severe",
+      "floodType": "Riverine"
+    },
+    {
+      "year": 2010,
+      "province": "Balochistan",
+      "district": "Sibi",
+      "deaths": 40,
+      "peopleAffected": 200000,
+      "severityLevel": "Severe",
+      "floodType": "Flash Flood"
+    },
+    {
+      "year": 2011,
+      "province": "Sindh",
+      "district": "Badin",
+      "deaths": 64,
+      "peopleAffected": 1021301,
+      "severityLevel": "Critical",
+      "floodType": "Monsoon"
+    },
+    {
+      "year": 2011,
+      "province": "Sindh",
+      "district": "Mirpurkhas",
+      "deaths": 55,
+      "peopleAffected": 800000,
+      "severityLevel": "Critical",
+      "floodType": "Monsoon"
+    },
+    {
+      "year": 2011,
+      "province": "Sindh",
+      "district": "Tharparkar",
+      "deaths": 45,
+      "peopleAffected": 600000,
+      "severityLevel": "Severe",
+      "floodType": "Monsoon"
+    },
+    {
+      "year": 2011,
+      "province": "Sindh",
+      "district": "Sanghar",
+      "deaths": 40,
+      "peopleAffected": 500000,
+      "severityLevel": "Severe",
+      "floodType": "Monsoon"
+    },
+    {
+      "year": 2011,
+      "province": "Sindh",
+      "district": "Shaheed Benazirabad",
+      "deaths": 35,
+      "peopleAffected": 400000,
+      "severityLevel": "Severe",
+      "floodType": "Monsoon"
+    },
+    {
+      "year": 2011,
+      "province": "Sindh",
+      "district": "Tando Allahyar",
+      "deaths": 40,
+      "peopleAffected": 350000,
+      "severityLevel": "Severe",
+      "floodType": "Monsoon"
+    },
+    {
+      "year": 2011,
+      "province": "Sindh",
+      "district": "Tando Muhammad Khan",
+      "deaths": 35,
+      "peopleAffected": 300000,
+      "severityLevel": "Severe",
+      "floodType": "Monsoon"
+    },
+    {
+      "year": 2011,
+      "province": "Sindh",
+      "district": "Umerkot",
+      "deaths": 30,
+      "peopleAffected": 350000,
+      "severityLevel": "Severe",
+      "floodType": "Monsoon"
+    },
+    {
+      "year": 2012,
+      "province": "Sindh",
+      "district": "Kashmore",
+      "deaths": 50,
+      "peopleAffected": 500000,
+      "severityLevel": "Critical",
+      "floodType": "Riverine"
+    },
+    {
+      "year": 2012,
+      "province": "Sindh",
+      "district": "Jacobabad",
+      "deaths": 45,
+      "peopleAffected": 400000,
+      "severityLevel": "Severe",
+      "floodType": "Riverine"
+    },
+    {
+      "year": 2012,
+      "province": "Sindh",
+      "district": "Shikarpur",
+      "deaths": 35,
+      "peopleAffected": 350000,
+      "severityLevel": "Severe",
+      "floodType": "Riverine"
+    },
+    {
+      "year": 2012,
+      "province": "Balochistan",
+      "district": "Jaffarabad",
+      "deaths": 40,
+      "peopleAffected": 300000,
+      "severityLevel": "Severe",
+      "floodType": "Riverine"
+    },
+    {
+      "year": 2012,
+      "province": "Balochistan",
+      "district": "Naseerabad",
+      "deaths": 35,
+      "peopleAffected": 280000,
+      "severityLevel": "Severe",
+      "floodType": "Riverine"
+    },
+    {
+      "year": 2012,
+      "province": "Punjab",
+      "district": "Rajanpur",
+      "deaths": 30,
+      "peopleAffected": 250000,
+      "severityLevel": "Severe",
+      "floodType": "Riverine"
+    },
+    {
+      "year": 2013,
+      "province": "Punjab",
+      "district": "Rajanpur",
+      "deaths": 25,
+      "peopleAffected": 200000,
+      "severityLevel": "Severe",
+      "floodType": "Flash Flood"
+    },
+    {
+      "year": 2013,
+      "province": "Punjab",
+      "district": "D.G. Khan",
+      "deaths": 20,
+      "peopleAffected": 180000,
+      "severityLevel": "Severe",
+      "floodType": "Flash Flood"
+    },
+    {
+      "year": 2013,
+      "province": "Khyber Pakhtunkhwa",
+      "district": "Chitral",
+      "deaths": 25,
+      "peopleAffected": 80000,
+      "severityLevel": "Severe",
+      "floodType": "Flash Flood"
+    },
+    {
+      "year": 2013,
+      "province": "Khyber Pakhtunkhwa",
+      "district": "Peshawar",
+      "deaths": 18,
+      "peopleAffected": 150000,
+      "severityLevel": "Moderate",
+      "floodType": "Urban Flooding"
+    },
+    {
+      "year": 2013,
+      "province": "Balochistan",
+      "district": "Sibi",
+      "deaths": 22,
+      "peopleAffected": 100000,
+      "severityLevel": "Severe",
+      "floodType": "Flash Flood"
+    },
+    {
+      "year": 2013,
+      "province": "Balochistan",
+      "district": "Jaffarabad",
+      "deaths": 20,
+      "peopleAffected": 120000,
+      "severityLevel": "Severe",
+      "floodType": "Riverine"
+    },
+    {
+      "year": 2014,
+      "province": "Punjab",
+      "district": "Sialkot",
+      "deaths": 30,
+      "peopleAffected": 300000,
+      "severityLevel": "Severe",
+      "floodType": "Riverine"
+    },
+    {
+      "year": 2014,
+      "province": "Punjab",
+      "district": "Narowal",
+      "deaths": 22,
+      "peopleAffected": 200000,
+      "severityLevel": "Severe",
+      "floodType": "Riverine"
+    },
+    {
+      "year": 2014,
+      "province": "Punjab",
+      "district": "Lahore",
+      "deaths": 18,
+      "peopleAffected": 250000,
+      "severityLevel": "Moderate",
+      "floodType": "Urban Flooding"
+    },
+    {
+      "year": 2014,
+      "province": "Punjab",
+      "district": "Gujranwala",
+      "deaths": 15,
+      "peopleAffected": 200000,
+      "severityLevel": "Moderate",
+      "floodType": "Riverine"
+    },
+    {
+      "year": 2014,
+      "province": "Punjab",
+      "district": "Mandi Bahauddin",
+      "deaths": 14,
+      "peopleAffected": 180000,
+      "severityLevel": "Moderate",
+      "floodType": "Riverine"
+    },
+    {
+      "year": 2014,
+      "province": "Punjab",
+      "district": "Gujrat",
+      "deaths": 12,
+      "peopleAffected": 170000,
+      "severityLevel": "Moderate",
+      "floodType": "Riverine"
+    },
+    {
+      "year": 2014,
+      "province": "Punjab",
+      "district": "Hafizabad",
+      "deaths": 10,
+      "peopleAffected": 120000,
+      "severityLevel": "Moderate",
+      "floodType": "Riverine"
+    },
+    {
+      "year": 2014,
+      "province": "Punjab",
+      "district": "Jhelum",
+      "deaths": 12,
+      "peopleAffected": 150000,
+      "severityLevel": "Moderate",
+      "floodType": "Riverine"
+    },
+    {
+      "year": 2014,
+      "province": "Punjab",
+      "district": "Chiniot",
+      "deaths": 8,
+      "peopleAffected": 100000,
+      "severityLevel": "Moderate",
+      "floodType": "Riverine"
+    },
+    {
+      "year": 2014,
+      "province": "Punjab",
+      "district": "Sargodha",
+      "deaths": 10,
+      "peopleAffected": 130000,
+      "severityLevel": "Moderate",
+      "floodType": "Riverine"
+    },
+    {
+      "year": 2015,
+      "province": "Khyber Pakhtunkhwa",
+      "district": "Chitral",
+      "deaths": 45,
+      "peopleAffected": 200000,
+      "severityLevel": "Critical",
+      "floodType": "GLOF and Flash Flood"
+    },
+    {
+      "year": 2015,
+      "province": "Khyber Pakhtunkhwa",
+      "district": "Dir Upper",
+      "deaths": 20,
+      "peopleAffected": 100000,
+      "severityLevel": "Severe",
+      "floodType": "Flash Flood"
+    },
+    {
+      "year": 2015,
+      "province": "Khyber Pakhtunkhwa",
+      "district": "Swat",
+      "deaths": 15,
+      "peopleAffected": 150000,
+      "severityLevel": "Moderate",
+      "floodType": "Flash Flood"
+    },
+    {
+      "year": 2015,
+      "province": "Punjab",
+      "district": "Rajanpur",
+      "deaths": 18,
+      "peopleAffected": 180000,
+      "severityLevel": "Severe",
+      "floodType": "Riverine"
+    },
+    {
+      "year": 2015,
+      "province": "Punjab",
+      "district": "D.G. Khan",
+      "deaths": 15,
+      "peopleAffected": 150000,
+      "severityLevel": "Moderate",
+      "floodType": "Riverine"
+    },
+    {
+      "year": 2016,
+      "province": "Khyber Pakhtunkhwa",
+      "district": "Peshawar",
+      "deaths": 30,
+      "peopleAffected": 180000,
+      "severityLevel": "Severe",
+      "floodType": "Flash Flood"
+    },
+    {
+      "year": 2016,
+      "province": "Khyber Pakhtunkhwa",
+      "district": "Charsadda",
+      "deaths": 25,
+      "peopleAffected": 150000,
+      "severityLevel": "Severe",
+      "floodType": "Flash Flood"
+    },
+    {
+      "year": 2016,
+      "province": "Khyber Pakhtunkhwa",
+      "district": "Nowshera",
+      "deaths": 22,
+      "peopleAffected": 140000,
+      "severityLevel": "Moderate",
+      "floodType": "Flash Flood"
+    },
+    {
+      "year": 2016,
+      "province": "Balochistan",
+      "district": "Lasbela",
+      "deaths": 15,
+      "peopleAffected": 80000,
+      "severityLevel": "Moderate",
+      "floodType": "Flash Flood"
+    },
+    {
+      "year": 2017,
+      "province": "Khyber Pakhtunkhwa",
+      "district": "D.I. Khan",
+      "deaths": 18,
+      "peopleAffected": 80000,
+      "severityLevel": "Moderate",
+      "floodType": "Flash Flood"
+    },
+    {
+      "year": 2017,
+      "province": "Punjab",
+      "district": "Rajanpur",
+      "deaths": 12,
+      "peopleAffected": 100000,
+      "severityLevel": "Moderate",
+      "floodType": "Riverine"
+    },
+    {
+      "year": 2017,
+      "province": "Punjab",
+      "district": "Muzaffargarh",
+      "deaths": 10,
+      "peopleAffected": 90000,
+      "severityLevel": "Moderate",
+      "floodType": "Riverine"
+    },
+    {
+      "year": 2018,
+      "province": "Sindh",
+      "district": "Karachi",
+      "deaths": 20,
+      "peopleAffected": 150000,
+      "severityLevel": "Moderate",
+      "floodType": "Urban Flooding"
+    },
+    {
+      "year": 2018,
+      "province": "Balochistan",
+      "district": "Quetta",
+      "deaths": 18,
+      "peopleAffected": 80000,
+      "severityLevel": "Moderate",
+      "floodType": "Flash Flood"
+    },
+    {
+      "year": 2018,
+      "province": "Balochistan",
+      "district": "Lasbela",
+      "deaths": 12,
+      "peopleAffected": 60000,
+      "severityLevel": "Moderate",
+      "floodType": "Flash Flood"
+    },
+    {
+      "year": 2019,
+      "province": "Khyber Pakhtunkhwa",
+      "district": "Mardan",
+      "deaths": 25,
+      "peopleAffected": 100000,
+      "severityLevel": "Severe",
+      "floodType": "Flash Flood"
+    },
+    {
+      "year": 2019,
+      "province": "Khyber Pakhtunkhwa",
+      "district": "Dir Lower",
+      "deaths": 20,
+      "peopleAffected": 80000,
+      "severityLevel": "Severe",
+      "floodType": "Flash Flood"
+    },
+    {
+      "year": 2019,
+      "province": "Balochistan",
+      "district": "Lasbela",
+      "deaths": 18,
+      "peopleAffected": 70000,
+      "severityLevel": "Moderate",
+      "floodType": "Flash Flood"
+    },
+    {
+      "year": 2019,
+      "province": "Balochistan",
+      "district": "Turbat",
+      "deaths": 12,
+      "peopleAffected": 50000,
+      "severityLevel": "Moderate",
+      "floodType": "Flash Flood"
+    },
+    {
+      "year": 2019,
+      "province": "AJK",
+      "district": "Poonch",
+      "deaths": 15,
+      "peopleAffected": 40000,
+      "severityLevel": "Moderate",
+      "floodType": "Landslide"
+    },
+    {
+      "year": 2020,
+      "province": "Sindh",
+      "district": "Karachi",
+      "deaths": 41,
+      "peopleAffected": 500000,
+      "severityLevel": "Critical",
+      "floodType": "Urban Flooding"
+    },
+    {
+      "year": 2020,
+      "province": "Sindh",
+      "district": "Hyderabad",
+      "deaths": 30,
+      "peopleAffected": 250000,
+      "severityLevel": "Severe",
+      "floodType": "Urban Flooding"
+    },
+    {
+      "year": 2020,
+      "province": "Sindh",
+      "district": "Mirpur Khas",
+      "deaths": 25,
+      "peopleAffected": 200000,
+      "severityLevel": "Severe",
+      "floodType": "Monsoon"
+    },
+    {
+      "year": 2020,
+      "province": "Sindh",
+      "district": "Sukkur",
+      "deaths": 20,
+      "peopleAffected": 180000,
+      "severityLevel": "Severe",
+      "floodType": "Riverine"
+    },
+    {
+      "year": 2020,
+      "province": "Sindh",
+      "district": "Larkana",
+      "deaths": 18,
+      "peopleAffected": 160000,
+      "severityLevel": "Severe",
+      "floodType": "Monsoon"
+    },
+    {
+      "year": 2020,
+      "province": "Sindh",
+      "district": "Dadu",
+      "deaths": 22,
+      "peopleAffected": 200000,
+      "severityLevel": "Severe",
+      "floodType": "Hill Torrent"
+    },
+    {
+      "year": 2021,
+      "province": "Khyber Pakhtunkhwa",
+      "district": "Swat",
+      "deaths": 15,
+      "peopleAffected": 50000,
+      "severityLevel": "Moderate",
+      "floodType": "Flash Flood"
+    },
+    {
+      "year": 2021,
+      "province": "Punjab",
+      "district": "Rawalpindi",
+      "deaths": 12,
+      "peopleAffected": 60000,
+      "severityLevel": "Moderate",
+      "floodType": "Urban Flooding"
+    },
+    {
+      "year": 2021,
+      "province": "Balochistan",
+      "district": "Quetta",
+      "deaths": 10,
+      "peopleAffected": 40000,
+      "severityLevel": "Moderate",
+      "floodType": "Flash Flood"
+    },
+    {
+      "year": 2022,
+      "province": "Sindh",
+      "district": "Dadu",
+      "deaths": 120,
+      "peopleAffected": 2500000,
+      "severityLevel": "Critical",
+      "floodType": "Mega Flood"
+    },
+    {
+      "year": 2022,
+      "province": "Sindh",
+      "district": "Jacobabad",
+      "deaths": 95,
+      "peopleAffected": 1500000,
+      "severityLevel": "Critical",
+      "floodType": "Mega Flood"
+    },
+    {
+      "year": 2022,
+      "province": "Sindh",
+      "district": "Larkana",
+      "deaths": 85,
+      "peopleAffected": 1200000,
+      "severityLevel": "Critical",
+      "floodType": "Mega Flood"
+    },
+    {
+      "year": 2022,
+      "province": "Sindh",
+      "district": "Qambar Shahdadkot",
+      "deaths": 80,
+      "peopleAffected": 1100000,
+      "severityLevel": "Critical",
+      "floodType": "Mega Flood"
+    },
+    {
+      "year": 2022,
+      "province": "Sindh",
+      "district": "Sukkur",
+      "deaths": 65,
+      "peopleAffected": 800000,
+      "severityLevel": "Severe",
+      "floodType": "Mega Flood"
+    },
+    {
+      "year": 2022,
+      "province": "Sindh",
+      "district": "Khairpur",
+      "deaths": 60,
+      "peopleAffected": 900000,
+      "severityLevel": "Severe",
+      "floodType": "Mega Flood"
+    },
+    {
+      "year": 2022,
+      "province": "Sindh",
+      "district": "Sanghar",
+      "deaths": 55,
+      "peopleAffected": 700000,
+      "severityLevel": "Severe",
+      "floodType": "Mega Flood"
+    },
+    {
+      "year": 2022,
+      "province": "Sindh",
+      "district": "Mirpurkhas",
+      "deaths": 50,
+      "peopleAffected": 650000,
+      "severityLevel": "Severe",
+      "floodType": "Monsoon"
+    },
+    {
+      "year": 2022,
+      "province": "Sindh",
+      "district": "Badin",
+      "deaths": 45,
+      "peopleAffected": 600000,
+      "severityLevel": "Severe",
+      "floodType": "Monsoon"
+    },
+    {
+      "year": 2022,
+      "province": "Sindh",
+      "district": "Thatta",
+      "deaths": 40,
+      "peopleAffected": 500000,
+      "severityLevel": "Severe",
+      "floodType": "Monsoon"
+    },
+    {
+      "year": 2022,
+      "province": "Balochistan",
+      "district": "Jaffarabad",
+      "deaths": 70,
+      "peopleAffected": 800000,
+      "severityLevel": "Critical",
+      "floodType": "Flash Flood"
+    },
+    {
+      "year": 2022,
+      "province": "Balochistan",
+      "district": "Jhal Magsi",
+      "deaths": 55,
+      "peopleAffected": 500000,
+      "severityLevel": "Critical",
+      "floodType": "Flash Flood"
+    },
+    {
+      "year": 2022,
+      "province": "Balochistan",
+      "district": "Lasbela",
+      "deaths": 50,
+      "peopleAffected": 400000,
+      "severityLevel": "Severe",
+      "floodType": "Flash Flood"
+    },
+    {
+      "year": 2022,
+      "province": "Balochistan",
+      "district": "Naseerabad",
+      "deaths": 45,
+      "peopleAffected": 350000,
+      "severityLevel": "Severe",
+      "floodType": "Flash Flood"
+    },
+    {
+      "year": 2022,
+      "province": "Balochistan",
+      "district": "Quetta",
+      "deaths": 35,
+      "peopleAffected": 200000,
+      "severityLevel": "Severe",
+      "floodType": "Flash Flood"
+    },
+    {
+      "year": 2022,
+      "province": "Punjab",
+      "district": "Rajanpur",
+      "deaths": 45,
+      "peopleAffected": 600000,
+      "severityLevel": "Critical",
+      "floodType": "Riverine"
+    },
+    {
+      "year": 2022,
+      "province": "Punjab",
+      "district": "D.G. Khan",
+      "deaths": 40,
+      "peopleAffected": 500000,
+      "severityLevel": "Severe",
+      "floodType": "Hill Torrent"
+    },
+    {
+      "year": 2022,
+      "province": "Punjab",
+      "district": "Muzaffargarh",
+      "deaths": 30,
+      "peopleAffected": 400000,
+      "severityLevel": "Severe",
+      "floodType": "Riverine"
+    },
+    {
+      "year": 2022,
+      "province": "Khyber Pakhtunkhwa",
+      "district": "D.I. Khan",
+      "deaths": 55,
+      "peopleAffected": 300000,
+      "severityLevel": "Severe",
+      "floodType": "Flash Flood"
+    },
+    {
+      "year": 2022,
+      "province": "Khyber Pakhtunkhwa",
+      "district": "Tank",
+      "deaths": 40,
+      "peopleAffected": 200000,
+      "severityLevel": "Severe",
+      "floodType": "Flash Flood"
+    },
+    {
+      "year": 2022,
+      "province": "Khyber Pakhtunkhwa",
+      "district": "Charsadda",
+      "deaths": 45,
+      "peopleAffected": 250000,
+      "severityLevel": "Severe",
+      "floodType": "Riverine"
+    },
+    {
+      "year": 2022,
+      "province": "Khyber Pakhtunkhwa",
+      "district": "Swabi",
+      "deaths": 35,
+      "peopleAffected": 180000,
+      "severityLevel": "Moderate",
+      "floodType": "Flash Flood"
+    },
+    {
+      "year": 2022,
+      "province": "Khyber Pakhtunkhwa",
+      "district": "Karak",
+      "deaths": 28,
+      "peopleAffected": 120000,
+      "severityLevel": "Moderate",
+      "floodType": "Flash Flood"
+    },
+    {
+      "year": 2023,
+      "province": "Punjab",
+      "district": "Kasur",
+      "deaths": 18,
+      "peopleAffected": 200000,
+      "severityLevel": "Severe",
+      "floodType": "Riverine"
+    },
+    {
+      "year": 2023,
+      "province": "Punjab",
+      "district": "Okara",
+      "deaths": 15,
+      "peopleAffected": 180000,
+      "severityLevel": "Moderate",
+      "floodType": "Riverine"
+    },
+    {
+      "year": 2023,
+      "province": "Punjab",
+      "district": "Bahawalnagar",
+      "deaths": 12,
+      "peopleAffected": 150000,
+      "severityLevel": "Moderate",
+      "floodType": "Riverine"
+    },
+    {
+      "year": 2023,
+      "province": "Punjab",
+      "district": "Lodhran",
+      "deaths": 10,
+      "peopleAffected": 120000,
+      "severityLevel": "Moderate",
+      "floodType": "Riverine"
+    },
+    {
+      "year": 2023,
+      "province": "Khyber Pakhtunkhwa",
+      "district": "Chitral",
+      "deaths": 15,
+      "peopleAffected": 60000,
+      "severityLevel": "Moderate",
+      "floodType": "GLOF"
+    },
+    {
+      "year": 2023,
+      "province": "Balochistan",
+      "district": "Lasbela",
+      "deaths": 14,
+      "peopleAffected": 70000,
+      "severityLevel": "Moderate",
+      "floodType": "Flash Flood"
+    },
+    {
+      "year": 2024,
+      "province": "Sindh",
+      "district": "Mirpurkhas",
+      "deaths": 18,
+      "peopleAffected": 200000,
+      "severityLevel": "Severe",
+      "floodType": "Monsoon"
+    },
+    {
+      "year": 2024,
+      "province": "Sindh",
+      "district": "Sanghar",
+      "deaths": 15,
+      "peopleAffected": 180000,
+      "severityLevel": "Severe",
+      "floodType": "Monsoon"
+    },
+    {
+      "year": 2024,
+      "province": "Sindh",
+      "district": "Badin",
+      "deaths": 14,
+      "peopleAffected": 160000,
+      "severityLevel": "Moderate",
+      "floodType": "Monsoon"
+    },
+    {
+      "year": 2024,
+      "province": "Sindh",
+      "district": "Jacobabad",
+      "deaths": 12,
+      "peopleAffected": 140000,
+      "severityLevel": "Moderate",
+      "floodType": "Riverine"
+    },
+    {
+      "year": 2024,
+      "province": "Sindh",
+      "district": "Dadu",
+      "deaths": 10,
+      "peopleAffected": 120000,
+      "severityLevel": "Moderate",
+      "floodType": "Monsoon"
+    },
+    {
+      "year": 2024,
+      "province": "Sindh",
+      "district": "Khairpur",
+      "deaths": 8,
+      "peopleAffected": 100000,
+      "severityLevel": "Moderate",
+      "floodType": "Monsoon"
+    },
+    {
+      "year": 2024,
+      "province": "Sindh",
+      "district": "Qambar Shahdadkot",
+      "deaths": 8,
+      "peopleAffected": 90000,
+      "severityLevel": "Moderate",
+      "floodType": "Monsoon"
+    },
+    {
+      "year": 2024,
+      "province": "Sindh",
+      "district": "Umerkot",
+      "deaths": 6,
+      "peopleAffected": 80000,
+      "severityLevel": "Moderate",
+      "floodType": "Monsoon"
+    },
+    {
+      "year": 2024,
+      "province": "Balochistan",
+      "district": "Jaffarabad",
+      "deaths": 22,
+      "peopleAffected": 100000,
+      "severityLevel": "Severe",
+      "floodType": "Flash Flood"
+    },
+    {
+      "year": 2024,
+      "province": "Balochistan",
+      "district": "Lasbela",
+      "deaths": 18,
+      "peopleAffected": 80000,
+      "severityLevel": "Moderate",
+      "floodType": "Flash Flood"
+    },
+    {
+      "year": 2024,
+      "province": "Balochistan",
+      "district": "Quetta",
+      "deaths": 15,
+      "peopleAffected": 70000,
+      "severityLevel": "Moderate",
+      "floodType": "Flash Flood"
+    },
+    {
+      "year": 2024,
+      "province": "Punjab",
+      "district": "Rajanpur",
+      "deaths": 16,
+      "peopleAffected": 120000,
+      "severityLevel": "Moderate",
+      "floodType": "Riverine"
+    },
+    {
+      "year": 2024,
+      "province": "Punjab",
+      "district": "D.G. Khan",
+      "deaths": 14,
+      "peopleAffected": 100000,
+      "severityLevel": "Moderate",
+      "floodType": "Hill Torrent"
+    },
+    {
+      "year": 2025,
+      "province": "Khyber Pakhtunkhwa",
+      "district": "Swat",
+      "deaths": 85,
+      "peopleAffected": 400000,
+      "severityLevel": "Critical",
+      "floodType": "Flash Flood"
+    },
+    {
+      "year": 2025,
+      "province": "Khyber Pakhtunkhwa",
+      "district": "Buner",
+      "deaths": 65,
+      "peopleAffected": 250000,
+      "severityLevel": "Critical",
+      "floodType": "Flash Flood"
+    },
+    {
+      "year": 2025,
+      "province": "Khyber Pakhtunkhwa",
+      "district": "Bhattagram",
+      "deaths": 55,
+      "peopleAffected": 180000,
+      "severityLevel": "Severe",
+      "floodType": "Flash Flood"
+    },
+    {
+      "year": 2025,
+      "province": "Khyber Pakhtunkhwa",
+      "district": "Bajur",
+      "deaths": 50,
+      "peopleAffected": 200000,
+      "severityLevel": "Severe",
+      "floodType": "Flash Flood"
+    },
+    {
+      "year": 2025,
+      "province": "Khyber Pakhtunkhwa",
+      "district": "Dir Upper",
+      "deaths": 48,
+      "peopleAffected": 150000,
+      "severityLevel": "Severe",
+      "floodType": "Flash Flood"
+    },
+    {
+      "year": 2025,
+      "province": "Khyber Pakhtunkhwa",
+      "district": "Chitral",
+      "deaths": 40,
+      "peopleAffected": 120000,
+      "severityLevel": "Severe",
+      "floodType": "GLOF"
+    },
+    {
+      "year": 2025,
+      "province": "Khyber Pakhtunkhwa",
+      "district": "Nowshera",
+      "deaths": 35,
+      "peopleAffected": 200000,
+      "severityLevel": "Severe",
+      "floodType": "Riverine"
+    },
+    {
+      "year": 2025,
+      "province": "Khyber Pakhtunkhwa",
+      "district": "Charsadda",
+      "deaths": 30,
+      "peopleAffected": 180000,
+      "severityLevel": "Moderate",
+      "floodType": "Riverine"
+    },
+    {
+      "year": 2025,
+      "province": "Punjab",
+      "district": "Multan",
+      "deaths": 55,
+      "peopleAffected": 600000,
+      "severityLevel": "Critical",
+      "floodType": "Riverine"
+    },
+    {
+      "year": 2025,
+      "province": "Punjab",
+      "district": "Muzaffargarh",
+      "deaths": 50,
+      "peopleAffected": 500000,
+      "severityLevel": "Critical",
+      "floodType": "Riverine"
+    },
+    {
+      "year": 2025,
+      "province": "Punjab",
+      "district": "Rajanpur",
+      "deaths": 45,
+      "peopleAffected": 450000,
+      "severityLevel": "Severe",
+      "floodType": "Riverine"
+    },
+    {
+      "year": 2025,
+      "province": "Punjab",
+      "district": "D.G. Khan",
+      "deaths": 40,
+      "peopleAffected": 400000,
+      "severityLevel": "Severe",
+      "floodType": "Hill Torrent"
+    },
+    {
+      "year": 2025,
+      "province": "Punjab",
+      "district": "Lahore",
+      "deaths": 30,
+      "peopleAffected": 350000,
+      "severityLevel": "Severe",
+      "floodType": "Urban Flooding"
+    },
+    {
+      "year": 2025,
+      "province": "Punjab",
+      "district": "Rahim Yar Khan",
+      "deaths": 28,
+      "peopleAffected": 300000,
+      "severityLevel": "Moderate",
+      "floodType": "Riverine"
+    },
+    {
+      "year": 2025,
+      "province": "Sindh",
+      "district": "Karachi",
+      "deaths": 22,
+      "peopleAffected": 350000,
+      "severityLevel": "Severe",
+      "floodType": "Urban Flooding"
+    },
+    {
+      "year": 2025,
+      "province": "Sindh",
+      "district": "Hyderabad",
+      "deaths": 18,
+      "peopleAffected": 200000,
+      "severityLevel": "Moderate",
+      "floodType": "Urban Flooding"
+    },
+    {
+      "year": 2025,
+      "province": "Sindh",
+      "district": "Mirpurkhas",
+      "deaths": 15,
+      "peopleAffected": 180000,
+      "severityLevel": "Moderate",
+      "floodType": "Monsoon"
+    },
+    {
+      "year": 2025,
+      "province": "Sindh",
+      "district": "Thatta",
+      "deaths": 12,
+      "peopleAffected": 150000,
+      "severityLevel": "Moderate",
+      "floodType": "Monsoon"
+    },
+    {
+      "year": 2025,
+      "province": "Sindh",
+      "district": "Badin",
+      "deaths": 10,
+      "peopleAffected": 120000,
+      "severityLevel": "Moderate",
+      "floodType": "Monsoon"
+    },
+    {
+      "year": 2025,
+      "province": "Balochistan",
+      "district": "Kachhi",
+      "deaths": 20,
+      "peopleAffected": 80000,
+      "severityLevel": "Moderate",
+      "floodType": "Flash Flood"
+    },
+    {
+      "year": 2025,
+      "province": "Balochistan",
+      "district": "Khuzdar",
+      "deaths": 15,
+      "peopleAffected": 60000,
+      "severityLevel": "Moderate",
+      "floodType": "Flash Flood"
+    },
+    {
+      "year": 2025,
+      "province": "Gilgit-Baltistan",
+      "district": "Diamer",
+      "deaths": 18,
+      "peopleAffected": 40000,
+      "severityLevel": "Moderate",
+      "floodType": "GLOF"
+    },
+    {
+      "year": 2025,
+      "province": "Gilgit-Baltistan",
+      "district": "Ghizer",
+      "deaths": 12,
+      "peopleAffected": 30000,
+      "severityLevel": "Moderate",
+      "floodType": "Landslide"
+    },
+    {
+      "year": 2026,
+      "province": "Khyber Pakhtunkhwa",
+      "district": "Peshawar",
+      "deaths": 15,
+      "peopleAffected": 80000,
+      "severityLevel": "Moderate",
+      "floodType": "Urban Flooding"
+    },
+    {
+      "year": 2026,
+      "province": "Khyber Pakhtunkhwa",
+      "district": "Nowshera",
+      "deaths": 12,
+      "peopleAffected": 60000,
+      "severityLevel": "Moderate",
+      "floodType": "Flash Flood"
+    },
+    {
+      "year": 2026,
+      "province": "Khyber Pakhtunkhwa",
+      "district": "Swabi",
+      "deaths": 10,
+      "peopleAffected": 50000,
+      "severityLevel": "Moderate",
+      "floodType": "Flash Flood"
+    },
+    {
+      "year": 2026,
+      "province": "Khyber Pakhtunkhwa",
+      "district": "Mardan",
+      "deaths": 8,
+      "peopleAffected": 40000,
+      "severityLevel": "Moderate",
+      "floodType": "Flash Flood"
+    },
+    {
+      "year": 2026,
+      "province": "Punjab",
+      "district": "Rawalpindi",
+      "deaths": 18,
+      "peopleAffected": 100000,
+      "severityLevel": "Severe",
+      "floodType": "Urban Flooding"
+    },
+    {
+      "year": 2026,
+      "province": "Punjab",
+      "district": "Islamabad",
+      "deaths": 10,
+      "peopleAffected": 60000,
+      "severityLevel": "Moderate",
+      "floodType": "Urban Flooding"
+    },
+    {
+      "year": 2026,
+      "province": "Sindh",
+      "district": "Karachi",
+      "deaths": 12,
+      "peopleAffected": 80000,
+      "severityLevel": "Moderate",
+      "floodType": "Urban Flooding"
+    },
+    {
+      "year": 2026,
+      "province": "Gilgit-Baltistan",
+      "district": "Diamer",
+      "deaths": 8,
+      "peopleAffected": 20000,
+      "severityLevel": "Moderate",
+      "floodType": "GLOF"
+    }
+  ],
+  "mostAffectedDistricts": {
+    "allTime": [
+      {
+        "rank": 1,
+        "district": "Nowshera",
+        "province": "Khyber Pakhtunkhwa",
+        "timesAffected": 8,
+        "worstYear": 2010,
+        "totalEstimatedDeaths": 362,
+        "reason": "Located along Kabul River; highly vulnerable to riverine flooding"
+      },
+      {
+        "rank": 2,
+        "district": "Jacobabad",
+        "province": "Sindh",
+        "timesAffected": 7,
+        "worstYear": 2022,
+        "totalEstimatedDeaths": 244,
+        "reason": "Low-lying area in upper Sindh; receives floodwaters from Indus and hill torrents"
+      },
+      {
+        "rank": 3,
+        "district": "Rajanpur",
+        "province": "Punjab",
+        "timesAffected": 9,
+        "worstYear": 2022,
+        "totalEstimatedDeaths": 171,
+        "reason": "Situated between Indus River and Sulaiman Mountains; receives both riverine and hill torrent flooding"
+      },
+      {
+        "rank": 4,
+        "district": "Charsadda",
+        "province": "Khyber Pakhtunkhwa",
+        "timesAffected": 7,
+        "worstYear": 2010,
+        "totalEstimatedDeaths": 350,
+        "reason": "Confluence of Kabul and Swat rivers; extreme vulnerability to rapid floods"
+      },
+      {
+        "rank": 5,
+        "district": "Swat",
+        "province": "Khyber Pakhtunkhwa",
+        "timesAffected": 7,
+        "worstYear": 2010,
+        "totalEstimatedDeaths": 325,
+        "reason": "Mountainous terrain with Swat River; prone to flash floods and GLOFs"
+      },
+      {
+        "rank": 6,
+        "district": "Dadu",
+        "province": "Sindh",
+        "timesAffected": 6,
+        "worstYear": 2022,
+        "totalEstimatedDeaths": 192,
+        "reason": "Indus River passes through; massive inundation during mega flood events"
+      },
+      {
+        "rank": 7,
+        "district": "Jaffarabad",
+        "province": "Balochistan",
+        "timesAffected": 7,
+        "worstYear": 2022,
+        "totalEstimatedDeaths": 217,
+        "reason": "Flat terrain along Pat Feeder Canal; receives both Indus and hill torrent water"
+      },
+      {
+        "rank": 8,
+        "district": "D.G. Khan",
+        "province": "Punjab",
+        "timesAffected": 7,
+        "worstYear": 2025,
+        "totalEstimatedDeaths": 159,
+        "reason": "Between Sulaiman Range and Indus; combined hill torrent and riverine flooding"
+      },
+      {
+        "rank": 9,
+        "district": "Karachi",
+        "province": "Sindh",
+        "timesAffected": 5,
+        "worstYear": 2020,
+        "totalEstimatedDeaths": 95,
+        "reason": "Inadequate drainage infrastructure; coastal city vulnerable to urban flooding"
+      },
+      {
+        "rank": 10,
+        "district": "Kashmore",
+        "province": "Sindh",
+        "timesAffected": 5,
+        "worstYear": 2010,
+        "totalEstimatedDeaths": 115,
+        "reason": "Upper Sindh district along Indus River; receives early floodwaters"
+      }
+    ]
+  },
+  "topCitiesAffected": [
+    {
+      "city": "Karachi",
+      "province": "Sindh",
+      "population": 16000000,
+      "floodYears": [2018, 2020, 2022, 2025, 2026],
+      "primaryFloodType": "Urban Flooding",
+      "majorEvent": "2020 - Heaviest rainfall in 89 years (490mm in August)",
+      "vulnerabilityFactors": ["Poor drainage", "Rapid urbanization", "Coastal location", "Encroachment on nullahs"]
+    },
+    {
+      "city": "Hyderabad",
+      "province": "Sindh",
+      "population": 3000000,
+      "floodYears": [2010, 2011, 2020, 2022, 2025],
+      "primaryFloodType": "Urban and Riverine",
+      "majorEvent": "2022 - Massive inundation during mega flood",
+      "vulnerabilityFactors": ["Indus River proximity", "Low elevation", "Aging infrastructure"]
+    },
+    {
+      "city": "Peshawar",
+      "province": "Khyber Pakhtunkhwa",
+      "population": 2200000,
+      "floodYears": [2010, 2013, 2016, 2022, 2026],
+      "primaryFloodType": "Urban and Flash Flood",
+      "majorEvent": "2010 - Kabul River devastation",
+      "vulnerabilityFactors": ["Kabul River proximity", "Rapid urbanization", "Downstream from mountains"]
+    },
+    {
+      "city": "Rawalpindi",
+      "province": "Punjab",
+      "population": 2300000,
+      "floodYears": [2014, 2021, 2025, 2026],
+      "primaryFloodType": "Urban Flooding",
+      "majorEvent": "2026 - Extreme rainfall caused severe urban flooding",
+      "vulnerabilityFactors": ["Nullah Leh", "Encroachments on waterways", "Margalla Hills runoff"]
+    },
+    {
+      "city": "Lahore",
+      "province": "Punjab",
+      "population": 13000000,
+      "floodYears": [2014, 2022, 2025],
+      "primaryFloodType": "Urban and Riverine",
+      "majorEvent": "2025 - Ravi River flooding threatened city",
+      "vulnerabilityFactors": ["Ravi River proximity", "High water table", "Poor drainage"]
+    },
+    {
+      "city": "Multan",
+      "province": "Punjab",
+      "population": 2200000,
+      "floodYears": [2010, 2014, 2022, 2025],
+      "primaryFloodType": "Riverine",
+      "majorEvent": "2025 - Extended submersion from Chenab River flooding",
+      "vulnerabilityFactors": ["Chenab River confluence", "Flat terrain", "Agricultural dependency"]
+    },
+    {
+      "city": "Quetta",
+      "province": "Balochistan",
+      "population": 1200000,
+      "floodYears": [2018, 2021, 2022, 2024],
+      "primaryFloodType": "Flash Flood",
+      "majorEvent": "2022 - Severe flash flooding across Balochistan",
+      "vulnerabilityFactors": ["Mountain surrounded valley", "Limited drainage", "Climate extremes"]
+    },
+    {
+      "city": "Sukkur",
+      "province": "Sindh",
+      "population": 700000,
+      "floodYears": [2010, 2020, 2022, 2024],
+      "primaryFloodType": "Riverine",
+      "majorEvent": "2022 - Sukkur Barrage threatened by historic high water levels",
+      "vulnerabilityFactors": ["Sukkur Barrage", "Indus River dependency", "Low elevation"]
+    },
+    {
+      "city": "Nowshera",
+      "province": "Khyber Pakhtunkhwa",
+      "population": 900000,
+      "floodYears": [2010, 2016, 2022, 2025, 2026],
+      "primaryFloodType": "Riverine",
+      "majorEvent": "2010 - Completely submerged by Kabul River overflow",
+      "vulnerabilityFactors": ["Kabul River banks", "Low-lying city center", "Recurring seasonal floods"]
+    },
+    {
+      "city": "Chitral",
+      "province": "Khyber Pakhtunkhwa",
+      "population": 400000,
+      "floodYears": [2013, 2015, 2023, 2025],
+      "primaryFloodType": "GLOF and Flash Flood",
+      "majorEvent": "2015 - Devastating GLOF event",
+      "vulnerabilityFactors": ["Glacial lakes", "Remote mountainous terrain", "Limited infrastructure"]
+    }
+  ]
+}

@@ -1,0 +1,159 @@
+Year,Province,District,Deaths,People_Affected,Severity_Level,Flood_Type
+2010,Khyber Pakhtunkhwa,Nowshera,280,1200000,Critical,Riverine
+2010,Khyber Pakhtunkhwa,Charsadda,250,900000,Critical,Riverine
+2010,Khyber Pakhtunkhwa,Swat,210,750000,Critical,Flash Flood
+2010,Khyber Pakhtunkhwa,Kohistan,130,200000,Severe,Flash Flood
+2010,Khyber Pakhtunkhwa,Shangla,85,180000,Severe,Flash Flood
+2010,Khyber Pakhtunkhwa,D.I. Khan,75,500000,Severe,Riverine
+2010,Khyber Pakhtunkhwa,Tank,45,200000,Severe,Riverine
+2010,Khyber Pakhtunkhwa,Upper Dir,40,150000,Moderate,Flash Flood
+2010,Khyber Pakhtunkhwa,Lower Dir,35,140000,Moderate,Flash Flood
+2010,Sindh,Jacobabad,80,900000,Critical,Riverine
+2010,Sindh,Kashmore,65,700000,Critical,Riverine
+2010,Sindh,Shikarpur,55,600000,Severe,Riverine
+2010,Sindh,Ghotki,45,500000,Severe,Riverine
+2010,Sindh,Qambar Shahdad Kot,40,600000,Severe,Riverine
+2010,Sindh,Dadu,40,800000,Severe,Riverine
+2010,Sindh,Jamshoro,35,400000,Severe,Riverine
+2010,Sindh,Thatta,30,500000,Severe,Riverine
+2010,Punjab,D.G. Khan,30,600000,Severe,Riverine
+2010,Punjab,Rajanpur,25,500000,Severe,Riverine
+2010,Punjab,Rahim Yar Khan,20,400000,Severe,Riverine
+2010,Punjab,Layyah,15,350000,Moderate,Riverine
+2010,Punjab,Bhakkar,10,300000,Moderate,Riverine
+2010,Punjab,Mianwali,10,250000,Moderate,Riverine
+2010,Balochistan,Jaffarabad,65,400000,Critical,Riverine
+2010,Balochistan,Nasirabad,55,350000,Severe,Riverine
+2010,Balochistan,Sibi,40,200000,Severe,Flash Flood
+2011,Sindh,Badin,64,1021301,Critical,Monsoon
+2011,Sindh,Mirpurkhas,55,800000,Critical,Monsoon
+2011,Sindh,Tharparkar,45,600000,Severe,Monsoon
+2011,Sindh,Sanghar,40,500000,Severe,Monsoon
+2011,Sindh,Shaheed Benazirabad,35,400000,Severe,Monsoon
+2011,Sindh,Tando Allahyar,40,350000,Severe,Monsoon
+2011,Sindh,Tando Muhammad Khan,35,300000,Severe,Monsoon
+2011,Sindh,Umerkot,30,350000,Severe,Monsoon
+2012,Sindh,Kashmore,50,500000,Critical,Riverine
+2012,Sindh,Jacobabad,45,400000,Severe,Riverine
+2012,Sindh,Shikarpur,35,350000,Severe,Riverine
+2012,Balochistan,Jaffarabad,40,300000,Severe,Riverine
+2012,Balochistan,Naseerabad,35,280000,Severe,Riverine
+2012,Punjab,Rajanpur,30,250000,Severe,Riverine
+2013,Punjab,Rajanpur,25,200000,Severe,Flash Flood
+2013,Punjab,D.G. Khan,20,180000,Severe,Flash Flood
+2013,Khyber Pakhtunkhwa,Chitral,25,80000,Severe,Flash Flood
+2013,Khyber Pakhtunkhwa,Peshawar,18,150000,Moderate,Urban Flooding
+2013,Balochistan,Sibi,22,100000,Severe,Flash Flood
+2013,Balochistan,Jaffarabad,20,120000,Severe,Riverine
+2014,Punjab,Sialkot,30,300000,Severe,Riverine
+2014,Punjab,Narowal,22,200000,Severe,Riverine
+2014,Punjab,Lahore,18,250000,Moderate,Urban Flooding
+2014,Punjab,Gujranwala,15,200000,Moderate,Riverine
+2014,Punjab,Mandi Bahauddin,14,180000,Moderate,Riverine
+2014,Punjab,Gujrat,12,170000,Moderate,Riverine
+2014,Punjab,Hafizabad,10,120000,Moderate,Riverine
+2014,Punjab,Jhelum,12,150000,Moderate,Riverine
+2014,Punjab,Chiniot,8,100000,Moderate,Riverine
+2014,Punjab,Sargodha,10,130000,Moderate,Riverine
+2015,Khyber Pakhtunkhwa,Chitral,45,200000,Critical,GLOF and Flash Flood
+2015,Khyber Pakhtunkhwa,Dir Upper,20,100000,Severe,Flash Flood
+2015,Khyber Pakhtunkhwa,Swat,15,150000,Moderate,Flash Flood
+2015,Punjab,Rajanpur,18,180000,Severe,Riverine
+2015,Punjab,D.G. Khan,15,150000,Moderate,Riverine
+2016,Khyber Pakhtunkhwa,Peshawar,30,180000,Severe,Flash Flood
+2016,Khyber Pakhtunkhwa,Charsadda,25,150000,Severe,Flash Flood
+2016,Khyber Pakhtunkhwa,Nowshera,22,140000,Moderate,Flash Flood
+2016,Balochistan,Lasbela,15,80000,Moderate,Flash Flood
+2017,Khyber Pakhtunkhwa,D.I. Khan,18,80000,Moderate,Flash Flood
+2017,Punjab,Rajanpur,12,100000,Moderate,Riverine
+2017,Punjab,Muzaffargarh,10,90000,Moderate,Riverine
+2018,Sindh,Karachi,20,150000,Moderate,Urban Flooding
+2018,Balochistan,Quetta,18,80000,Moderate,Flash Flood
+2018,Balochistan,Lasbela,12,60000,Moderate,Flash Flood
+2019,Khyber Pakhtunkhwa,Mardan,25,100000,Severe,Flash Flood
+2019,Khyber Pakhtunkhwa,Dir Lower,20,80000,Severe,Flash Flood
+2019,Balochistan,Lasbela,18,70000,Moderate,Flash Flood
+2019,Balochistan,Turbat,12,50000,Moderate,Flash Flood
+2019,AJK,Poonch,15,40000,Moderate,Landslide
+2020,Sindh,Karachi,41,500000,Critical,Urban Flooding
+2020,Sindh,Hyderabad,30,250000,Severe,Urban Flooding
+2020,Sindh,Mirpur Khas,25,200000,Severe,Monsoon
+2020,Sindh,Sukkur,20,180000,Severe,Riverine
+2020,Sindh,Larkana,18,160000,Severe,Monsoon
+2020,Sindh,Dadu,22,200000,Severe,Hill Torrent
+2021,Khyber Pakhtunkhwa,Swat,15,50000,Moderate,Flash Flood
+2021,Punjab,Rawalpindi,12,60000,Moderate,Urban Flooding
+2021,Balochistan,Quetta,10,40000,Moderate,Flash Flood
+2022,Sindh,Dadu,120,2500000,Critical,Mega Flood
+2022,Sindh,Jacobabad,95,1500000,Critical,Mega Flood
+2022,Sindh,Larkana,85,1200000,Critical,Mega Flood
+2022,Sindh,Qambar Shahdadkot,80,1100000,Critical,Mega Flood
+2022,Sindh,Sukkur,65,800000,Severe,Mega Flood
+2022,Sindh,Khairpur,60,900000,Severe,Mega Flood
+2022,Sindh,Sanghar,55,700000,Severe,Mega Flood
+2022,Sindh,Mirpurkhas,50,650000,Severe,Monsoon
+2022,Sindh,Badin,45,600000,Severe,Monsoon
+2022,Sindh,Thatta,40,500000,Severe,Monsoon
+2022,Balochistan,Jaffarabad,70,800000,Critical,Flash Flood
+2022,Balochistan,Jhal Magsi,55,500000,Critical,Flash Flood
+2022,Balochistan,Lasbela,50,400000,Severe,Flash Flood
+2022,Balochistan,Naseerabad,45,350000,Severe,Flash Flood
+2022,Balochistan,Quetta,35,200000,Severe,Flash Flood
+2022,Punjab,Rajanpur,45,600000,Critical,Riverine
+2022,Punjab,D.G. Khan,40,500000,Severe,Hill Torrent
+2022,Punjab,Muzaffargarh,30,400000,Severe,Riverine
+2022,Khyber Pakhtunkhwa,D.I. Khan,55,300000,Severe,Flash Flood
+2022,Khyber Pakhtunkhwa,Tank,40,200000,Severe,Flash Flood
+2022,Khyber Pakhtunkhwa,Charsadda,45,250000,Severe,Riverine
+2022,Khyber Pakhtunkhwa,Swabi,35,180000,Moderate,Flash Flood
+2022,Khyber Pakhtunkhwa,Karak,28,120000,Moderate,Flash Flood
+2023,Punjab,Kasur,18,200000,Severe,Riverine
+2023,Punjab,Okara,15,180000,Moderate,Riverine
+2023,Punjab,Bahawalnagar,12,150000,Moderate,Riverine
+2023,Punjab,Lodhran,10,120000,Moderate,Riverine
+2023,Khyber Pakhtunkhwa,Chitral,15,60000,Moderate,GLOF
+2023,Balochistan,Lasbela,14,70000,Moderate,Flash Flood
+2024,Sindh,Mirpurkhas,18,200000,Severe,Monsoon
+2024,Sindh,Sanghar,15,180000,Severe,Monsoon
+2024,Sindh,Badin,14,160000,Moderate,Monsoon
+2024,Sindh,Jacobabad,12,140000,Moderate,Riverine
+2024,Sindh,Dadu,10,120000,Moderate,Monsoon
+2024,Sindh,Khairpur,8,100000,Moderate,Monsoon
+2024,Sindh,Qambar Shahdadkot,8,90000,Moderate,Monsoon
+2024,Sindh,Umerkot,6,80000,Moderate,Monsoon
+2024,Balochistan,Jaffarabad,22,100000,Severe,Flash Flood
+2024,Balochistan,Lasbela,18,80000,Moderate,Flash Flood
+2024,Balochistan,Quetta,15,70000,Moderate,Flash Flood
+2024,Punjab,Rajanpur,16,120000,Moderate,Riverine
+2024,Punjab,D.G. Khan,14,100000,Moderate,Hill Torrent
+2025,Khyber Pakhtunkhwa,Swat,85,400000,Critical,Flash Flood
+2025,Khyber Pakhtunkhwa,Buner,65,250000,Critical,Flash Flood
+2025,Khyber Pakhtunkhwa,Bhattagram,55,180000,Severe,Flash Flood
+2025,Khyber Pakhtunkhwa,Bajur,50,200000,Severe,Flash Flood
+2025,Khyber Pakhtunkhwa,Dir Upper,48,150000,Severe,Flash Flood
+2025,Khyber Pakhtunkhwa,Chitral,40,120000,Severe,GLOF
+2025,Khyber Pakhtunkhwa,Nowshera,35,200000,Severe,Riverine
+2025,Khyber Pakhtunkhwa,Charsadda,30,180000,Moderate,Riverine
+2025,Punjab,Multan,55,600000,Critical,Riverine
+2025,Punjab,Muzaffargarh,50,500000,Critical,Riverine
+2025,Punjab,Rajanpur,45,450000,Severe,Riverine
+2025,Punjab,D.G. Khan,40,400000,Severe,Hill Torrent
+2025,Punjab,Lahore,30,350000,Severe,Urban Flooding
+2025,Punjab,Rahim Yar Khan,28,300000,Moderate,Riverine
+2025,Sindh,Karachi,22,350000,Severe,Urban Flooding
+2025,Sindh,Hyderabad,18,200000,Moderate,Urban Flooding
+2025,Sindh,Mirpurkhas,15,180000,Moderate,Monsoon
+2025,Sindh,Thatta,12,150000,Moderate,Monsoon
+2025,Sindh,Badin,10,120000,Moderate,Monsoon
+2025,Balochistan,Kachhi,20,80000,Moderate,Flash Flood
+2025,Balochistan,Khuzdar,15,60000,Moderate,Flash Flood
+2025,Gilgit-Baltistan,Diamer,18,40000,Moderate,GLOF
+2025,Gilgit-Baltistan,Ghizer,12,30000,Moderate,Landslide
+2026,Khyber Pakhtunkhwa,Peshawar,15,80000,Moderate,Urban Flooding
+2026,Khyber Pakhtunkhwa,Nowshera,12,60000,Moderate,Flash Flood
+2026,Khyber Pakhtunkhwa,Swabi,10,50000,Moderate,Flash Flood
+2026,Khyber Pakhtunkhwa,Mardan,8,40000,Moderate,Flash Flood
+2026,Punjab,Rawalpindi,18,100000,Severe,Urban Flooding
+2026,Punjab,Islamabad,10,60000,Moderate,Urban Flooding
+2026,Sindh,Karachi,12,80000,Moderate,Urban Flooding
+2026,Gilgit-Baltistan,Diamer,8,20000,Moderate,GLOF

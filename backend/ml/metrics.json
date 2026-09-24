@@ -1,11 +1,21 @@
 {
-  "accuracy": 0.9663,
-  "mae": 3.37,
-  "r2": 0.9698,
-  "precision": 0.99,
-  "recall": 0.99,
-  "f1Score": 0.99,
+  "accuracy": 0.96,
+  "mae": 3.06,
+  "r2": 0.9722,
+  "precision": 0.98,
+  "recall": 0.98,
+  "f1Score": 0.98,
   "rocAuc": 0.99,
-  "samples": 6000,
-  "features": 6
+  "samples": 8000,
+  "features": 8,
+  "featureImportances": {
+    "rainfall_7day": 0.5436,
+    "rainfall_30day": 0.2812,
+    "river_discharge": 0.1428,
+    "population": 0.0103,
+    "month": 0.002,
+    "elevation_factor": 0.0047,
+    "historical_floods": 0.003,
+    "ndma_fatality_weight": 0.0125
+  }
 }

@@ -321,15 +321,36 @@ def create_app():
     # ==============================
     # ML PREDICTION
     # ==============================
-    def predict_risk(rainfall_7day, rainfall_30day, river_discharge, population, month, elevation):
+    def predict_risk(rainfall_7day, rainfall_30day, river_discharge, population, month, elevation, hist_floods=6, ndma_weight=0.5):
         if model is not None:
-            features = np.array([[rainfall_7day, rainfall_30day, river_discharge, population, month, elevation]])
-            score = model.predict(features)[0]
-            return int(np.clip(round(score), 0, 100))
+            try:
+                # 8 features matching trained model
+                features = np.array([[
+                    rainfall_7day,
+                    rainfall_30day,
+                    river_discharge,
+                    population,
+                    month,
+                    elevation,
+                    hist_floods,
+                    ndma_weight,
+                ]])
+                score = model.predict(features)[0]
+                return int(np.clip(round(score), 0, 100))
+            except Exception as ex:
+                print(f"  [ML predict ex]: {ex}")
+                # Fallback if feature count mismatch
+                score = (
+                    rainfall_7day * 0.25 +
+                    rainfall_30day * 0.05 +
+                    (river_discharge / 1000) * 3.0 +
+                    (1 - elevation) * 15
+                )
+                return int(np.clip(round(score), 0, 100))
         else:
             # Fallback: weighted formula
             score = (
-                rainfall_7day * 0.4 +
+                rainfall_7day * 0.25 +
                 rainfall_30day * 0.05 +
                 (river_discharge / 1000) * 3.0 +
                 (1 - elevation) * 15
@@ -369,10 +390,50 @@ def create_app():
     def health():
         return jsonify({
             "status": "ok",
-            "service": "Pakistan Flood Risk API",
-            "version": "3.0.0-ml",
+            "service": "Pakistan Flood Risk AI ML API",
+            "version": "3.2.0-ml-real",
             "model_loaded": model is not None,
+            "metrics": model_metrics,
         })
+
+    # ==============================
+    # REAL-TIME CUSTOM ML PREDICT ENDPOINT
+    # ==============================
+    @app.route("/api/predict", methods=["POST", "GET"])
+    def custom_predict():
+        from flask import request
+        try:
+            params = request.get_json(silent=True) or request.args
+            r7 = float(params.get("rainfall_7day", 50))
+            r30 = float(params.get("rainfall_30day", 150))
+            discharge = float(params.get("river_discharge", 8000))
+            pop = int(params.get("population", 20000000))
+            month = int(params.get("month", datetime.utcnow().month))
+            elevation = float(params.get("elevation_factor", 0.3))
+            hist_floods = int(params.get("historical_floods", 6))
+            ndma_weight = float(params.get("ndma_fatality_weight", 0.5))
+
+            score = predict_risk(r7, r30, discharge, pop, month, elevation, hist_floods, ndma_weight)
+            level = score_to_level(score)
+
+            return jsonify({
+                "status": "success",
+                "predicted_risk_score": score,
+                "risk_level": level,
+                "inputs": {
+                    "rainfall_7day": r7,
+                    "rainfall_30day": r30,
+                    "river_discharge": discharge,
+                    "population": pop,
+                    "month": month,
+                    "elevation_factor": elevation,
+                    "historical_floods": hist_floods,
+                    "ndma_fatality_weight": ndma_weight,
+                },
+                "model_metrics": model_metrics,
+            })
+        except Exception as err:
+            return jsonify({"error": str(err)}), 400
 
     # ==============================
     # MAIN COMBINED API
@@ -392,20 +453,6 @@ def create_app():
                 rainfall_7day, daily_7 = get_nasa_rainfall(p["lat"], p["lon"])
                 rainfall_30day, daily_30 = get_nasa_rainfall_30day(p["lat"], p["lon"])
 
-                # Dynamic river discharge (simulated from rainfall)
-                river_discharge = get_river_discharge(rainfall_7day, rainfall_30day, p["riverDischargeThreshold"])
-
-                # ML PREDICTION - core risk score
-                risk_score = predict_risk(
-                    rainfall_7day,
-                    rainfall_30day,
-                    river_discharge,
-                    p["population"],
-                    current_month,
-                    p["elevation_factor"],
-                )
-                risk_level = score_to_level(risk_score)
-
                 # Rainfall trend (averaged across provinces)
                 if len(all_daily_values) == 0:
                     all_daily_values = list(daily_30)
@@ -413,10 +460,27 @@ def create_app():
                     for i in range(min(len(all_daily_values), len(daily_30))):
                         all_daily_values[i] = round((all_daily_values[i] + daily_30[i]) / 2, 2)
 
+                # Dynamic river discharge (simulated from rainfall)
+                river_discharge = get_river_discharge(rainfall_7day, rainfall_30day, p["riverDischargeThreshold"])
+
                 # NDMA impact data
                 ndma = ndma_data.get(p["name"], ndma_data.get(p["id"].upper(), {}))
                 deaths = ndma.get("deaths", 0)
                 houses = ndma.get("houses", 0)
+                ndma_weight = round(min(1.0, deaths / 1000.0), 3)
+
+                # ML PREDICTION - core risk score from 8 trained features
+                risk_score = predict_risk(
+                    rainfall_7day,
+                    rainfall_30day,
+                    river_discharge,
+                    p["population"],
+                    current_month,
+                    p["elevation_factor"],
+                    p["historicalFloods"],
+                    ndma_weight,
+                )
+                risk_level = score_to_level(risk_score)
 
                 # Prediction (next 3 days extrapolated via model)
                 recent_avg = sum(daily_7[-3:]) / max(len(daily_7[-3:]), 1)
